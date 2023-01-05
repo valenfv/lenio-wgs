@@ -10,6 +10,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { getProcessedDataSet } from '../lib/getProcessedDataSet';
+import Link from 'next/link';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,15 +38,15 @@ interface HomePropsT {
 }
 
 export default function Home(props: HomePropsT) {
-  React.useEffect(() => {
-    console.log(props.dataSet)
-  }, [props.dataSet])
   return (
     <>
       <Head>
         <title>WGS - Leniolabs</title>
       </Head>
       <main>
+        <Link href="/jsonview">
+          See JSON view
+        </Link>
         <TableContainer component={Paper} style={{height: '100vh'}}>
           <Table stickyHeader>
             <TableHead>
@@ -83,6 +85,7 @@ export default function Home(props: HomePropsT) {
 
 export async function getStaticProps(){
   const dataSet = await getDataSet();
+  const pd = await getProcessedDataSet();
   return {
     props: {
       dataSet,
