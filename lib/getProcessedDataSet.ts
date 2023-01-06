@@ -1,13 +1,13 @@
 import { getDataSet } from "./getDataSet";
 import { getIndicatorsBoundaries, IndicatorBoundariesT, IndicatorBoundaryT } from "./getIndicatorsBoundaries";
 
-interface CountryMetricsT {
+export interface CountryMetricsT {
     [metric: string]: {
         [year: string]: string;
     }
 }
 
-interface ProcessedDataSetT {
+export interface ProcessedDataSetT {
     [ISOCC: string]: {
         countryName: string;
         metrics: CountryMetricsT;
