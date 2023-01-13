@@ -2,9 +2,16 @@ import { Html, Head, Main, NextScript } from 'next/document'
 
 export default function Document() {
   return (
-    <Html lang="en">
+    <Html
+      style={{
+        height: "100vh",
+        background: "linear-gradient(130deg, rgba(0,0,32), rgba(1,0,43) 70%)"
+      }}
+      lang="en">
       <Head />
-      <body>
+      <body style={{
+        boxSizing: "border-box"
+      }}>
         <Main />
         <NextScript />
       </body>
