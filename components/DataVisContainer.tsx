@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import DynamicComponentWithNoSSR from './DynamicComponentWithNoSSR';
 
 const StyledContainer = styled('div')({
   display: "flex",
@@ -11,7 +12,9 @@ interface DataVisContainerPropsT {
 
 const DataVisContainer = (props: DataVisContainerPropsT) => {
   return (
-    <StyledContainer></StyledContainer>
+    <StyledContainer>
+      <DynamicComponentWithNoSSR />
+    </StyledContainer>
   )
 }
 
