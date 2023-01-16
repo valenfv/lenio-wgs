@@ -1,0 +1,43 @@
+#legend {
+  font-size: 0.7em;
+  letter-spacing: 0.1;
+}
+
+.map {
+  padding: 20px;
+  background-color: transparent;
+}
+
+div.tooltip {   
+  position: absolute;
+  padding: 7px;
+  font-size: 0.8em;
+  pointer-events: none;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.25);
+}  
+
+.background {
+  fill: transparent;
+  pointer-evens: all;
+}
+
+.world {
+  transform-origin: center;
+}
+
+.svg{
+  fill: transparent;
+}
+
+.floatingMenu{
+  position: absolute;
+  width: 300px;
+  background-color: wheat;
+  margin-top: 20px;
+}
+.worldContainer{
+  position: relative;
+}

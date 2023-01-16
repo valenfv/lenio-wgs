@@ -2,8 +2,8 @@ import { styled } from '@mui/material/styles';
 import DynamicComponentWithNoSSR from './DynamicComponentWithNoSSR';
 
 const StyledContainer = styled('div')({
-  display: "flex",
-  width: "calc(100% - 360px)",
+  display: 'flex',
+  width: 'calc(100% - 360px)',
 });
 
 interface DataVisContainerPropsT {
