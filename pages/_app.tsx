@@ -17,13 +17,13 @@ const StyledHeader = styled('div')({
   justifyContent: 'center',
   position: 'relative',
   alignItems: 'center',
-  fontSize: '36px',
+  fontSize: '28px',
   lineHeight: '40px',
 });
 
 const StyledButton = styled(Button)({
-  height: '64px',
-  width: '75px',
+  height: '51px',
+  width: '60px',
   border: '1px solid #191935',
 });
 
@@ -66,8 +66,8 @@ export default function App({ Component, pageProps }: AppProps) {
         <StyledHeader>
           <Image
             src="/lenio-wgs/header-logo1.png"
-            height={60}
-            width={250}
+            height={48}
+            width={200}
             alt="Logo Image"
             style={{
               marginRight: 'auto',

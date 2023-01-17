@@ -1,13 +1,12 @@
 import React from 'react';
 import * as d3 from 'd3';
 import styles from '../styles/world.module.css';
+import { ConfigContainer } from '../components/ConfigContainer';
 
 const readyWithParams = (tooltip, world, projection, colorScale, data, height, svg, click) => function ready(error, topo, ...rest) {
   // topo is the data received from the d3.queue function (the world.geojson)
   // the data from world_population.csv (country code and country population) is saved in data variable
-  console.log({
-    called: true, topo, error, ...rest,
-  });
+
   const mouseOver = function (d) {
     d3.selectAll('.Country')
       .transition()
@@ -19,7 +18,6 @@ const readyWithParams = (tooltip, world, projection, colorScale, data, height, s
       .duration(200)
       .style('opacity', 1)
       .style('stroke', 'black');
-    console.log({ d });
     tooltip.style('left', `${d.pageX + 15}px`)
       .style('top', `${d.pageY - 28}px`)
       .style('z-index', '2')
@@ -29,7 +27,6 @@ const readyWithParams = (tooltip, world, projection, colorScale, data, height, s
       .duration(400)
       .style('opacity', 1)
       .text('hello');
-    console.log({ dataName: this.attributes });
     // .text(`${d.properties.name}: ${Math.round((d.total / 1000000) * 10) / 10} mio.`);
   };
 
@@ -189,7 +186,7 @@ export default function World() {
   return (
     <div className={styles.worldContainer}>
       <div className={styles.floatingMenu}>
-        hello
+        <ConfigContainer />
       </div>
       <div className={styles.map}>
         <svg className={styles.svg} ref={svgRef} width="1200" height="675" />

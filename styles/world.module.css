@@ -35,7 +35,7 @@ div.tooltip {
 .floatingMenu{
   position: absolute;
   width: 300px;
-  background-color: wheat;
+  background-color: transparent;
   margin-top: 20px;
 }
 .worldContainer{
