@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import IndicatorsTable from './IndicatorsTable';
 
 const StyledContainer = styled('div')({
   display: "flex",
@@ -8,9 +9,11 @@ const StyledContainer = styled('div')({
 });
 
 const ConfigContainer = () => {
-    return (
-      <StyledContainer></StyledContainer>
-    )
+  return (
+    <StyledContainer>
+      <IndicatorsTable />
+    </StyledContainer>
+  )
 };
 
 export default ConfigContainer;
