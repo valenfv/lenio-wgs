@@ -36,8 +36,9 @@ div.tooltip {
   position: absolute;
   width: 300px;
   background-color: transparent;
-  margin-top: 20px;
+  margin-top: 40px;
 }
+
 .worldContainer{
   position: relative;
 }

@@ -1,0 +1,15 @@
+.menu {
+  width: 300px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  row-gap: 15px;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.chart {
+  width: calc(100% - 315px)
+}
