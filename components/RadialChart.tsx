@@ -7,8 +7,9 @@ const RadialChart = () => {
 
     useEffect(() => {
       const width = 600;
-      const height = 600;
+      const height = 620;
 
+      //chart container
       const svg = d3.select(radialChart.current)
         .attr('width', width)
         .attr('height', height)
@@ -23,7 +24,7 @@ const RadialChart = () => {
 
       const eachAngle = (2 * Math.PI) / data.length;
       const maxOuterRadius = (width / 2);
-      const minInnerRadius = (width / 2) * 0.6;
+      const minInnerRadius = (width / 2) * 0.70;
 
       const extent = d3.extent(data, (d) => d.temp);
       const min = extent[0];
@@ -31,13 +32,13 @@ const RadialChart = () => {
 
       const valueScale = d3
       .scaleLinear()
-      .domain(extent)
+      .domain([extent[0] - 5, extent[1]])
       .range([minInnerRadius, maxOuterRadius]);
 
     const colorScale = d3
       .scaleLinear()
-    //   .domain([min, 0, 0, max])
-    // //   .range(['darkblue', 'skyblue', 'orange', 'darkred']);
+      .domain([min, max])
+      .range(['#45F9E0', '#45F9E040']);
 
     data.forEach((d, i) => {
       d.startAngle = i * eachAngle;
@@ -61,6 +62,7 @@ const RadialChart = () => {
       .startAngle((d) => d.startAngle)
       .endAngle((d) => d.endAngle);
 
+    // bars
     center
       .selectAll('.radial-bar')
       .data(data)
@@ -69,13 +71,16 @@ const RadialChart = () => {
       .attr('d', (d) => {
         return arc(d);
       })
-      .attr('fill', '#45F9E040')
-    //   .attr('stroke', '#45F9E040');
+      .attr('fill', (d) => colorScale(d.temp))
+      // .attr('stroke', (d) => colorScale(d.temp));
+    //   .attr('fill', '#45F9E040')
+    // //   .attr('stroke', '#45F9E040');
 
     /** Axis */
 
     const scaleTicks = valueScale.ticks(5);
 
+    // circles
     center
       .selectAll('.radial-circle')
       .data(scaleTicks)
@@ -83,18 +88,20 @@ const RadialChart = () => {
       .attr('r', (d) => valueScale(d))
       .attr('fill', 'none')
       .attr('stroke', '#EEEEEE')
-      .attr('opacity', 0.2);
+      .attr('opacity', 0.2)
 
-    // center
-    //   .selectAll('.radial-text')
-    //   .data(scaleTicks)
-    //   .join('text')
-    //   .text((d) => d)
-    //   .attr('y', (d) => -valueScale(d))
-    //   .attr('stroke-width', 5)
-    //   .attr('stroke', 'white')
-    //   .clone(true)
-    //   .attr('stroke', 'none');
+    // text showing circle limit
+    center
+      .selectAll('.radial-text')
+      .data(scaleTicks)
+      .join('text')
+      .text((d) => d >= 0 ? d : null)
+      .attr('y', (d) => -valueScale(d))
+      .attr('fill', '#EEEEEE40')
+      .attr('font-family', 'arial')
+      .attr('font-size', '10px')
+      .attr('font-weight', 400)
+      .clone(true)
 
     const months = [
       'Aug',
@@ -111,20 +118,22 @@ const RadialChart = () => {
       'Jul',
     ];
 
+    // categories text properties
     const g = center
       .selectAll('.radial-axis-g')
       .data(months)
       .join('g')
-      .attr('color', '#AAAAAA')
-      .attr('fill', '#AAAAAA')
+      .attr('fill', '#01012B')
       .attr('font-weight', 500)
+      .style('z-index', 10)
       .attr('font-size', '10px')
       .attr('font-family', 'Montserrat')
       .attr('transform', (d, i) => {
         const angle = (360 / months.length) * i - 90;
         return `rotate(${angle})`;
-      });
+      })
 
+    // lines between categories
     g.append('line')
       .attr('x1', minInnerRadius)
       .attr('y1', 0)
@@ -133,18 +142,84 @@ const RadialChart = () => {
       .attr('stroke', '#EEEEEE')
       .attr('opacity', 0.2);
 
+    // categories text
     g.append('text')
       .text((d) => d)
       .attr('transform', (d, i) => {
         let x = minInnerRadius - 20;
-        let rotation = 0;
-        if (i > 6 && i < 12) {
-          rotation = 180;
-          x = x + 15;
+        let y = 40
+        let rotation = 102;
+        x = x + 20;
+        if (i > 2 && i < 9) {
+          rotation = -80;
+          x = x + 2;
+          y = 55
         }
-        return `translate(${x},0) rotate(${rotation})`;
+        return `translate(${x},${y}) rotate(${rotation})`;
       });
 
+      const categories = [
+        {property: 'Aug', value: 1},
+        {property: 'Sep', value: 1},
+        {property: 'Oct', value: 1},
+        {property: 'Nov', value: 1},
+        {property: 'Dec', value: 1},
+        {property: 'Jan', value: 1},
+        {property: 'Feb', value: 1},
+        {property: 'Mar', value: 1},
+        {property: 'Apr', value: 1},
+        {property: 'May', value: 1},
+        {property: 'Jun', value: 1},
+        {property: 'Jul', value: 1},
+      ];
+
+      const pieColors = ['#5A7EDA', '#5A7EDA', '#5A7EDA', '#ED762F', '#ED762F', '#ED762F', '#DCB300', '#DCB300', '#DCB300', '#55BDA6', '#55BDA6', '#55BDA6'];
+
+      const rotateText = (i) => {
+        let x = minInnerRadius - 20;
+        let y = 40
+        let rotation = 102;
+        x = x + 20;
+        if (i > 2 && i < 9) {
+          rotation = -80;
+          x = x + 2;
+          y = 55
+        }
+        return `translate(${x},${y}) rotate(${rotation})`;
+      }
+
+      const piewidth = 455;
+      const pieHeight = 455;
+      const radius = piewidth / 2;
+
+      const formattedData = d3.pie().value(d => d.value)(categories);
+      const arcGenerator = d3.arc().innerRadius(210).outerRadius(radius);
+
+      const pie = svg.append('g');
+
+      pie.selectAll()
+        .data(formattedData)
+        .join('path')
+          .attr('d', arcGenerator)
+          .attr('id', d => d.data.property)
+          .attr('fill', d => pieColors[d.index])
+          .attr('class', 'center')
+          .attr('transform', `translate(${width / 2},${height / 2})`);
+
+      categories.forEach((category, index) => {
+        const text = svg.append("text")
+          .attr("x", index < 9 && index > 2 ? 180 : 50)
+          .attr("dy", 13)
+
+        text.append("textPath")
+          .attr("fill","#01012B")
+          .attr('font-family', 'Monstserrat')
+          .style('text-anchor', 'start')
+          .attr('font-weight', 700)
+          .attr('font-size', '12px')
+          .attr("xlink:href", `#${category.property}`)
+          .text(category.property);
+      })
   }, []);
 
 
