@@ -2,7 +2,7 @@
     fill: hsla(0, 0%, 93%, 0.7);
 }
 
-.data-tooltip {   
+.dataTooltip {   
   position: absolute;
   padding: 7px;
   font-size: 0.8em;
