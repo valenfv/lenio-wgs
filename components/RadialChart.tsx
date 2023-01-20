@@ -143,10 +143,8 @@ const RadialChart = () => {
             .data(formattedData)
             .join('path')
               .attr('d', arcGenerator)
-              .attr('id', (d, i) => {
-                console.log(`${i}: ${d.data.label}`)
-                return d.data.label
-              })
+              .attr('id', d => d.data.label
+              )
               .attr('fill', d => INDICATORS_TYPE_MAP[indicatorsTypeMap[d.data.label]])
               .attr('class', 'center')
               .attr('transform', `translate(${width / 2},${height / 2})`);
