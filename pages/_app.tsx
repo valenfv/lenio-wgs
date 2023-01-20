@@ -1,6 +1,8 @@
 import type { AppProps } from 'next/app';
 
 import React, { useState } from 'react';
+import { store } from '../store'
+import { Provider } from 'react-redux'
 import Head from 'next/head';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
@@ -19,6 +21,8 @@ const StyledHeader = styled('div')({
   alignItems: 'center',
   fontSize: '28px',
   lineHeight: '40px',
+  maxWidth: 1280,
+  margin: '0 auto'
 });
 
 const StyledButton = styled(Button)({
@@ -58,7 +62,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const [dataVisType, setDataVisType] = useState('');
 
   return (
-    <>
+    <Provider store={store}>
       <Head>
         <title>WGS - Leniolabs</title>
       </Head>
@@ -88,6 +92,6 @@ export default function App({ Component, pageProps }: AppProps) {
         </StyledHeader>
         <Component {...pageProps} />
       </main>
-    </>
+    </Provider>
   );
 }
