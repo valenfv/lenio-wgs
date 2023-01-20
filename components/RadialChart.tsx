@@ -92,7 +92,7 @@ const RadialChart = () => {
           .attr('r', (d) => valueScale(d))
           .attr('fill', 'none')
           .attr('stroke', '#EEEEEE')
-          .attr('opacity', 0.2)
+          .attr('border', `1px solid #EEEEEE`)
 
         const g = center
           .selectAll('.radial-axis-g')
@@ -110,7 +110,7 @@ const RadialChart = () => {
           .attr('y1', 0)
           .attr('x2', maxOuterRadius)
           .attr('y2', 0)
-          .attr('stroke', '#EEEEEE')
+          .attr('stroke', '#EEEEEE40')
           .attr('opacity', 0.2);
 
           const categories = [];
@@ -264,6 +264,7 @@ const RadialChart = () => {
             .attr('font-size', '14px')
             .attr('text-anchor', 'start')
             .attr('transform', 'translate(145,-125)');
+
   }, []);
 
 
