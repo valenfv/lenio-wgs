@@ -11,5 +11,8 @@
 }
 
 .chart {
-  width: calc(100% - 315px)
+  width: 100%;
+}
+.chart svg {
+   width: 100%;
 }

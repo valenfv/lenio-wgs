@@ -30,6 +30,7 @@ div.tooltip {
 
 .svg{
   fill: transparent;
+  width: 100%;
 }
 
 .floatingMenu{
