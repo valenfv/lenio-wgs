@@ -1,5 +1,5 @@
 import React from 'react';
-import ConfigContainer from '../components/ConfigContainer';
+import { ConfigContainer } from '../components/ConfigContainer';
 import DataVisContainer from '../components/DataVisContainer';
 
 export default function Home() {
