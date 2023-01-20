@@ -163,7 +163,107 @@ const RadialChart = () => {
               .attr('overflow', 'ellipsis')
               .attr("xlink:href", `#${category.label}`)
               .text(textWrap(category.label));
-          })
+          });
+
+          center
+            .append('text')
+            .text('GINI Index Rankings')
+            .attr('fill', '#DDDDDD')
+            .attr('font-family', 'arial')
+            .attr('font-weight', 700)
+            .attr('font-size', '20px')
+            .attr('text-anchor', 'middle')
+            .attr('transform', 'translate(0,-240)');
+
+          center
+            .append('text')
+            .text('United States')
+            .attr('fill', '#DDDDDD')
+            .attr('font-family', 'arial')
+            .attr('font-weight', 700)
+            .attr('font-size', '18px')
+            .attr('text-anchor', 'middle')
+            .attr('transform', 'translate(0,-180)');
+
+          center
+            .append('text')
+            .text('43.1')
+            .attr('fill', '#DDDDDD')
+            .attr('font-family', 'arial')
+            .attr('font-weight', 700)
+            .attr('font-size', '22px')
+            .attr('text-anchor', 'middle')
+            .attr('transform', 'translate(0,-150)');
+
+          center
+            .append('text')
+            .text('Selected Country')
+            .attr('fill', '#FFFFFF80')
+            .attr('font-family', 'arial')
+            .attr('font-weight', 700)
+            .attr('font-size', '14px')
+            .attr('text-anchor', 'middle')
+            .attr('transform', 'translate(0,-125)');
+
+          center
+            .append('text')
+            .text('South Africa')
+            .attr('fill', '#DDDDDD')
+            .attr('font-family', 'arial')
+            .attr('font-weight', 400)
+            .attr('font-size', '18px')
+            .attr('text-anchor', 'start')
+            .attr('transform', 'translate(-225,-180)');
+
+          center
+            .append('text')
+            .text('63.1')
+            .attr('fill', '#DDDDDD')
+            .attr('font-family', 'arial')
+            .attr('font-weight', 400)
+            .attr('font-size', '22px')
+            .attr('text-anchor', 'start')
+            .attr('transform', 'translate(-200,-150)');
+
+          center
+            .append('text')
+            .text('Lowest ranking')
+            .attr('fill', '#FFFFFF80')
+            .attr('font-family', 'arial')
+            .attr('font-weight', 400)
+            .attr('font-size', '14px')
+            .attr('text-anchor', 'start')
+            .attr('transform', 'translate(-225,-125)');
+
+          center
+            .append('text')
+            .text('Slovenia')
+            .attr('fill', '#DDDDDD')
+            .attr('font-family', 'arial')
+            .attr('font-weight', 400)
+            .attr('font-size', '18px')
+            .attr('text-anchor', 'end')
+            .attr('transform', 'translate(220,-180)');
+
+          center
+            .append('text')
+            .text('63.1')
+            .attr('fill', '#DDDDDD')
+            .attr('font-family', 'arial')
+            .attr('font-weight', 400)
+            .attr('font-size', '22px')
+            .attr('text-anchor', 'end')
+            .attr('transform', 'translate(210,-150)');
+
+          center
+            .append('text')
+            .text('Highest ranking')
+            .attr('fill', '#FFFFFF80')
+            .attr('font-family', 'arial')
+            .attr('font-weight', 400)
+            .attr('font-size', '14px')
+            .attr('text-anchor', 'start')
+            .attr('transform', 'translate(145,-125)');
   }, []);
 
 
