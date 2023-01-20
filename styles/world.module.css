@@ -30,14 +30,16 @@ div.tooltip {
 
 .svg{
   fill: transparent;
+  width: 100%;
 }
 
 .floatingMenu{
   position: absolute;
   width: 300px;
-  background-color: wheat;
-  margin-top: 20px;
+  background-color: transparent;
+  margin-top: 40px;
 }
+
 .worldContainer{
   position: relative;
 }

@@ -1,16 +1,22 @@
+import React from 'react';
 import { styled } from '@mui/material/styles';
+import { CountryPicker } from './CountryPicker';
 
 const StyledContainer = styled('div')({
-  display: "flex",
-  flexDirection: "column",
-  width: "30%",
-  minWidth: "360px",
+  display: 'flex',
+  flexDirection: 'column',
+  width: '300px',
+  minWidth: '300px',
+  rowGap: '15px'
 });
 
-const ConfigContainer = () => {
-    return (
-      <StyledContainer></StyledContainer>
-    )
-};
+function ConfigContainer() {
+  return (
+    <StyledContainer>
+      <CountryPicker />
+      <CountryPicker canBeNull/>
+    </StyledContainer>
+  );
+}
 
-export default ConfigContainer;
+export { ConfigContainer };
