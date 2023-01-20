@@ -1,11 +1,15 @@
-import React from 'react';
-import styles from '../styles/world.module.css';
-import { ConfigContainer } from '../components/ConfigContainer';
-import { useChoropleth } from '../lib/useChoropleth';
+import React from "react";
+import styles from "../styles/world.module.css";
+import { ConfigContainer } from "../components/ConfigContainer";
+import {
+  CHOROPLEITH_HEIGHT,
+  CHOROPLEITH_WIDTH,
+  useChoropleth,
+} from "../lib/useChoropleth";
 
 export default function World() {
   const svgRef = React.useRef(null);
-  useChoropleth(svgRef)
+  useChoropleth(svgRef);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return (
     <div className={styles.worldContainer}>
@@ -13,7 +17,11 @@ export default function World() {
         <ConfigContainer />
       </div>
       <div className={styles.map}>
-        <svg className={styles.svg} ref={svgRef} width="1200" height="675" />
+        <svg
+          viewBox={`0 0 ${CHOROPLEITH_WIDTH} ${CHOROPLEITH_HEIGHT}`}
+          className={styles.svg}
+          ref={svgRef}
+        />
       </div>
     </div>
   );
