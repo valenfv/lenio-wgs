@@ -22,10 +22,18 @@ export default function World() {
         max: 1500,
     }
 
+    const highlights = [
+      "USA",
+      "ARG",
+      "CHL",
+      "AFG",
+    ]
+
     setData({
       comparing: 'CHL',
       indicatorX,
       indicatorY,
+      highlights,
       data: generateData(indicatorX, indicatorY)
     })
   }, []);

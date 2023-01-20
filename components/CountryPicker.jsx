@@ -7,6 +7,38 @@ import { styled } from '@mui/material/styles';
 import Popper from '@mui/material/Popper';
 import InputAdornment from '@mui/material/InputAdornment';
 import { WorldIcon } from './WorldIcon';
+import countries from '../data/iso_country.json';
+import organizations from '../data/organizations.json';
+
+export const WORLD_ITEM = {code: 'WORLD', label: 'World'};
+
+const getPickerItems = ({
+  showOrganizations, 
+  showCountries, 
+  showNeighboring, 
+  showWorld
+}) => ([
+  ...(showWorld ? [{code: 'WORLD', label: 'World', group: 'Groups', image: <WorldIcon />}] : []),
+  ...(showNeighboring ? [{code: 'NEIGHBORS', label: 'Neighboring Countries', group: 'Groups', image: <WorldIcon />}] : []),
+  ...(showCountries ? Object.keys(countries).map(country => ({ 
+    code: country, 
+    label: countries[country], 
+    group: 'Countries', 
+    image: <img
+      loading="lazy"
+      width="20"
+      src={`https://flagcdn.com/w20/${String(getCountryISO2(country)).toLowerCase()}.png`}
+      srcSet={`https://flagcdn.com/w40/${String(getCountryISO2(country)).toLowerCase()}.png 2x`}
+      alt={`${countries[country]} flag`}
+    />,
+  })) : []),
+  ...(showOrganizations ? Object.keys(organizations).map(organization => ({
+    code: organization,
+    label: organization,
+    group: 'Organizations',
+    image: null,
+  })) : [])
+]);
 
 const StyledTextField = styled(TextField)({
   '& input, label': {
@@ -31,24 +63,24 @@ const StyledPopper = styled(Popper)({
   [`& .${autocompleteClasses.listbox}`]: {
     background: '#191935' 
   },
+  [`& .${autocompleteClasses.listbox} .MuiListSubheader-root`]: {
+    background: '#191935',
+    color: '#EEEEEE',
+  }
 });
-
-export const WORLD_ITEM = {code: 'WORLD', label: 'World'};
 
 export function CountryPicker({ 
   canBeNull = false,
   label = 'Select a country to compare',
-  onChange = () => null
+  onChange = () => null,
+  showOrganizations = false,
+  showCountries = false,
+  showNeighboring = false,
+  showWorld = false,
 }) {
-  const [countries, setCountries] = React.useState([]);
   const [country, setCountry] = React.useState(!canBeNull ? WORLD_ITEM : null);
+  const pickerItems = React.useMemo(() => getPickerItems({showOrganizations, showCountries, showNeighboring, showWorld}), [showOrganizations, showCountries, showNeighboring, showWorld]);
 
-  React.useEffect(() => {
-    fetch('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson').then((res) => res.json()).then((json) => {
-      const countryList = [WORLD_ITEM, ...json.features.map((feature) => ({ code: feature.id, label: feature.properties.name }))];
-      setCountries(countryList);
-    });
-  }, []);
   return (
     <Autocomplete
       id="country-select-demo"
@@ -69,23 +101,14 @@ export function CountryPicker({
       }} 
       value={country}
       sx={{ width: 300 }}
-      options={countries}
+      options={pickerItems}
       autoHighlight
+      groupBy={(option) => option.group}
       PopperComponent={StyledPopper}
       getOptionLabel={(option) => option.label}
       renderOption={(props, option) => (
         <StyledBox component="li" sx={{ '& > img, svg': { mr: 2, flexShrink: 0 } }} {...props}>
-          {option.code === 'WORLD' ? 
-            <WorldIcon />
-          :
-          (<img
-              loading="lazy"
-              width="20"
-              src={`https://flagcdn.com/w20/${String(getCountryISO2(option.code)).toLowerCase()}.png`}
-              srcSet={`https://flagcdn.com/w40/${String(getCountryISO2(option.code)).toLowerCase()}.png 2x`}
-              alt=""
-            />)
-          } 
+          {option.image}
           {option.label}
         </StyledBox>
       )}
@@ -98,18 +121,8 @@ export function CountryPicker({
             ...(!country ? {} : {
               startAdornment: (
               <InputAdornment position="start" sx={{ '& > img, svg': { ml: 1, flexShrink: 0 } }}>
-                  {country.code === 'WORLD' ? 
-                    <WorldIcon />
-                  :
-                  (<img
-                      loading="lazy"
-                      width="20"
-                      src={`https://flagcdn.com/w20/${String(getCountryISO2(country.code)).toLowerCase()}.png`}
-                      srcSet={`https://flagcdn.com/w40/${String(getCountryISO2(country.code)).toLowerCase()}.png 2x`}
-                      alt=""
-                    />)
-                  } 
-                </InputAdornment>
+                  {country.image}
+              </InputAdornment>
             )})
           }}
           inputProps={{

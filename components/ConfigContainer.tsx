@@ -13,8 +13,8 @@ const StyledContainer = styled('div')({
 function ConfigContainer() {
   return (
     <StyledContainer>
-      <CountryPicker />
-      <CountryPicker canBeNull/>
+      <CountryPicker showCountries/>
+      <CountryPicker canBeNull showNeighboring showOrganizations showWorld showCountries={false}/>
     </StyledContainer>
   );
 }
