@@ -84,13 +84,18 @@ const TableTitle: React.FC = () => {
 
 interface DeltaProps {
   up?: boolean;
+  children: React.ReactNode;
 }
 
-const Delta: React.FC<DeltaProps> = ({ up }) => {
+const Delta: React.FC<DeltaProps> = ({ up, children }) => {
   return (
-    <span style={{ color: up ? '#45F9E0CC' : '#DE3108CC' }}>
-      {up ? '▲' : '▼'}
-    </span>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <span style={{ color: up ? '#45F9E0CC' : '#DE3108CC' }}>
+        {up ? '▲' : '▼'}
+      </span>
+      <span>{children}</span>
+    </div>
+
   )
 }
 
@@ -133,77 +138,77 @@ const IndicatorsTable: React.FC = () => {
             <StyledTableCell align="left">GINI Index</StyledTableCell>
             <StyledTableCell align="left">50th</StyledTableCell>
             <StyledTableCell align="left">41.5</StyledTableCell>
-            <StyledTableCell align="left"><Delta up /> 0.7</StyledTableCell>
+            <StyledTableCell align="left"><Delta up> 0.7</Delta></StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
             <StyledTableCell align="left">HDI Index</StyledTableCell>
             <StyledTableCell align="left">21st</StyledTableCell>
             <StyledTableCell align="left">0.926</StyledTableCell>
-            <StyledTableCell align="left"><Delta up />0.7</StyledTableCell>
+            <StyledTableCell align="left"><Delta up>0.7</Delta></StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
             <StyledTableCell align="left">GDP</StyledTableCell>
             <StyledTableCell align="left">1st</StyledTableCell>
             <StyledTableCell align="left">$23T</StyledTableCell>
-            <StyledTableCell align="left"><Delta up /> 1.1</StyledTableCell>
+            <StyledTableCell align="left"><Delta up>1.1</Delta></StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
             <StyledTableCell align="left">Unemployment</StyledTableCell>
             <StyledTableCell align="left">12th</StyledTableCell>
             <StyledTableCell align="left">3.5%</StyledTableCell>
-            <StyledTableCell align="left"><Delta />1.1</StyledTableCell>
+            <StyledTableCell align="left"><Delta up>1.1</Delta></StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
             <StyledTableCell align="left">Extreme Poverty</StyledTableCell>
             <StyledTableCell align="left">14th</StyledTableCell>
             <StyledTableCell align="left">3.3%</StyledTableCell>
-            <StyledTableCell align="left"><Delta up />1.5</StyledTableCell>
+            <StyledTableCell align="left"><Delta up>1.5</Delta></StyledTableCell>
           </StyledTableRow>
 
           <StyledTableRow>
             <StyledTableCell align="left">Military Expendidure</StyledTableCell>
             <StyledTableCell align="left">14th</StyledTableCell>
             <StyledTableCell align="left">3.3%</StyledTableCell>
-            <StyledTableCell align="left"><Delta up />1.5</StyledTableCell>
+            <StyledTableCell align="left"><Delta up>1.5</Delta></StyledTableCell>
           </StyledTableRow>
 
           <StyledTableRow>
             <StyledTableCell align="left">Health Expendidure</StyledTableCell>
             <StyledTableCell align="left">14th</StyledTableCell>
             <StyledTableCell align="left">3.3%</StyledTableCell>
-            <StyledTableCell align="left"><Delta />1.5</StyledTableCell>
+            <StyledTableCell align="left"><Delta>1.5</Delta></StyledTableCell>
           </StyledTableRow>
 
           <StyledTableRow>
             <StyledTableCell align="left">Happy Planet Index</StyledTableCell>
             <StyledTableCell align="left">14th</StyledTableCell>
             <StyledTableCell align="left">3.3%</StyledTableCell>
-            <StyledTableCell align="left"><Delta /> 1.5</StyledTableCell>
+            <StyledTableCell align="left"><Delta>1.5</Delta></StyledTableCell>
           </StyledTableRow>
 
           <StyledTableRow>
             <StyledTableCell align="left">Maternal Mortality</StyledTableCell>
             <StyledTableCell align="left">14th</StyledTableCell>
             <StyledTableCell align="left">3.3%</StyledTableCell>
-            <StyledTableCell align="left"><Delta />1.5</StyledTableCell>
+            <StyledTableCell align="left"><Delta>1.5</Delta></StyledTableCell>
           </StyledTableRow>
 
           <StyledTableRow>
             <StyledTableCell align="left">Political Rights Score</StyledTableCell>
             <StyledTableCell align="left">14th</StyledTableCell>
             <StyledTableCell align="left">3.3%</StyledTableCell>
-            <StyledTableCell align="left"><Delta up />1.5</StyledTableCell>
+            <StyledTableCell align="left"><Delta up>1.5</Delta></StyledTableCell>
           </StyledTableRow>
 
           <StyledTableRow>
             <StyledTableCell align="left">Regulatory Quality</StyledTableCell>
             <StyledTableCell align="left">14th</StyledTableCell>
             <StyledTableCell align="left">3.3%</StyledTableCell>
-            <StyledTableCell align="left"><Delta />1.5</StyledTableCell>
+            <StyledTableCell align="left"><Delta>1.5</Delta></StyledTableCell>
           </StyledTableRow>
         </TableBody>
       </Table>
-    </TableContainer>
+    </TableContainer >
   )
 }
 
