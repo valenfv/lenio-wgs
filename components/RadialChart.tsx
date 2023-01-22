@@ -1,19 +1,23 @@
 import { useEffect, useRef } from 'react';
 import endpoint_data from "../data/endpoint_data.json";
 import { COUNTRIES_QTY, LABELS_MAP, INDICATORS_QTY, INDICATORS_TYPE_MAP } from '../constants/radialChart';
+import { capitalizeFirstLetter } from '../lib/helpers';
 import * as d3 from 'd3';
 
 const RadialChart = () => {
     const radialChart = useRef();
+    const { comparison, metrics } = endpoint_data;
+    const selectedIndicator = "GINI INDEX";
+    const selectedIndicatorData = metrics.filter(metric => metric.indicator === selectedIndicator)[0];
 
     useEffect(() => {
       const chartLabels = [];
-      endpoint_data.metrics.forEach(metric => {
+      metrics.forEach(metric => {
         metric.type = LABELS_MAP[metric.indicator].type
         chartLabels.push(LABELS_MAP[metric.indicator].label)
       });
 
-      endpoint_data.metrics.sort((a, b) => {
+      metrics.sort((a, b) => {
         if(a.type < b.type) { return -1; }
         if(a.type > b.type) { return 1; }
         return 0;
@@ -51,7 +55,7 @@ const RadialChart = () => {
           .domain([min - 6, max])
           .range([minInnerRadius, maxOuterRadius]);
 
-        endpoint_data.metrics.forEach((d, i) => {
+        metrics.forEach((d, i) => {
           d.startAngle = i * eachAngle;
           d.endAngle = (i + 1) * eachAngle;
 
@@ -76,7 +80,7 @@ const RadialChart = () => {
         // bars
         center
           .selectAll('.radial-bar')
-          .data(endpoint_data.metrics)
+          .data(metrics)
           .join('path')
           .attr('class', 'radial-bar')
           .attr('d', (d) => {
@@ -122,8 +126,8 @@ const RadialChart = () => {
             })
           })
 
+          // indicators pie in the center of the chart
           const piewidth = 638;
-          const pieHeight = 650;
           const radius = piewidth / 2;
 
           const formattedData = d3.pie().value(d => d.value)(categories);
@@ -165,6 +169,7 @@ const RadialChart = () => {
               .text(textWrap(category.label));
           });
 
+          // title and ranking's legend inside the chart
           center
             .append('text')
             .text('GINI Index Rankings')
@@ -177,7 +182,7 @@ const RadialChart = () => {
 
           center
             .append('text')
-            .text('United States')
+            .text(comparison)
             .attr('fill', '#DDDDDD')
             .attr('font-family', 'arial')
             .attr('font-weight', 700)
@@ -187,7 +192,7 @@ const RadialChart = () => {
 
           center
             .append('text')
-            .text('43.1')
+            .text(selectedIndicatorData.ranking)
             .attr('fill', '#DDDDDD')
             .attr('font-family', 'arial')
             .attr('font-weight', 700)
@@ -207,7 +212,7 @@ const RadialChart = () => {
 
           center
             .append('text')
-            .text('South Africa')
+            .text(selectedIndicatorData.firstPosition.country)
             .attr('fill', '#DDDDDD')
             .attr('font-family', 'arial')
             .attr('font-weight', 400)
@@ -217,7 +222,7 @@ const RadialChart = () => {
 
           center
             .append('text')
-            .text('63.1')
+            .text(selectedIndicatorData.firstPosition .ranking)
             .attr('fill', '#DDDDDD')
             .attr('font-family', 'arial')
             .attr('font-weight', 400)
@@ -237,7 +242,7 @@ const RadialChart = () => {
 
           center
             .append('text')
-            .text('Slovenia')
+            .text(selectedIndicatorData.lastPosition.country)
             .attr('fill', '#DDDDDD')
             .attr('font-family', 'arial')
             .attr('font-weight', 400)
@@ -247,7 +252,7 @@ const RadialChart = () => {
 
           center
             .append('text')
-            .text('63.1')
+            .text(selectedIndicatorData.lastPosition.ranking)
             .attr('fill', '#DDDDDD')
             .attr('font-family', 'arial')
             .attr('font-weight', 400)
@@ -265,6 +270,31 @@ const RadialChart = () => {
             .attr('text-anchor', 'start')
             .attr('transform', 'translate(145,-125)');
 
+          let circleYPosition = 20;
+          let legendYPosition = 18;
+
+          Object.keys(INDICATORS_TYPE_MAP).forEach(indicatorType => {
+
+            svg.append('circle')
+              .attr('cx', 800)
+              .attr('cy', circleYPosition)
+              .attr('r', 10)
+              .attr('fill', INDICATORS_TYPE_MAP[indicatorType])
+
+            svg.append('text')
+              .attr('text-anchor', 'start')
+              .attr('x', 710)
+              .attr('y',legendYPosition)
+              .attr('transform', 'translate(110,10)')
+              .attr('fill', '#FFFFFF')
+              .style("font-size", 15)
+              .style("font-weight", 400)
+              .style("font-family", 'Roboto')
+              .text(capitalizeFirstLetter(indicatorType));
+
+            circleYPosition += 30;
+            legendYPosition += 30;
+          });
   }, []);
 
 

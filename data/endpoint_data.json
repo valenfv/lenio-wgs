@@ -3,7 +3,16 @@
     "metrics": [
         {
             "indicator": "GINI INDEX",
-            "ranking": 130
+            "ranking": 72,
+            "sortedCountries": ["Armenia", "Azerbaijan", "USA", "Bulgaria", "Georgia", "Greece", "Iran", "Iraq", "Syria"],
+            "lastPosition": {
+				"country": "Slovenia",
+				"ranking": 24.6
+			},
+			"firstPosition": {
+				"country": "South Africa",
+				"ranking": 63
+			}
         },
         {
             "indicator": "UNEMPLOYMENT (PERCENTAGE)",

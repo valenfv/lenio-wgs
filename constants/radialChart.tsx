@@ -150,8 +150,8 @@ export const LABELS_MAP = {
 }
 
 export const INDICATORS_TYPE_MAP = {
+    economic: "#3860F6",
     education: "#59C3C3",
     health: "#D56A2D",
     social: "#DCB300",
-    economic: "#3860F6"
 }
