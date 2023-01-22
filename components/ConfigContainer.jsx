@@ -1,6 +1,8 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import { CountryPicker } from './CountryPicker';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeComparingCountry } from '../slices/sidebarSlice';
 
 const StyledContainer = styled('div')({
   display: 'flex',
@@ -11,9 +13,18 @@ const StyledContainer = styled('div')({
 });
 
 function ConfigContainer() {
+  const comparingCountry = useSelector((state) => state.sidebar.comparingCountry);
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    console.log({comparingCountry})
+  }, [comparingCountry])
+
   return (
     <StyledContainer>
-      <CountryPicker showCountries/>
+      <CountryPicker showCountries onChange={(value) => {
+        dispatch(changeComparingCountry(value.code))
+      }}/>
       <CountryPicker canBeNull showNeighboring showOrganizations showWorld showCountries={false}/>
     </StyledContainer>
   );

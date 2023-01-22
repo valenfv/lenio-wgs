@@ -8,7 +8,6 @@ export default function World() {
   const svgRef = React.useRef(null);
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
-
     const indicatorX = {
         id: 'c8316e0c7c1dca5df2a7fa9c63297c9d772b33c10d812ece07a1ad4ad2df650a',
         indicator_name: 'PERCENTAGE OF POPULATION IN EXTREME POVERTY',
@@ -22,19 +21,16 @@ export default function World() {
         max: 1500,
     }
 
-    const highlights = [
-      "USA",
-      "ARG",
-      "CHL",
-      "AFG",
-    ]
+    const data = generateData(indicatorX, indicatorY);
+
+    const highlights = data.find(c => c.isoCc === 'ARG').neighboring;
 
     setData({
-      comparing: 'CHL',
+      comparing: 'ARG',
       indicatorX,
       indicatorY,
       highlights,
-      data: generateData(indicatorX, indicatorY)
+      data,
     })
   }, []);
   useScatterPlot(svgRef, data)
