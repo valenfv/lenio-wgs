@@ -28,8 +28,8 @@ const RadialChart = () => {
 
        Object.values(LABELS_MAP).forEach(indicator => indicatorsTypeMap[indicator.label] = indicator.type);
 
-      const width = 900;
-      const height = 900;
+      const width = 750;
+      const height = 750;
 
       //chart container
       const svg = d3.select(radialChart.current)
@@ -92,7 +92,7 @@ const RadialChart = () => {
         // circles
         center
           .selectAll('.radial-circle')
-          .data([-26, 174])
+          .data([-34, COUNTRIES_QTY])
           .join('circle')
           .attr('r', (d) => valueScale(d))
           .attr('fill', 'none')
@@ -128,11 +128,11 @@ const RadialChart = () => {
           })
 
           // indicators pie in the center of the chart
-          const piewidth = 638;
+          const piewidth = 532;
           const radius = piewidth / 2;
 
           const formattedData = d3.pie().value(d => d.value)(categories);
-          const arcGenerator = d3.arc().innerRadius(300).outerRadius(radius);
+          const arcGenerator = d3.arc().innerRadius(245).outerRadius(radius);
 
           const pie = svg.append('g');
 
@@ -148,7 +148,7 @@ const RadialChart = () => {
 
           categories.forEach((category, index) => {
             const text = svg.append("text")
-              .attr("x", index > 8 && index < 27 ? 90 : 18)
+              .attr("x", index > 8 && index < 27 ? 75 : 7)
               .attr("dy", 13)
 
             text.append("textPath")
@@ -171,7 +171,7 @@ const RadialChart = () => {
             .attr('font-weight', 700)
             .attr('font-size', '20px')
             .attr('text-anchor', 'middle')
-            .attr('transform', 'translate(0,-240)');
+            .attr('transform', 'translate(0,-180)');
 
           center
             .append('text')
@@ -181,7 +181,7 @@ const RadialChart = () => {
             .attr('font-weight', 700)
             .attr('font-size', '18px')
             .attr('text-anchor', 'middle')
-            .attr('transform', 'translate(0,-180)');
+            .attr('transform', 'translate(0,-145)');
 
           center
             .append('text')
@@ -191,7 +191,7 @@ const RadialChart = () => {
             .attr('font-weight', 700)
             .attr('font-size', '22px')
             .attr('text-anchor', 'middle')
-            .attr('transform', 'translate(0,-150)');
+            .attr('transform', 'translate(0,-115)');
 
           center
             .append('text')
@@ -201,7 +201,7 @@ const RadialChart = () => {
             .attr('font-weight', 700)
             .attr('font-size', '14px')
             .attr('text-anchor', 'middle')
-            .attr('transform', 'translate(0,-125)');
+            .attr('transform', 'translate(0,-90)');
 
           center
             .append('text')
@@ -211,17 +211,17 @@ const RadialChart = () => {
             .attr('font-weight', 400)
             .attr('font-size', '18px')
             .attr('text-anchor', 'start')
-            .attr('transform', 'translate(-225,-180)');
+            .attr('transform', 'translate(-180,-145)');
 
           center
             .append('text')
-            .text(selectedIndicatorData.firstPosition .ranking)
+            .text(selectedIndicatorData.firstPosition.ranking)
             .attr('fill', '#DDDDDD')
             .attr('font-family', 'arial')
             .attr('font-weight', 400)
             .attr('font-size', '22px')
             .attr('text-anchor', 'start')
-            .attr('transform', 'translate(-200,-150)');
+            .attr('transform', 'translate(-150,-115)');
 
           center
             .append('text')
@@ -231,7 +231,7 @@ const RadialChart = () => {
             .attr('font-weight', 400)
             .attr('font-size', '14px')
             .attr('text-anchor', 'start')
-            .attr('transform', 'translate(-225,-125)');
+            .attr('transform', 'translate(-185,-90)');
 
           center
             .append('text')
@@ -241,7 +241,7 @@ const RadialChart = () => {
             .attr('font-weight', 400)
             .attr('font-size', '18px')
             .attr('text-anchor', 'end')
-            .attr('transform', 'translate(220,-180)');
+            .attr('transform', 'translate(180,-145)');
 
           center
             .append('text')
@@ -251,7 +251,7 @@ const RadialChart = () => {
             .attr('font-weight', 400)
             .attr('font-size', '22px')
             .attr('text-anchor', 'end')
-            .attr('transform', 'translate(210,-150)');
+            .attr('transform', 'translate(170,-115)');
 
           center
             .append('text')
@@ -261,22 +261,22 @@ const RadialChart = () => {
             .attr('font-weight', 400)
             .attr('font-size', '14px')
             .attr('text-anchor', 'start')
-            .attr('transform', 'translate(145,-125)');
+            .attr('transform', 'translate(105,-90)');
 
-          let circleYPosition = 20;
-          let legendYPosition = 18;
+          let circleYPosition = 15;
+          let legendYPosition = 10;
 
           Object.keys(INDICATORS_TYPE_MAP).forEach(indicatorType => {
 
             svg.append('circle')
-              .attr('cx', 800)
+              .attr('cx', 660)
               .attr('cy', circleYPosition)
               .attr('r', 10)
               .attr('fill', INDICATORS_TYPE_MAP[indicatorType])
 
             svg.append('text')
               .attr('text-anchor', 'start')
-              .attr('x', 710)
+              .attr('x', 570)
               .attr('y',legendYPosition)
               .attr('transform', 'translate(110,10)')
               .attr('fill', '#FFFFFF')
@@ -285,8 +285,8 @@ const RadialChart = () => {
               .style("font-family", 'Roboto')
               .text(capitalizeFirstLetter(indicatorType));
 
-            circleYPosition += 30;
-            legendYPosition += 30;
+            circleYPosition += 28;
+            legendYPosition += 28;
           });
   }, []);
 
