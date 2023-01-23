@@ -7,6 +7,8 @@ import Head from 'next/head';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Image from 'next/image';
+import '../styles/main.css';
+
 // import ConfigContainer from '../components/ConfigContainer';
 // import DataVisContainer from '../components/DataVisContainer';
 
