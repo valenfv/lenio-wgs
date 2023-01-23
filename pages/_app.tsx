@@ -67,6 +67,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <Provider store={store}>
       <Head>
         <title>WGS - Leniolabs</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
       </Head>
       <main style={{ padding: '0 50px 50px 50px' }}>
         <StyledHeader>

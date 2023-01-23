@@ -24,3 +24,7 @@
   justify-content: space-between;
   margin-top: 40px;
 }
+
+.svgText {
+  font-family: 'Montserrat', sans-serif;
+}
