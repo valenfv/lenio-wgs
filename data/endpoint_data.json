@@ -1,0 +1,359 @@
+{
+    "comparison": "USA",
+    "metrics": [
+        {
+            "indicator": "GINI INDEX",
+            "ranking": 72,
+            "sortedCountries": [
+                "AFG",
+                "ALB",
+                "AND",
+                "DZA",
+                "AGO",
+                "ARG",
+                "ARM",
+                "AUS",
+                "AUT",
+                "AZE",
+                "BHS",
+                "BHR",
+                "BGD",
+                "BRB",
+                "BLR",
+                "BEL",
+                "BLZ",
+                "BEN",
+                "BTN",
+                "BOL",
+                "BIH",
+                "BWA",
+                "BRA",
+                "BRN",
+                "BGR",
+                "BFA",
+                "BDI",
+                "CPV",
+                "KHM",
+                "CMR",
+                "CAN",
+                "CAF",
+                "TCD",
+                "CHL",
+                "CHN",
+                "COL",
+                "COM",
+                "COD",
+                "COG",
+                "CRI",
+                "CIV",
+                "HRV",
+                "CUB",
+                "CYP",
+                "CZE",
+                "DNK",
+                "DJI",
+                "DOM",
+                "ECU",
+                "EGY",
+                "SLV",
+                "GNQ",
+                "ERI",
+                "EST",
+                "SWZ",
+                "ETH",
+                "FJI",
+                "FIN",
+                "FRA",
+                "GAB",
+                "GMB",
+                "GEO",
+                "DEU",
+                "GHA",
+                "GRC",
+                "GTM",
+                "GIN",
+                "GNB",
+                "GUY",
+                "HTI",
+                "HND",
+                "HUN",
+                "ISL",
+                "IND",
+                "IDN",
+                "IRN",
+                "IRQ",
+                "IRL",
+                "ISR",
+                "ITA",
+                "JAM",
+                "JPN",
+                "JOR",
+                "KAZ",
+                "KEN",
+                "PRK",
+                "KOR",
+                "XXK",
+                "KWT",
+                "KGZ",
+                "LAO",
+                "LIE",
+                "LVA",
+                "LBN",
+                "LSO",
+                "LBR",
+                "LBY",
+                "LTU",
+                "LUX",
+                "MKD",
+                "MDG",
+                "MWI",
+                "MYS",
+                "MDV",
+                "MLI",
+                "MLT",
+                "MRT",
+                "MUS",
+                "MEX",
+                "MDA",
+                "MCO",
+                "MNG",
+                "MNE",
+                "MAR",
+                "MOZ",
+                "MMR",
+                "NAM",
+                "NPL",
+                "NLD",
+                "NZL",
+                "NIC",
+                "NER",
+                "NGA",
+                "NOR",
+                "OMN",
+                "PAK",
+                "PAN",
+                "PNG",
+                "PRY",
+                "PER",
+                "PHL",
+                "POL",
+                "PRT",
+                "QAT",
+                "ROU",
+                "RUS",
+                "RWA",
+                "SAU",
+                "SEN",
+                "SRB",
+                "SLE",
+                "SGP",
+                "SMR",
+                "SVK",
+                "SVN",
+                "SLB",
+                "SOM",
+                "ZAF",
+                "SSD",
+                "ESP",
+                "LKA",
+                "SDN",
+                "SUR",
+                "SWE",
+                "CHE",
+                "SYR",
+                "TWN",
+                "TJK",
+                "TZA",
+                "THA",
+                "TLS",
+                "TGO",
+                "TTO",
+                "TUN",
+                "TUR",
+                "TKM",
+                "UGA",
+                "UKR",
+                "ARE",
+                "GBR",
+                "USA",
+                "URY",
+                "UZB",
+                "VAT",
+                "VEN",
+                "VNM",
+                "YEM",
+                "ZMB",
+                "ZWE",
+                "ESH",
+                "KNA",
+                "LCA",
+                "VCT",
+                "SYC",
+                "VIR",
+                "ATG",
+                "KIR",
+                "DMA",
+                "NRU",
+                "GRD",
+                "WSM",
+                "TON",
+                "TUV",
+                "VUT",
+                "PSE",
+                "MHL",
+                "FSM",
+                "PLW",
+                "HKG",
+                "MAC"
+            ],
+            "lastPosition": {
+				"country": "SVN",
+				"ranking": 24.6
+			},
+			"firstPosition": {
+				"country": "ZAF",
+				"ranking": 63
+			}
+        },
+        {
+            "indicator": "UNEMPLOYMENT (PERCENTAGE)",
+            "ranking": 120
+        },
+        {
+            "indicator": "INFANT MORTALITY",
+            "ranking": 80
+        },
+        {
+            "indicator": "POPULATION",
+            "ranking": 100
+        },
+        {
+            "indicator": "SURFACE AREA (KM2)",
+            "ranking": 150
+        },
+        {
+            "indicator": "HAPPY PLANET INDEX",
+            "ranking": 120
+        },
+        {
+            "indicator": "HUMAN DEVELOPMENT INDEX",
+            "ranking": 170
+        },
+        {
+            "indicator": "SUSTAINABLE ECONOMIC DEVELOPMENT ASSESSMENT (SEDA)",
+            "ranking": 100
+        },
+        {
+            "indicator": "GDP GROWTH\n(ANNUAL PERCENTAGE)",
+            "ranking": 115
+        },
+        {
+            "indicator": "GDP \n($ USD BILLIONS PPP)",
+            "ranking": 135
+        },
+        {
+            "indicator": "GDP PER CAPITA IN $ (PPP)",
+            "ranking": 88
+        },
+        {
+            "indicator": "ECONOMIC GROWTH",
+            "ranking": 60
+        },
+        {
+            "indicator": "HEALTH EXPENDITURE \nPERCENTAGE OF GDP",
+            "ranking": 140
+        },
+        {
+            "indicator": "HEALTH EXPENDITURE \nPER PERSON",
+            "ranking": 110
+        },
+        {
+            "indicator": "MATERNAL MORTALITY PER 100,000 LIVE BIRTHS",
+            "ranking": 30
+        },
+        {
+            "indicator": "EDUCATION EXPENDITURE\nPERCENTAGE OF GDP",
+            "ranking": 114
+        },
+        {
+            "indicator": "EDUCATION AS PERCENTAGE OF GDP",
+            "ranking": 101
+        },
+        {
+            "indicator": "PERCENTAGE OF PRIMARY SCHOOL AGED KIDS OUT OF SCHOOL",
+            "ranking": 79
+        },
+        {
+            "indicator": "PERCENTAGE OF POPULATION WITH ACCESS TO ELECTRICITY",
+            "ranking": 70
+        },
+        {
+            "indicator": "PERCENTAGE OF POPULATION IN EXTREME POVERTY",
+            "ranking": 50
+        },
+        {
+            "indicator": "POLITICAL RIGHTS SCORE",
+            "ranking": 40
+        },
+        {
+            "indicator": "CIVIL LIBERTIES SCORE",
+            "ranking": 60
+        },
+        {
+            "indicator": "POLITICAL STABILITY AND ABSENCE OF VIOLENCE",
+            "ranking": 100
+        },
+        {
+            "indicator": "GOVERNMENT EFFECTIVENESS",
+            "ranking": 25
+        },
+        {
+            "indicator": "REGULATORY QUALITY",
+            "ranking": 165
+        },
+        {
+            "indicator": "RULE OF LAW",
+            "ranking": 85
+        },
+        {
+            "indicator": "CONTROL OF CORRUPTION",
+            "ranking": 111
+        },
+        {
+            "indicator": "JUDICIAL EFFECTIVENESS SCORE",
+            "ranking": 109
+        },
+        {
+            "indicator": "GOVERNMENT INTEGRITY SCORE",
+            "ranking": 108
+        },
+        {
+            "indicator": "OVERALL ECONOMIC FREEDOM SCORE",
+            "ranking": 107
+        },
+        {
+            "indicator": "FINANCIAL FREEDOM SCORE",
+            "ranking": 106
+        },
+        {
+            "indicator": "GOVERNMENT EXPENDITURE (PERCENTAGE OF GDP)",
+            "ranking": 105
+        },
+        {
+            "indicator": "CO2E EMISSIONS PER CAPITA",
+            "ranking": 144
+        },
+        {
+            "indicator": "SHARE OF ELECTRICITY FROM RENEWABLES GENERATION",
+            "ranking": 133
+        },
+        {
+            "indicator": "PERCENTAGE OF SEATS HELD BY WOMEN IN NATIONAL PARLIAMENTS",
+            "ranking": 122
+        },
+        {
+            "indicator": "MILITARY SPENDING AS PERCENTAGE OF GDP",
+            "ranking": 174
+        }
+    ]
+}

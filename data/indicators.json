@@ -1,0 +1,290 @@
+{
+	"c4543f13e489ba26b88cd849ca6c57f833f6eda07e36cc52e3fac4a0ae4600ed": {
+		"indicator_name": "POPULATION",
+		"note": "",
+		"source": "World Bank Data",
+		"source_URL": "https://data.worldbank.org/indicator/SP.POP.TOTL",
+		"id": "c4543f13e489ba26b88cd849ca6c57f833f6eda07e36cc52e3fac4a0ae4600ed",
+		"data_type": "numeric"
+	},
+	"eda129823e6a4a7b16f8a3ccb09157d8582b3a755a225201b60a745c786df7a5": {
+		"indicator_name": "SURFACE AREA (KM2)",
+		"note": "",
+		"source": "CIA World Factbook",
+		"source_URL": "https://www.cia.gov/library/publications/the-world-factbook/fields/2147.html#al",
+		"id": "eda129823e6a4a7b16f8a3ccb09157d8582b3a755a225201b60a745c786df7a5",
+		"data_type": "numeric"
+	},
+	"abf6788a66fbe940547ee9c108535f0be5b0eacbd2bec3796634f90a742202cd": {
+		"indicator_name": "GINI INDEX",
+		"note": "inequality in the distribution of family income. Lower the better.",
+		"source": "CIA World Factbook",
+		"source_URL": "https://www.cia.gov/library/publications/the-world-factbook/rankorder/2172rank.html",
+		"id": "abf6788a66fbe940547ee9c108535f0be5b0eacbd2bec3796634f90a742202cd",
+		"data_type": "numeric"
+	},
+	"80c1e29026bae838ab3275c67aed5010b25cc6c12cc109a75a4695a9c9735c56": {
+		"indicator_name": "HAPPY PLANET INDEX",
+		"note": "well being + life expectancy + inequalities + ecological footprint  \n(higher = better)",
+		"source": "Happy Planet Index",
+		"source_URL": "http://happyplanetindex.org/",
+		"id": "80c1e29026bae838ab3275c67aed5010b25cc6c12cc109a75a4695a9c9735c56",
+		"data_type": "numeric"
+	},
+	"19e77066afdf91785409c51a56b77d2bdd49e86e3d8f00d55588c035665fe49e": {
+		"indicator_name": "HUMAN DEVELOPMENT INDEX",
+		"note": "healthy life + knowledge + standard of living  \n(high = better)",
+		"source": "UNDP",
+		"source_URL": "http://hdr.undp.org/en/data#",
+		"id": "19e77066afdf91785409c51a56b77d2bdd49e86e3d8f00d55588c035665fe49e",
+		"data_type": "numeric"
+	},
+	"2e62289e29d9f2c072c12c0cced17aa21f9756601a7fa53d7d2bf2aab649b2ad": {
+		"indicator_name": "SUSTAINABLE ECONOMIC DEVELOPMENT ASSESSMENT (SEDA)",
+		"note": "an assessment based on 40 indicators in sustainability, economics, & investments\n(higher = better)",
+		"source": "Boston Consulting Group (BCG)",
+		"source_URL": "https://www.bcg.com/en-gb/publications/interactives/seda-2018-guide.aspx",
+		"id": "2e62289e29d9f2c072c12c0cced17aa21f9756601a7fa53d7d2bf2aab649b2ad",
+		"data_type": "numeric"
+	},
+	"3ab543971f17c026abea3dd25ad5153cf5bdfc4998597934a81b79de35fe3057": {
+		"indicator_name": "GDP GROWTH\n(ANNUAL PERCENTAGE)",
+		"note": "",
+		"source": "",
+		"source_URL": "",
+		"id": "3ab543971f17c026abea3dd25ad5153cf5bdfc4998597934a81b79de35fe3057",
+		"data_type": "percent"
+	},
+	"38dbe7f7c1734f0a0385914a726628ef168b728813c9dcf0a7550032d93ec0ac": {
+		"indicator_name": "GDP \n($ USD BILLIONS PPP)",
+		"note": "",
+		"source": "World Bank",
+		"source_URL": "https://data.worldbank.org/indicator/NY.GDP.MKTP.CD",
+		"id": "38dbe7f7c1734f0a0385914a726628ef168b728813c9dcf0a7550032d93ec0ac",
+		"data_type": "numeric"
+	},
+	"1e89ed77b6d69f5fbeb36459962e5ea5846c36a6657a271a78d2630e78675cd8": {
+		"indicator_name": "GDP PER CAPITA IN $ (PPP)",
+		"note": "",
+		"source": "World Bank",
+		"source_URL": "https://data.worldbank.org/indicator/NY.GDP.PCAP.PP.CD",
+		"id": "1e89ed77b6d69f5fbeb36459962e5ea5846c36a6657a271a78d2630e78675cd8",
+		"data_type": "numeric"
+	},
+	"8050fbce1032d0e59268657a150e8b73dda479ed43969a645e7ed0b5c6a1211e": {
+		"indicator_name": "ECONOMIC GROWTH",
+		"note": "",
+		"source": "WorldBank",
+		"source_URL": "https://data.worldbank.org/indicator/NY.GDP.MKTP.KD.ZG",
+		"id": "8050fbce1032d0e59268657a150e8b73dda479ed43969a645e7ed0b5c6a1211e",
+		"data_type": "numeric"
+	},
+	"2ef038044876a95de566566c491df256e711d67d31ee39aab4e4ee70dcc95855": {
+		"indicator_name": "HEALTH EXPENDITURE \nPERCENTAGE OF GDP",
+		"note": "",
+		"source": "World Bank",
+		"source_URL": "https://data.worldbank.org/indicator/SH.XPD.CHEX.GD.ZS",
+		"id": "2ef038044876a95de566566c491df256e711d67d31ee39aab4e4ee70dcc95855",
+		"data_type": "percent"
+	},
+	"26d63fe0f57877f7081748048f4a04128804d8d466e6d99beb622829b2a4aa5d": {
+		"indicator_name": "HEALTH EXPENDITURE \nPER PERSON",
+		"note": "(current international $)",
+		"source": "World Bank",
+		"source_URL": "https://data.worldbank.org/indicator/SH.XPD.CHEX.PP.CD",
+		"id": "26d63fe0f57877f7081748048f4a04128804d8d466e6d99beb622829b2a4aa5d",
+		"data_type": "numeric"
+	},
+	"d10f28023d022432dc66f939bf93d275927305bb6e3aad03c364bb596d2298cb": {
+		"indicator_name": "INFANT MORTALITY",
+		"note": "",
+		"source": "WorldBank",
+		"source_URL": "https://data.worldbank.org/indicator/SP.DYN.IMRT.IN",
+		"id": "d10f28023d022432dc66f939bf93d275927305bb6e3aad03c364bb596d2298cb",
+		"data_type": "numeric"
+	},
+	"e697ac9a176a90500f956d096de94a2dfa2ee08b46a8e5673981516fcacde6fa": {
+		"indicator_name": "MATERNAL MORTALITY PER 100,000 LIVE BIRTHS",
+		"note": "",
+		"source": "Worldbank",
+		"source_URL": "https://data.worldbank.org/indicator/SH.STA.MMRT",
+		"id": "e697ac9a176a90500f956d096de94a2dfa2ee08b46a8e5673981516fcacde6fa",
+		"data_type": "numeric"
+	},
+	"dbcbcf99dea62258312085547393ba450a0d7603c1e1408bebdaf848dc83b608": {
+		"indicator_name": "EDUCATION EXPENDITURE\nPERCENTAGE OF GDP",
+		"note": "",
+		"source": "World Bank",
+		"source_URL": "https://data.worldbank.org/indicator/SE.XPD.TOTL.GD.ZS?view=chart",
+		"id": "dbcbcf99dea62258312085547393ba450a0d7603c1e1408bebdaf848dc83b608",
+		"data_type": "percent"
+	},
+	"4f324bf9da22a4e7dfb98be2d6a346b6a796759410c2722566ae51322d1b1589": {
+		"indicator_name": "EDUCATION AS PERCENTAGE OF GDP",
+		"note": "",
+		"source": "WorldBank",
+		"source_URL": "https://data.worldbank.org/indicator/SE.XPD.TOTL.GD.ZS",
+		"id": "4f324bf9da22a4e7dfb98be2d6a346b6a796759410c2722566ae51322d1b1589",
+		"data_type": "percent"
+	},
+	"c75c3f864c7a7da6c6986e939121004da68f762931e9d67266e7bbd8af2c4f97": {
+		"indicator_name": "PERCENTAGE OF PRIMARY SCHOOL AGED KIDS OUT OF SCHOOL",
+		"note": "",
+		"source": "WorldBank",
+		"source_URL": "https://data.worldbank.org/indicator/SE.PRM.UNER.ZS",
+		"id": "c75c3f864c7a7da6c6986e939121004da68f762931e9d67266e7bbd8af2c4f97",
+		"data_type": "percent"
+	},
+	"6a51088c71570cf4bffa49c68618749c8bd47937306555fb9920745428a9fac5": {
+		"indicator_name": "UNEMPLOYMENT (PERCENTAGE)",
+		"note": "",
+		"source": "Heritage Foundation",
+		"source_URL": "https://www.heritage.org/index/explore",
+		"id": "6a51088c71570cf4bffa49c68618749c8bd47937306555fb9920745428a9fac5",
+		"data_type": "percent"
+	},
+	"c8316e0c7c1dca5df2a7fa9c63297c9d772b33c10d812ece07a1ad4ad2df650a": {
+		"indicator_name": "PERCENTAGE OF POPULATION IN EXTREME POVERTY",
+		"note": "",
+		"source": "WorldBank",
+		"source_URL": "https://data.worldbank.org/topic/poverty",
+		"id": "c8316e0c7c1dca5df2a7fa9c63297c9d772b33c10d812ece07a1ad4ad2df650a",
+		"data_type": "percent"
+	},
+	"9bee96b1b89d7d9e7d562af0d64753876cbba914c3bfe1c52cbae20f64bba0f3": {
+		"indicator_name": "PERCENTAGE OF POPULATION WITH ACCESS TO ELECTRICITY",
+		"note": "",
+		"source": "WorldBank",
+		"source_URL": "https://data.worldbank.org/indicator/EG.ELC.ACCS.ZS",
+		"id": "9bee96b1b89d7d9e7d562af0d64753876cbba914c3bfe1c52cbae20f64bba0f3",
+		"data_type": "percent"
+	},
+	"b6b1399d53ea98896cfedc7ec550f5b7bac495c84f75e9d3eeb10fc54e036cb7": {
+		"indicator_name": "POLITICAL RIGHTS SCORE",
+		"note": "",
+		"source": "Freedom House",
+		"source_URL": "https://freedomhouse.org/reports/publication-archives",
+		"id": "b6b1399d53ea98896cfedc7ec550f5b7bac495c84f75e9d3eeb10fc54e036cb7",
+		"data_type": "numeric"
+	},
+	"e727157830356e026bf060e58d46ffe9228093c3f26529016dce727ff61a5d73": {
+		"indicator_name": "CIVIL LIBERTIES SCORE",
+		"note": "",
+		"source": "Freedom House",
+		"source_URL": "https://freedomhouse.org/reports/publication-archives",
+		"id": "e727157830356e026bf060e58d46ffe9228093c3f26529016dce727ff61a5d73",
+		"data_type": "numeric"
+	},
+	"fce6a423e89ed866fb7d4003c30f319b3176e128257f2f5924dca1abde2f63e4": {
+		"indicator_name": "POLITICAL STABILITY AND ABSENCE OF VIOLENCE",
+		"note": "Likelihood of political instability ",
+		"source": "World Bank",
+		"source_URL": "",
+		"id": "fce6a423e89ed866fb7d4003c30f319b3176e128257f2f5924dca1abde2f63e4",
+		"data_type": "numeric"
+	},
+	"f09176250add1a45973990cdb6c517f53276a71e70bb81bc181db793454c5915": {
+		"indicator_name": "GOVERNMENT EFFECTIVENESS",
+		"note": "Quality of public services, civil service, policy formation, government commitment (-2.5 to +2.5)",
+		"source": "World Bank",
+		"source_URL": "",
+		"id": "f09176250add1a45973990cdb6c517f53276a71e70bb81bc181db793454c5915",
+		"data_type": "numeric"
+	},
+	"63cd3a0c49b877e08a64f2bb59c9ae89962fa29d176c86177157892df65a924f": {
+		"indicator_name": "REGULATORY QUALITY",
+		"note": "level of policies to support private sector",
+		"source": "World Bank",
+		"source_URL": "",
+		"id": "63cd3a0c49b877e08a64f2bb59c9ae89962fa29d176c86177157892df65a924f",
+		"data_type": "numeric"
+	},
+	"5a949ddffedc1e05608a3ba73522b4287e1a4c6a5ffd299034b6260de7a2ebe2": {
+		"indicator_name": "RULE OF LAW",
+		"note": "quality of rule of law + likelihood of crime / violence",
+		"source": "World Bank",
+		"source_URL": "",
+		"id": "5a949ddffedc1e05608a3ba73522b4287e1a4c6a5ffd299034b6260de7a2ebe2",
+		"data_type": "numeric"
+	},
+	"d6185a4e9a01b20e4abb942a726116e366fe89ccb4323936282b7162ee26972e": {
+		"indicator_name": "CONTROL OF CORRUPTION",
+		"note": "",
+		"source": "World Bank",
+		"source_URL": "",
+		"id": "d6185a4e9a01b20e4abb942a726116e366fe89ccb4323936282b7162ee26972e",
+		"data_type": "numeric"
+	},
+	"58b38f63df795b4139a8b58c6221874780f060a8191b79e60d9396832448a8b6": {
+		"indicator_name": "JUDICIAL EFFECTIVENESS SCORE",
+		"note": "judicial independence + quality of the judicial process,\nfairness\n(/100)",
+		"source": "Heritage Foundation",
+		"source_URL": "https://www.heritage.org/index/explore",
+		"id": "58b38f63df795b4139a8b58c6221874780f060a8191b79e60d9396832448a8b6",
+		"data_type": "numeric"
+	},
+	"332ad49d7d69aa5d1fe8422d71a45711c1b1407f4b6b32eea4bfbed6aa7624c8": {
+		"indicator_name": "GOVERNMENT INTEGRITY SCORE",
+		"note": "Public trust + transparency + corruption ",
+		"source": "Heritage Foundation",
+		"source_URL": "https://www.heritage.org/index/explore",
+		"id": "332ad49d7d69aa5d1fe8422d71a45711c1b1407f4b6b32eea4bfbed6aa7624c8",
+		"data_type": "numeric"
+	},
+	"385d664b83782726a9044ed08e1ef9e202b11301174766278d2a270e91715102": {
+		"indicator_name": "OVERALL ECONOMIC FREEDOM SCORE",
+		"note": "",
+		"source": "Heritage Foundation",
+		"source_URL": "https://www.heritage.org/index/explore",
+		"id": "385d664b83782726a9044ed08e1ef9e202b11301174766278d2a270e91715102",
+		"data_type": "numeric"
+	},
+	"0c54d47091efa7e571c68e48f36cce50e7d5074cfb51c28e97a6718509e975f7": {
+		"indicator_name": "FINANCIAL FREEDOM SCORE",
+		"note": "",
+		"source": "Heritage Foundation",
+		"source_URL": "https://www.heritage.org/index/explore",
+		"id": "0c54d47091efa7e571c68e48f36cce50e7d5074cfb51c28e97a6718509e975f7",
+		"data_type": "numeric"
+	},
+	"ac1b7c4efacc160444c81a4edf7cbc0836e1653d6d52b08f4bc9d27012c12430": {
+		"indicator_name": "GOVERNMENT EXPENDITURE (PERCENTAGE OF GDP)",
+		"note": "",
+		"source": "Heritage Foundation",
+		"source_URL": "https://www.heritage.org/index/explore",
+		"id": "ac1b7c4efacc160444c81a4edf7cbc0836e1653d6d52b08f4bc9d27012c12430",
+		"data_type": "percent"
+	},
+	"e04d546d273c7f54c904d2dc81871af194740b45802e6364046292d242e0c0c2": {
+		"indicator_name": "CO2E EMISSIONS PER CAPITA",
+		"note": "",
+		"source": "WorldBank",
+		"source_URL": "https://data.worldbank.org/indicator/EN.ATM.CO2E.PC",
+		"id": "e04d546d273c7f54c904d2dc81871af194740b45802e6364046292d242e0c0c2",
+		"data_type": "numeric"
+	},
+	"33689b2eb540a3297384fc40ea261c0d8cebeb5423f2efc52f6154cc7033ef23": {
+		"indicator_name": "SHARE OF ELECTRICITY FROM RENEWABLES GENERATION",
+		"note": "",
+		"source": "EIA",
+		"source_URL": "https://www.eia.gov/international/data/world/electricity/electricity-generation?pd=2&p=0000000000000000000000000000098&u=1&f=A&v=column&a=-&i=none&vo=value&t=C&g=00000000000000000000000000000000000000000000000001&l=249-ruvvvvvfvtvnvv1vrvvvvfvvvvvvfvvvou20evvvvvvvvvvvvvvs&s=1420070400000&e=1577836800000&vb=146&ev=false",
+		"id": "33689b2eb540a3297384fc40ea261c0d8cebeb5423f2efc52f6154cc7033ef23",
+		"data_type": "numeric"
+	},
+	"35081da1753663fe4b9495acb7e57296cd1c9c15ebf04c25a14391807727690f": {
+		"indicator_name": "PERCENTAGE OF SEATS HELD BY WOMEN IN NATIONAL PARLIAMENTS",
+		"note": "",
+		"source": "World Bank",
+		"source_URL": "https://data.worldbank.org/indicator/SG.GEN.PARL.ZS",
+		"id": "35081da1753663fe4b9495acb7e57296cd1c9c15ebf04c25a14391807727690f",
+		"data_type": "percent"
+	},
+	"ddbd43370d66241d028fc473f4668cd56bced211b91bdd4ffef635beef11ee9c": {
+		"indicator_name": "MILITARY SPENDING AS PERCENTAGE OF GDP",
+		"note": "",
+		"source": "SIPRI",
+		"source_URL": "https://milex.sipri.org/sipri",
+		"id": "ddbd43370d66241d028fc473f4668cd56bced211b91bdd4ffef635beef11ee9c",
+		"data_type": "percent"
+	}
+}

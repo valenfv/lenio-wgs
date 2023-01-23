@@ -1,0 +1,19 @@
+.menu {
+  width: 300px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  row-gap: 5px;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.chart {
+  width: 100%;
+}
+
+.chart svg {
+   width: 100%;
+}

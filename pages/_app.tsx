@@ -1,10 +1,14 @@
 import type { AppProps } from 'next/app';
 
 import React, { useState } from 'react';
+import { store } from '../store'
+import { Provider } from 'react-redux'
 import Head from 'next/head';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Image from 'next/image';
+import '../styles/main.css';
+
 // import ConfigContainer from '../components/ConfigContainer';
 // import DataVisContainer from '../components/DataVisContainer';
 
@@ -17,13 +21,15 @@ const StyledHeader = styled('div')({
   justifyContent: 'center',
   position: 'relative',
   alignItems: 'center',
-  fontSize: '36px',
+  fontSize: '28px',
   lineHeight: '40px',
+  maxWidth: 1280,
+  margin: '0 auto'
 });
 
 const StyledButton = styled(Button)({
-  height: '64px',
-  width: '75px',
+  height: '51px',
+  width: '60px',
   border: '1px solid #191935',
 });
 
@@ -58,16 +64,19 @@ export default function App({ Component, pageProps }: AppProps) {
   const [dataVisType, setDataVisType] = useState('');
 
   return (
-    <>
+    <Provider store={store}>
       <Head>
         <title>WGS - Leniolabs</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
       </Head>
       <main style={{ padding: '0 50px 50px 50px' }}>
         <StyledHeader>
           <Image
             src="/lenio-wgs/header-logo1.png"
-            height={60}
-            width={250}
+            height={48}
+            width={200}
             alt="Logo Image"
             style={{
               marginRight: 'auto',
@@ -88,6 +97,6 @@ export default function App({ Component, pageProps }: AppProps) {
         </StyledHeader>
         <Component {...pageProps} />
       </main>
-    </>
+    </Provider>
   );
 }
