@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import endpoint_data from "../data/endpoint_data.json";
 import { COUNTRIES_QTY, LABELS_MAP, INDICATORS_QTY, INDICATORS_TYPE_MAP } from '../constants/radialChart';
-import { capitalizeFirstLetter } from '../lib/helpers';
+import { capitalizeFirstLetter, setEllipsis } from '../lib/helpers';
 import * as d3 from 'd3';
 
 const RadialChart = () => {
@@ -91,7 +91,7 @@ const RadialChart = () => {
         // circles
         center
           .selectAll('.radial-circle')
-          .data([1, 174])
+          .data([-26, 174])
           .join('circle')
           .attr('r', (d) => valueScale(d))
           .attr('fill', 'none')
@@ -135,14 +135,6 @@ const RadialChart = () => {
 
           const pie = svg.append('g');
 
-          const textWrap = (label: string) => {
-            let indicator = label
-            if (label.length > 4) {
-              indicator = `${label.split('').splice(0, 4).join('')}...`;
-            }
-            return indicator;
-          };
-
           pie.selectAll()
             .data(formattedData)
             .join('path')
@@ -166,13 +158,13 @@ const RadialChart = () => {
               .attr('font-size', '12px')
               .attr('overflow', 'ellipsis')
               .attr("xlink:href", `#${category.label}`)
-              .text(textWrap(category.label));
+              .text(setEllipsis(category.label, 4));
           });
 
           // title and ranking's legend inside the chart
           center
             .append('text')
-            .text('GINI Index Rankings')
+            .text(`${setEllipsis(selectedIndicator, 17)} Rankings`)
             .attr('fill', '#DDDDDD')
             .attr('font-family', 'arial')
             .attr('font-weight', 700)
