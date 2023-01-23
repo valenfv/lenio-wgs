@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import endpoint_data from "../data/endpoint_data.json";
 import { COUNTRIES_QTY, LABELS_MAP, INDICATORS_QTY, INDICATORS_TYPE_MAP } from '../constants/radialChart';
 import { capitalizeFirstLetter, setEllipsis } from '../lib/helpers';
+import iso_country from '../data/iso_country.json'
 import * as d3 from 'd3';
 
 const RadialChart = () => {
@@ -174,7 +175,7 @@ const RadialChart = () => {
 
           center
             .append('text')
-            .text(comparison)
+            .text(iso_country[comparison])
             .attr('fill', '#DDDDDD')
             .attr('font-family', 'arial')
             .attr('font-weight', 700)
@@ -204,7 +205,7 @@ const RadialChart = () => {
 
           center
             .append('text')
-            .text(selectedIndicatorData.firstPosition.country)
+            .text(iso_country[selectedIndicatorData.firstPosition.country])
             .attr('fill', '#DDDDDD')
             .attr('font-family', 'arial')
             .attr('font-weight', 400)
@@ -234,7 +235,7 @@ const RadialChart = () => {
 
           center
             .append('text')
-            .text(selectedIndicatorData.lastPosition.country)
+            .text(iso_country[selectedIndicatorData.lastPosition.country])
             .attr('fill', '#DDDDDD')
             .attr('font-family', 'arial')
             .attr('font-weight', 400)
