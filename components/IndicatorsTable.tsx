@@ -15,7 +15,7 @@ interface Cell {
 const StyledTableCell = styled(TableCell)<TableCellProps & Cell>(() => ({
   [`&.${tableCellClasses.head}`]: {
     color: 'rgba(238, 238, 238, 0.7)',
-    fontSize: '16px',
+    fontSize: '14px',
     height: 30,
     padding: "1px 0 1px 15px",
     border: 'none',
@@ -26,10 +26,10 @@ const StyledTableCell = styled(TableCell)<TableCellProps & Cell>(() => ({
     background: 'linear-gradient(130deg, rgba(0,0,32), rgba(1,0,43) 70%)',
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 16,
+    fontSize: '12px',
     color: '#DDDDDD',
     border: 'none',
-    padding: "1px 0 1px 15px",
+    padding: "1px 0 0 15px",
     height: 50,
     whiteSpace: 'nowrap',
   },
@@ -101,11 +101,11 @@ const Delta: React.FC<DeltaProps> = ({ up, children }) => {
 
 const TableContainer = styled('div')(() => ({
   height: 500,
+  width: 300,
   overflowY: 'auto',
   border: '1px solid rgba(238, 238, 238, 0.25)',
-  width: '366px',
   "::-webkit-scrollbar": {
-    width: "5px",
+    width: "2px",
     height: '10px'
   },
   "::-webkit-scrollbar-track": {
