@@ -7,10 +7,9 @@ import {
 	CountryRankingData,
 	IndicatorsKeys,
 } from "../../interfaces";
-import countries_data from "../../data/data.json";
 import iso_countries from "../../data/iso_country.json";
 import indicators from "../../data/indicators.json";
-import { getLatestYear } from "../../utils/rankingUtils";
+import { getLatestIndicatorValue, getLatestYear } from "../../utils/rankingUtils";
 
 function getRankings(comparing_country: string, countries: Array<CountriesDataKeys>): Ranking {
 	const rankings: Ranking = {
@@ -27,17 +26,12 @@ function getRankings(comparing_country: string, countries: Array<CountriesDataKe
 		};
 
 		countries.forEach((iso_country_code: CountriesDataKeys) => {
-			const country_indicators = (countries_data as CountriesData)[iso_country_code].indicators[indicator_key];
-			const latestYear = getLatestYear(Object.keys(country_indicators));
-			if (latestYear) {
-				const value = (countries_data as CountriesData)[iso_country_code].indicators[indicator_key][latestYear];
-
-				obj.sortedCountries.push({
-					country: iso_country_code,
-					country_name: iso_countries[iso_country_code],
-					value: value || null,
-				});
-			}
+			const value = getLatestIndicatorValue(iso_country_code, indicator_key);
+			obj.sortedCountries.push({
+				country: iso_country_code,
+				country_name: iso_countries[iso_country_code],
+				value,
+			});
 		});
 		if (true) {
 			// higher is better

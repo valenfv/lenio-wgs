@@ -1,8 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { CountriesData, CountriesDataKeys, IndicatorsKeys, IndicatorValue } from "../../interfaces";
-import countries_data from "../../data/data.json";
+import { CountriesDataKeys, IndicatorsKeys, IndicatorValue } from "../../interfaces";
 import iso_countries from "../../data/iso_country.json";
-import { getLatestYear } from "../../utils/rankingUtils";
+import { getLatestIndicatorValue } from "../../utils/rankingUtils";
 
 function getIndicatorsValues(indicators: Array<IndicatorsKeys>): Array<IndicatorValue> {
 	const indicatorsValues: Array<IndicatorValue> = [];
@@ -14,11 +13,8 @@ function getIndicatorsValues(indicators: Array<IndicatorsKeys>): Array<Indicator
 			country: iso_country_code,
 		};
 		indicators.forEach((indicator_key: IndicatorsKeys) => {
-			const country_indicators = (countries_data as CountriesData)[iso_country_code].indicators[indicator_key];
-			const latestYear = getLatestYear(Object.keys(country_indicators));
-
-			if (latestYear) {
-				const value = (countries_data as CountriesData)[iso_country_code].indicators[indicator_key][latestYear];
+			const value = getLatestIndicatorValue(iso_country_code, indicator_key);
+			if (value) {
 				temp[indicator_key] = value;
 			}
 		});
