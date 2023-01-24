@@ -124,8 +124,6 @@ const RadialChart = () => {
           .attr('class', 'radial-bar')
           .attr('d', (d) => arc(d))
           .attr('fill', d => INDICATORS_TYPE_MAP[LABELS_MAP[d.indicator].type])
-          // .append('title')
-          // .text((d) => d.indicator)
           .on('mouseover', mouseOver)
           .on('mouseleave', mouseLeave)
 
