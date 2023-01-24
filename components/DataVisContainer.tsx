@@ -1,6 +1,5 @@
 import { styled } from '@mui/material/styles';
 
-
 const StyledContainer = styled('div')({
   display: 'flex',
   justifyContent: 'center',
@@ -16,9 +15,9 @@ interface DataVisContainerPropsT {
 function DataVisContainer(props: DataVisContainerPropsT) {
   const { children } = props;
   return (
-  <StyledContainer>
-    {children}
-  </StyledContainer>);
+    <StyledContainer>
+      {children}
+    </StyledContainer>);
 }
 
 export default DataVisContainer;
