@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import endpoint_data from "../data/endpoint_data.json";
 import { COUNTRIES_QTY, LABELS_MAP, INDICATORS_QTY, INDICATORS_TYPE_MAP } from '../constants/radialChart';
 import { capitalizeFirstLetter, setEllipsis } from '../lib/helpers';
+import styles from '../styles/world.module.css';
 import iso_country from '../data/iso_country.json'
 import * as d3 from 'd3';
 
@@ -80,6 +81,42 @@ const RadialChart = () => {
           .endAngle((d) => d.endAngle);
 
         // bars
+        const tooltip = d3.select('body').append('div')
+          .attr('class', styles.tooltip)
+          .style('opacity', 0);
+
+        const mouseOver = function (d) {
+          d3.selectAll('.radial-bar')
+            .transition()
+            .duration(200)
+            .style('opacity', 0.5)
+            .style('stroke', 'transparent');
+          d3.select(this)
+            .transition()
+            .duration(200)
+            .style('opacity', 1)
+            .style('stroke', 'black');
+          tooltip.style('left', `${d.pageX + 15}px`)
+            .style('top', `${d.pageY - 28}px`)
+            .style('z-index', '2')
+            .style('background', 'white')
+            .style('position', 'absolute')
+            .transition()
+            .duration(400)
+            .style('opacity', 1)
+            .text(d.target?.__data__?.indicator);
+        };
+
+        const mouseLeave = function () {
+          d3.selectAll('.radial-bar')
+            .transition()
+            .duration(200)
+            .style('opacity', 1)
+            .style('stroke', 'transparent');
+          tooltip.transition().duration(300)
+            .style('opacity', 0)
+        };
+
         center
           .selectAll('.radial-bar')
           .data(metrics)
@@ -87,8 +124,10 @@ const RadialChart = () => {
           .attr('class', 'radial-bar')
           .attr('d', (d) => arc(d))
           .attr('fill', d => INDICATORS_TYPE_MAP[LABELS_MAP[d.indicator].type])
-          .append('title')
-          .text((d) => d.indicator)
+          // .append('title')
+          // .text((d) => d.indicator)
+          .on('mouseover', mouseOver)
+          .on('mouseleave', mouseLeave)
 
         // circles
         center
