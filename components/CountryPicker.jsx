@@ -10,33 +10,47 @@ import { WorldIcon } from './WorldIcon';
 import countries from '../data/iso_country.json';
 import organizations from '../data/organizations.json';
 
-export const WORLD_ITEM = {code: 'WORLD', label: 'World'};
 
+export const ORGANIZATION = 'Organizations';
+export const GROUPS = 'Groups';
+export const COUNTRY = 'Countries';
+
+export const NEIGHBORS = 'NEIGHBORS';
+export const WORLD = 'WORLD';
+
+
+export const WORLD_ITEM = {code: WORLD, label: 'World', group: GROUPS};
+
+const getCountryFlag = (country, group) => {
+  if(group === GROUPS) return <WorldIcon />;
+  if(group === ORGANIZATION) return null;
+  return (
+    <img
+      loading="lazy"
+      width="20"
+      src={`https://flagcdn.com/w20/${String(getCountryISO2(country)).toLowerCase()}.png`}
+      srcSet={`https://flagcdn.com/w40/${String(getCountryISO2(country)).toLowerCase()}.png 2x`}
+      alt={`${countries[country]} flag`}
+    />
+  );
+}; 
 const getPickerItems = ({
   showOrganizations, 
   showCountries, 
   showNeighboring, 
   showWorld
 }) => ([
-  ...(showWorld ? [{code: 'WORLD', label: 'World', group: 'Groups', image: <WorldIcon />}] : []),
-  ...(showNeighboring ? [{code: 'NEIGHBORS', label: 'Neighboring Countries', group: 'Groups', image: <WorldIcon />}] : []),
+  ...(showWorld ? [WORLD_ITEM] : []),
+  ...(showNeighboring ? [{code: NEIGHBORS, label: 'Neighboring Countries', group: GROUPS}] : []),
   ...(showCountries ? Object.keys(countries).map(country => ({ 
     code: country, 
     label: countries[country], 
-    group: 'Countries', 
-    image: <img
-      loading="lazy"
-      width="20"
-      src={`https://flagcdn.com/w20/${String(getCountryISO2(country)).toLowerCase()}.png`}
-      srcSet={`https://flagcdn.com/w40/${String(getCountryISO2(country)).toLowerCase()}.png 2x`}
-      alt={`${countries[country]} flag`}
-    />,
+    group: COUNTRY, 
   })) : []),
   ...(showOrganizations ? Object.keys(organizations).map(organization => ({
     code: organization,
     label: organization,
-    group: 'Organizations',
-    image: null,
+    group: ORGANIZATION,
   })) : [])
 ]);
 
@@ -77,20 +91,26 @@ export function CountryPicker({
   showCountries = false,
   showNeighboring = false,
   showWorld = false,
+  defaultCode = 'USA'
 }) {
-  const [country, setCountry] = React.useState(!canBeNull ? WORLD_ITEM : null);
   const pickerItems = React.useMemo(() => getPickerItems({showOrganizations, showCountries, showNeighboring, showWorld}), [showOrganizations, showCountries, showNeighboring, showWorld]);
+  const [country, setCountry] = React.useState(pickerItems.find(item => item.code === defaultCode));
+
+  React.useLayoutEffect(() => {
+    onChange(country);
+  }, []);
 
   return (
     <Autocomplete
       id="country-select-demo"
       onBlur={() => {
         if(!canBeNull && !country){
-          setCountry(WORLD_ITEM);
-          onChange(WORLD_ITEM)
+          const defaultOption = pickerItems.find(item => item.code === defaultCode);
+          setCountry(defaultOption);
+          onChange(defaultOption)
         }
       }}
-      onChange={(_, newValue, reason)=> {
+      onChange={(_, newValue)=> {
         if(newValue){
           setCountry(newValue) 
           onChange(newValue)
@@ -108,7 +128,7 @@ export function CountryPicker({
       getOptionLabel={(option) => option.label}
       renderOption={(props, option) => (
         <StyledBox component="li" sx={{ '& > img, svg': { mr: 2, flexShrink: 0 } }} {...props}>
-          {option.image}
+          {getCountryFlag(option.code, option.group)}
           {option.label}
         </StyledBox>
       )}
@@ -121,7 +141,7 @@ export function CountryPicker({
             ...(!country ? {} : {
               startAdornment: (
               <InputAdornment position="start" sx={{ '& > img, svg': { ml: 1, flexShrink: 0 } }}>
-                  {country.image}
+                  {getCountryFlag(country.code, country?.group)}
               </InputAdornment>
             )})
           }}
