@@ -22,30 +22,37 @@ export const generateData = (indicatorX, indicatorY) => {
 export const fetchExploreData = createAsyncThunk(
     'explore/fetchExploreData',
     async ({ xAxis, yAxis }) => {
+        const { data } = await axios.post('/lenio-wgs/api/indicators-values', {
+            indicators: [xAxis, yAxis]
+        });
+
+        const filteredData = data.filter(d => d[xAxis] && d[yAxis]).map(d => ({ ...d, isoCc: d.country }))
+
+        const {
+            xMin, xMax,
+            yMin, yMax
+        } = {
+            xMin: Math.min.apply(Math, filteredData.map(d => d[xAxis])),
+            xMax: Math.max.apply(Math, filteredData.map(d => d[xAxis])),
+            yMin: Math.min.apply(Math, filteredData.map(d => d[yAxis])),
+            yMax: Math.max.apply(Math, filteredData.map(d => d[yAxis])),
+        };
+
         const indicatorX = {
             id: xAxis,
             indicator_name: indicators[xAxis].indicator_name,
-            min: 0,
-            max: 100,
+            min: xMin,
+            max: xMax,
         };
         const indicatorY = {
             id: yAxis,
             indicator_name: indicators[yAxis].indicator_name,
-            min: 200,
-            max: 1500,
+            min: yMin,
+            max: yMax,
         }
 
-        axios.post('/lenio-wgs/api/indicators-values', {
-            indicators: [xAxis, yAxis]
-        }).then(response => console.log({ response })).catch(x => console.log({ x }))
-
-
-        return new Promise((res) => {
-            setTimeout(() => {
-                const data = generateData(indicatorX, indicatorY);
-                res({ data, indicatorX, indicatorY });
-            }, 1000)
-        });
+        console.log({ filteredData })
+        return { data: filteredData, indicatorX, indicatorY };
     });
 
 export const exploreSlice = createSlice({
@@ -62,6 +69,7 @@ export const exploreSlice = createSlice({
             state.loading = true;
         })
         builder.addCase(fetchExploreData.fulfilled, (state, action) => {
+            console.log()
             // just an example
             state.data = action.payload.data;
             state.indicatorX = action.payload.indicatorX;
