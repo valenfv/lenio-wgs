@@ -9,6 +9,7 @@ import { NEIGHBORS, ORGANIZATION, WORLD, COUNTRY } from '../components/CountryPi
 import bordering from '../data/bordering_countries.json';
 import organizations from '../data/organizations.json';
 import { fetchExploreData } from '../slices/exploreSlice';
+import indicators from '../data/indicators.json';
 
 export default function World() {
   const svgRef = React.useRef(null);
@@ -16,30 +17,22 @@ export default function World() {
   const { 
     comparingCountry,
     selectedCountry,
-    data
+    data,
+    selectedXAxis,
+    selectedYAxis,
+    indicatorX,
+    indicatorY,
   } = useSelector((state) => ({
     comparingCountry: state.sidebar.comparingCountry,
     selectedCountry: state.sidebar.selectedCountry,
     data: state.explore.data,
+    selectedXAxis: state.sidebar.xAxis,
+    selectedYAxis: state.sidebar.yAxis,
+    indicatorX: state.explore.indicatorX,
+    indicatorY: state.explore.indicatorY,
   }));
 
   const dispatch = useDispatch();
-
-  const { indicatorX, indicatorY } = React.useMemo(() => {
-    const indicatorX = {
-        id: 'c8316e0c7c1dca5df2a7fa9c63297c9d772b33c10d812ece07a1ad4ad2df650a',
-        indicator_name: 'PERCENTAGE OF POPULATION IN EXTREME POVERTY',
-        min: 0,
-        max: 100,
-    };
-    const indicatorY = {
-        id: 'e04d546d273c7f54c904d2dc81871af194740b45802e6364046292d242e0c0c2',
-        indicator_name: 'CO2E EMISSIONS PER CAPITA',
-        min: 200,
-        max: 1500,
-    }
-    return { indicatorX, indicatorY };
-  }, []);
 
 
   const highlights = React.useMemo(() => {
@@ -53,21 +46,8 @@ export default function World() {
   }, [comparingCountry, selectedCountry]);
 
   React.useEffect(() => {
-
-    // const data = generateData(indicatorX, indicatorY);
-
-    // const highlights = data.find(c => c.isoCc === 'ARG').neighboring;
-
-    // setData({
-    //   comparing: 'ARG',
-    //   indicatorX,
-    //   indicatorY,
-    //   highlights,
-    //   data,
-    // })
-
-    dispatch(fetchExploreData({indicatorX, indicatorY}));
-  }, [indicatorX, indicatorY]);
+    dispatch(fetchExploreData({xAxis: selectedXAxis, yAxis: selectedYAxis}));
+  }, [selectedXAxis, selectedYAxis]);
 
 
 
