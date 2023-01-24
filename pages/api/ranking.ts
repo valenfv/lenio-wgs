@@ -7,7 +7,6 @@ import {
 	CountryRankingData,
 	IndicatorsKeys,
 } from "../../interfaces";
-import countries_data from "../../data/data.json";
 import iso_countries from "../../data/iso_country.json";
 import indicators from "../../data/indicators.json";
 import { getLatestIndicatorValue, getLatestYear } from "../../utils/rankingUtils";
