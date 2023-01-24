@@ -1,9 +1,9 @@
 import React from 'react';
-import IndicatorsTable from './IndicatorsTable';
+import IndicatorsTable from './Indicators/IndicatorsTable';
 import { styled } from '@mui/material/styles';
 import { CountryPicker } from './CountryPicker';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeComparingCountry, changeSelectedCountry } from '../slices/sidebarSlice';
+import { changeComparingCountry, changeSelectedCountry, changeAxis } from '../slices/sidebarSlice';
 const StyledContainer = styled('div')({
   display: 'flex',
   flexDirection: 'column',
@@ -20,11 +20,6 @@ function ConfigContainer() {
     selectedCountry: state.sidebar.selectedCountry,
   }));
   const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    console.log({ comparingCountry, selectedCountry })
-  }, [comparingCountry, selectedCountry])
-
   return (
     <StyledContainer>
       <CountryPicker 
@@ -40,11 +35,12 @@ function ConfigContainer() {
         showCountries={false}
         defaultCode="WORLD"
         onChange={(value) => {
-          console.log(value)
           dispatch(changeSelectedCountry(value));
         }}
       />
-      <IndicatorsTable />
+      <IndicatorsTable 
+        onIndicatorAxisChange={(indicators) => dispatch(changeAxis(indicators))} 
+      />
     </StyledContainer>
   );
 }

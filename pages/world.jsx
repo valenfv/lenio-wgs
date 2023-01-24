@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "../styles/world.module.css";
+import commonStyles from "../styles/commons.module.css";
 import { ConfigContainer } from "../components/ConfigContainer";
 import {
   CHOROPLEITH_HEIGHT,
@@ -13,7 +14,7 @@ export default function World() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return (
     <div className={styles.worldContainer}>
-      <div className={styles.floatingMenu}>
+      <div className={[styles.floatingMenu]}>
         <ConfigContainer />
       </div>
       <div className={styles.map}>

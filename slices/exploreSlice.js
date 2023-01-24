@@ -20,10 +20,24 @@ export const generateData = (indicatorX, indicatorY) => {
 
 export const fetchExploreData = createAsyncThunk(
     'explore/fetchExploreData',
-    async ({ indicatorX, indicatorY }) => {
+    async ({ xAxis, yAxis }) => {
+        const indicatorX = {
+            id: xAxis,
+            indicator_name: indicators[xAxis].indicator_name,
+            min: 0,
+            max: 100,
+        };
+        const indicatorY = {
+            id: yAxis,
+            indicator_name: indicators[yAxis].indicator_name,
+            min: 200,
+            max: 1500,
+        }
+
         return new Promise((res) => {
             setTimeout(() => {
-                res(generateData(indicatorX, indicatorY));
+                const data = generateData(indicatorX, indicatorY);
+                res({ data, indicatorX, indicatorY });
             }, 1000)
         });
     });
@@ -33,6 +47,8 @@ export const exploreSlice = createSlice({
     initialState: {
         data: null,
         loading: false,
+        indicatorX: null,
+        indicatorY: null,
     },
     extraReducers: (builder) => {
         builder.addCase(fetchExploreData.pending, (state) => {
@@ -41,7 +57,9 @@ export const exploreSlice = createSlice({
         })
         builder.addCase(fetchExploreData.fulfilled, (state, action) => {
             // just an example
-            state.data = action.payload;
+            state.data = action.payload.data;
+            state.indicatorX = action.payload.indicatorX;
+            state.indicatorY = action.payload.indicatorY;
             state.loading = false;
         })
     },

@@ -6,7 +6,7 @@ import getCountryISO2 from 'country-iso-3-to-2';
 import { styled } from '@mui/material/styles';
 import Popper from '@mui/material/Popper';
 import InputAdornment from '@mui/material/InputAdornment';
-import { WorldIcon } from './WorldIcon';
+import { WorldIcon } from './icons/WorldIcon';
 import countries from '../data/iso_country.json';
 import organizations from '../data/organizations.json';
 
@@ -96,7 +96,7 @@ export function CountryPicker({
   const pickerItems = React.useMemo(() => getPickerItems({showOrganizations, showCountries, showNeighboring, showWorld}), [showOrganizations, showCountries, showNeighboring, showWorld]);
   const [country, setCountry] = React.useState(pickerItems.find(item => item.code === defaultCode));
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     onChange(country);
   }, []);
 
