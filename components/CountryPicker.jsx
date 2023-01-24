@@ -103,6 +103,7 @@ export function CountryPicker({
   return (
     <Autocomplete
       id="country-select-demo"
+      style={{ width: '100%' }}
       onBlur={() => {
         if(!canBeNull && !country){
           const defaultOption = pickerItems.find(item => item.code === defaultCode);

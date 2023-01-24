@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 const StyledContainer = styled('div')({
   display: 'flex',
   justifyContent: 'center',
-  width: 'calc(100% - 315px)',
+  width: '100%',
   background: '#000020',
   border: '1px solid rgba(238, 238, 238, 0.2)',
 });

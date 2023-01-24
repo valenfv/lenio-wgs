@@ -7,8 +7,7 @@ import { changeComparingCountry, changeSelectedCountry } from '../slices/sidebar
 const StyledContainer = styled('div')({
   display: 'flex',
   flexDirection: 'column',
-  width: '300px',
-  minWidth: '300px',
+  width: '100%',
   rowGap: '15px'
 });
 
@@ -34,7 +33,7 @@ function ConfigContainer() {
         onChange={(value) => dispatch(changeComparingCountry(value))}
       />
       <CountryPicker
-        canBeNull
+        canBeNull={false}
         showNeighboring
         showOrganizations
         showWorld

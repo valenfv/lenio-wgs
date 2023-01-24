@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from '../styles/explore.module.css';
+import commonStyles from '../styles/commons.module.css';
 import { ConfigContainer } from '../components/ConfigContainer';
 import { useScatterPlot } from '../lib/useScatterPlot';
 import DataVisContainer from '../components/DataVisContainer';
@@ -73,8 +74,8 @@ export default function World() {
   useScatterPlot({svgRef, data, highlights, indicatorX, indicatorY, comparingCountry})
 
   return (
-    <div className={styles.container}>
-      <div className={styles.menu}>
+    <div className={commonStyles.container}>
+      <div className={commonStyles.menu}>
         <ConfigContainer />
       </div>
       <DataVisContainer>

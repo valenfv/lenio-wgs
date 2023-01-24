@@ -17,7 +17,7 @@ const StyledTableCell = styled(TableCell)<TableCellProps & Cell>(() => ({
     color: 'rgba(238, 238, 238, 0.7)',
     fontSize: '14px',
     height: 30,
-    padding: "1px 0 1px 15px",
+    padding: "1px 15px 1px 15px",
     border: 'none',
     borderBottom: '1px solid rgba(238, 238, 238, 0.25)',
     borderTop: '1px solid rgba(238, 238, 238, 0.25)',
@@ -101,9 +101,9 @@ const Delta: React.FC<DeltaProps> = ({ up, children }) => {
 
 const TableContainer = styled('div')(() => ({
   height: 500,
-  width: 300,
   overflowY: 'auto',
   border: '1px solid rgba(238, 238, 238, 0.25)',
+  boxSizing:'border-box',
   "::-webkit-scrollbar": {
     width: "2px",
     height: '10px'
