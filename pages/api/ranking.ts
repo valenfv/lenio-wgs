@@ -10,11 +10,7 @@ import {
 import countries_data from "../../data/data.json";
 import iso_countries from "../../data/iso_country.json";
 import indicators from "../../data/indicators.json";
-
-function getLatestYear(years: Array<string>) {
-	years.sort((a, b) => Number(b) - Number(a));
-	return years[0];
-}
+import { getLatestYear } from "../../utils/rankingUtils";
 
 function getRankings(comparing_country: string, countries: Array<CountriesDataKeys>): Ranking {
 	const rankings: Ranking = {

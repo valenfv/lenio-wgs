@@ -12,6 +12,10 @@ export type CountriesData = {
 	[Property in keyof typeof countries_data]: any;
 };
 
+export type IndicatorValue = {
+	[Property in keyof typeof indicators | "country"]: number | CountriesDataKeys | null;
+};
+
 export interface CountryRankingData {
 	country: CountriesDataKeys;
 	country_name: CountriesNames;
