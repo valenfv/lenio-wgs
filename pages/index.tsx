@@ -1,21 +1,18 @@
 import React from "react";
 import { ConfigContainer } from "../components/ConfigContainer";
 import DataVisContainer from "../components/DataVisContainer";
+import RadialChart from "../components/RadialChart";
+import styles from '../styles/commons.module.css';
 
 export default function Home() {
-	return (
-		<div
-			style={{
-				display: "flex",
-				minHeight: "100px",
-				overflow: "hidden",
-				paddingTop: "40px",
-			}}
-		>
-			<ConfigContainer />
-			<DataVisContainer type="">
-				<div></div>
-			</DataVisContainer>
-		</div>
-	);
+  return (
+    <div className={styles.container} >
+      <div className={styles.menu}>
+        <ConfigContainer />
+      </div>
+      <DataVisContainer>
+        <RadialChart />
+      </DataVisContainer>
+    </div>
+  );
 }

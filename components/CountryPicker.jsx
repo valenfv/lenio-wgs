@@ -7,6 +7,52 @@ import { styled } from '@mui/material/styles';
 import Popper from '@mui/material/Popper';
 import InputAdornment from '@mui/material/InputAdornment';
 import { WorldIcon } from './WorldIcon';
+import countries from '../data/iso_country.json';
+import organizations from '../data/organizations.json';
+
+
+export const ORGANIZATION = 'Organizations';
+export const GROUPS = 'Groups';
+export const COUNTRY = 'Countries';
+
+export const NEIGHBORS = 'NEIGHBORS';
+export const WORLD = 'WORLD';
+
+
+export const WORLD_ITEM = {code: WORLD, label: 'World', group: GROUPS};
+
+const getCountryFlag = (country, group) => {
+  if(group === GROUPS) return <WorldIcon />;
+  if(group === ORGANIZATION) return null;
+  return (
+    <img
+      loading="lazy"
+      width="20"
+      src={`https://flagcdn.com/w20/${String(getCountryISO2(country)).toLowerCase()}.png`}
+      srcSet={`https://flagcdn.com/w40/${String(getCountryISO2(country)).toLowerCase()}.png 2x`}
+      alt={`${countries[country]} flag`}
+    />
+  );
+}; 
+const getPickerItems = ({
+  showOrganizations, 
+  showCountries, 
+  showNeighboring, 
+  showWorld
+}) => ([
+  ...(showWorld ? [WORLD_ITEM] : []),
+  ...(showNeighboring ? [{code: NEIGHBORS, label: 'Neighboring Countries', group: GROUPS}] : []),
+  ...(showCountries ? Object.keys(countries).map(country => ({ 
+    code: country, 
+    label: countries[country], 
+    group: COUNTRY, 
+  })) : []),
+  ...(showOrganizations ? Object.keys(organizations).map(organization => ({
+    code: organization,
+    label: organization,
+    group: ORGANIZATION,
+  })) : [])
+]);
 
 const StyledTextField = styled(TextField)({
   '& input, label': {
@@ -31,34 +77,41 @@ const StyledPopper = styled(Popper)({
   [`& .${autocompleteClasses.listbox}`]: {
     background: '#191935' 
   },
+  [`& .${autocompleteClasses.listbox} .MuiListSubheader-root`]: {
+    background: '#191935',
+    color: '#EEEEEE',
+  }
 });
-
-export const WORLD_ITEM = {code: 'WORLD', label: 'World'};
 
 export function CountryPicker({ 
   canBeNull = false,
   label = 'Select a country to compare',
-  onChange = () => null
+  onChange = () => null,
+  showOrganizations = false,
+  showCountries = false,
+  showNeighboring = false,
+  showWorld = false,
+  defaultCode = 'USA'
 }) {
-  const [countries, setCountries] = React.useState([]);
-  const [country, setCountry] = React.useState(!canBeNull ? WORLD_ITEM : null);
+  const pickerItems = React.useMemo(() => getPickerItems({showOrganizations, showCountries, showNeighboring, showWorld}), [showOrganizations, showCountries, showNeighboring, showWorld]);
+  const [country, setCountry] = React.useState(pickerItems.find(item => item.code === defaultCode));
 
-  React.useEffect(() => {
-    fetch('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson').then((res) => res.json()).then((json) => {
-      const countryList = [WORLD_ITEM, ...json.features.map((feature) => ({ code: feature.id, label: feature.properties.name }))];
-      setCountries(countryList);
-    });
+  React.useLayoutEffect(() => {
+    onChange(country);
   }, []);
+
   return (
     <Autocomplete
       id="country-select-demo"
+      style={{ width: '100%' }}
       onBlur={() => {
         if(!canBeNull && !country){
-          setCountry(WORLD_ITEM);
-          onChange(WORLD_ITEM)
+          const defaultOption = pickerItems.find(item => item.code === defaultCode);
+          setCountry(defaultOption);
+          onChange(defaultOption)
         }
       }}
-      onChange={(_, newValue, reason)=> {
+      onChange={(_, newValue)=> {
         if(newValue){
           setCountry(newValue) 
           onChange(newValue)
@@ -69,23 +122,14 @@ export function CountryPicker({
       }} 
       value={country}
       sx={{ width: 300 }}
-      options={countries}
+      options={pickerItems}
       autoHighlight
+      groupBy={(option) => option.group}
       PopperComponent={StyledPopper}
       getOptionLabel={(option) => option.label}
       renderOption={(props, option) => (
         <StyledBox component="li" sx={{ '& > img, svg': { mr: 2, flexShrink: 0 } }} {...props}>
-          {option.code === 'WORLD' ? 
-            <WorldIcon />
-          :
-          (<img
-              loading="lazy"
-              width="20"
-              src={`https://flagcdn.com/w20/${String(getCountryISO2(option.code)).toLowerCase()}.png`}
-              srcSet={`https://flagcdn.com/w40/${String(getCountryISO2(option.code)).toLowerCase()}.png 2x`}
-              alt=""
-            />)
-          } 
+          {getCountryFlag(option.code, option.group)}
           {option.label}
         </StyledBox>
       )}
@@ -98,18 +142,8 @@ export function CountryPicker({
             ...(!country ? {} : {
               startAdornment: (
               <InputAdornment position="start" sx={{ '& > img, svg': { ml: 1, flexShrink: 0 } }}>
-                  {country.code === 'WORLD' ? 
-                    <WorldIcon />
-                  :
-                  (<img
-                      loading="lazy"
-                      width="20"
-                      src={`https://flagcdn.com/w20/${String(getCountryISO2(country.code)).toLowerCase()}.png`}
-                      srcSet={`https://flagcdn.com/w40/${String(getCountryISO2(country.code)).toLowerCase()}.png 2x`}
-                      alt=""
-                    />)
-                  } 
-                </InputAdornment>
+                  {getCountryFlag(country.code, country?.group)}
+              </InputAdornment>
             )})
           }}
           inputProps={{
