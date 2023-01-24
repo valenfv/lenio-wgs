@@ -25,7 +25,6 @@
     "country-iso-3-to-2": "^1.1.1",
     "csv": "^6.2.5",
     "d3": "^7.8.1",
-    "eslint": "8.31.0",
     "d3-queue": "^3.0.7",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.1",
