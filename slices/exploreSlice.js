@@ -3,7 +3,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import indicators from '../data/indicators.json';
 import countries from '../data/iso_country.json';
-import bordering from '../data/bordering_countries.json';
+import axios from 'axios';
+
 
 export const generateData = (indicatorX, indicatorY) => {
     function randomIntFromInterval(min, max) { // min and max included 
@@ -33,6 +34,11 @@ export const fetchExploreData = createAsyncThunk(
             min: 200,
             max: 1500,
         }
+
+        axios.post('/lenio-wgs/api/indicators-values', {
+            indicators: [xAxis, yAxis]
+        }).then(response => console.log({ response })).catch(x => console.log({ x }))
+
 
         return new Promise((res) => {
             setTimeout(() => {
