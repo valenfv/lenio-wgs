@@ -28,11 +28,10 @@ function ConfigContainer() {
 
   return (
     <StyledContainer>
-      <CountryPicker
+      <CountryPicker 
         showCountries
-        onChange={(value) => {
-          dispatch(changeComparingCountry(value.code))
-        }}
+        showWorld={false} 
+        onChange={(value) => dispatch(changeComparingCountry(value))}
       />
       <CountryPicker
         canBeNull
@@ -40,7 +39,11 @@ function ConfigContainer() {
         showOrganizations
         showWorld
         showCountries={false}
-        onChange={() => dispatch(changeSelectedCountry())}
+        defaultCode="WORLD"
+        onChange={(value) => {
+          console.log(value)
+          dispatch(changeSelectedCountry(value));
+        }}
       />
       <IndicatorsTable />
     </StyledContainer>

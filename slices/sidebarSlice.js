@@ -13,8 +13,8 @@ export const changeComparingCountryAsyncExample = createAsyncThunk(
 export const sidebarSlice = createSlice({
     name: 'sidebar',
     initialState: {
-        comparingCountry: 'USA',
-        selectedCountry: 'WORLD',
+        comparingCountry: null,
+        selectedCountry: null,
     },
     reducers: {
         changeComparingCountry: (state, action) => {

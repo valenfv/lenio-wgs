@@ -83,7 +83,7 @@ export default function App({ Component, pageProps }: AppProps) {
             }}
           />
           <div style={{ color: 'rgba(238, 238, 238, 0.5)' }}>
-            Dashboard of the Present Future
+            « Dashboard of the Present Future »
           </div>
           <div
             style={{
