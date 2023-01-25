@@ -375,6 +375,11 @@ const RadialChart = () => {
             };
           };
 
+          const getBarXPosition = () => {
+            if (selectedIndicatorData.sortedCountries.length < 6) return 115;
+            return selectedIndicatorData.sortedCountries.length < 21 ? 145 : 155
+          }
+
           svg
             .append("g")
             .selectAll("rect")
@@ -387,7 +392,7 @@ const RadialChart = () => {
               .attr("class", "rect")
               .attr("height", d => y(0) - y(d.value))
               .attr("width", selectedIndicatorData.sortedCountries.length < 21 ? 14 : 4)
-              .attr("transform", `translate(${selectedIndicatorData.sortedCountries.length < 21 ? 145 : 155}, 280)`)
+              .attr("transform", `translate(${getBarXPosition()}, 280)`)
 
           // x and y axis setup
           // function yAxis(g) {
