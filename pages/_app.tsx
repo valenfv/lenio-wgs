@@ -7,6 +7,8 @@ import Head from 'next/head';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Image from 'next/image';
+import '../styles/main.css';
+
 // import ConfigContainer from '../components/ConfigContainer';
 // import DataVisContainer from '../components/DataVisContainer';
 
@@ -65,6 +67,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <Provider store={store}>
       <Head>
         <title>WGS - Leniolabs</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
       </Head>
       <main style={{ padding: '0 50px 50px 50px' }}>
         <StyledHeader>
@@ -78,7 +83,7 @@ export default function App({ Component, pageProps }: AppProps) {
             }}
           />
           <div style={{ color: 'rgba(238, 238, 238, 0.5)' }}>
-            Dashboard of the Present Future
+            « Dashboard of the Present Future »
           </div>
           <div
             style={{

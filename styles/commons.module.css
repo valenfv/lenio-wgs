@@ -12,3 +12,19 @@
   border-radius: 4px;
   box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.25);
 } 
+
+.menu {
+  width: 500px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.svgText {
+  font-family: 'Montserrat', sans-serif;
+}
