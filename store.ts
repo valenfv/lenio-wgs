@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import sidebarSlice from "./slices/sidebarSlice";
 import exploreSlice from "./slices/exploreSlice";
+import radialChartSlice from "./slices/radialChartSlice";
 
 export const store = configureStore({
-	reducer: { 
+	reducer: {
 		sidebar: sidebarSlice,
 		explore: exploreSlice,
+		radialChart: radialChartSlice
 	},
 });
 

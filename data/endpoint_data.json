@@ -21,143 +21,633 @@
         },
         {
             "indicator": "UNEMPLOYMENT (PERCENTAGE)",
-            "ranking": 120
+            "ranking": 120,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "INFANT MORTALITY",
-            "ranking": 80
+            "ranking": 80,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "POPULATION",
-            "ranking": 100
+            "ranking": 100,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "SURFACE AREA (KM2)",
-            "ranking": 150
+            "ranking": 150,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "HAPPY PLANET INDEX",
-            "ranking": 120
+            "ranking": 120,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "HUMAN DEVELOPMENT INDEX",
-            "ranking": 170
+            "ranking": 170,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "SUSTAINABLE ECONOMIC DEVELOPMENT ASSESSMENT (SEDA)",
-            "ranking": 100
+            "ranking": 100,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "GDP GROWTH\n(ANNUAL PERCENTAGE)",
-            "ranking": 115
+            "ranking": 115,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "GDP \n($ USD BILLIONS PPP)",
-            "ranking": 135
+            "ranking": 135,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "GDP PER CAPITA IN $ (PPP)",
-            "ranking": 88
+            "ranking": 88,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "ECONOMIC GROWTH",
-            "ranking": 60
+            "ranking": 60,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "HEALTH EXPENDITURE \nPERCENTAGE OF GDP",
-            "ranking": 140
+            "ranking": 140,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "HEALTH EXPENDITURE \nPER PERSON",
-            "ranking": 110
+            "ranking": 110,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "MATERNAL MORTALITY PER 100,000 LIVE BIRTHS",
-            "ranking": 30
+            "ranking": 30,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "EDUCATION EXPENDITURE\nPERCENTAGE OF GDP",
-            "ranking": 114
+            "ranking": 114,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "EDUCATION AS PERCENTAGE OF GDP",
-            "ranking": 101
+            "ranking": 101,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "PERCENTAGE OF PRIMARY SCHOOL AGED KIDS OUT OF SCHOOL",
-            "ranking": 79
+            "ranking": 79,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "PERCENTAGE OF POPULATION WITH ACCESS TO ELECTRICITY",
-            "ranking": 70
+            "ranking": 70,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "PERCENTAGE OF POPULATION IN EXTREME POVERTY",
-            "ranking": 50
+            "ranking": 50,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "POLITICAL RIGHTS SCORE",
-            "ranking": 40
+            "ranking": 40,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "CIVIL LIBERTIES SCORE",
-            "ranking": 60
+            "ranking": 60,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "POLITICAL STABILITY AND ABSENCE OF VIOLENCE",
-            "ranking": 100
+            "ranking": 100,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "GOVERNMENT EFFECTIVENESS",
-            "ranking": 25
+            "ranking": 25,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "REGULATORY QUALITY",
-            "ranking": 165
+            "ranking": 165,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "RULE OF LAW",
-            "ranking": 85
+            "ranking": 85,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "CONTROL OF CORRUPTION",
-            "ranking": 111
+            "ranking": 111,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "JUDICIAL EFFECTIVENESS SCORE",
-            "ranking": 109
+            "ranking": 109,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "GOVERNMENT INTEGRITY SCORE",
-            "ranking": 108
+            "ranking": 108,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "OVERALL ECONOMIC FREEDOM SCORE",
-            "ranking": 107
+            "ranking": 107,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "FINANCIAL FREEDOM SCORE",
-            "ranking": 106
+            "ranking": 106,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "GOVERNMENT EXPENDITURE (PERCENTAGE OF GDP)",
-            "ranking": 105
+            "ranking": 105,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "CO2E EMISSIONS PER CAPITA",
-            "ranking": 144
+            "ranking": 144,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "SHARE OF ELECTRICITY FROM RENEWABLES GENERATION",
-            "ranking": 133
+            "ranking": 133,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "PERCENTAGE OF SEATS HELD BY WOMEN IN NATIONAL PARLIAMENTS",
-            "ranking": 122
+            "ranking": 122,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         },
         {
             "indicator": "MILITARY SPENDING AS PERCENTAGE OF GDP",
-            "ranking": 174
+            "ranking": 174,
+            "sortedCountries": [
+                {
+                    "country": "ZAF",
+                    "value": 174
+                },
+                {
+                    "country": "USA",
+                    "value": 50
+                },
+                {
+			    	"country": "SVN",
+			    	"value": 34.6
+			    }
+            ]
         }
     ]
 }

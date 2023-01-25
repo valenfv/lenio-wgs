@@ -1,14 +1,23 @@
 import { useEffect, useState, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import getCountryISO2 from 'country-iso-3-to-2';
 import endpoint_data from "../data/endpoint_data.json";
 import { COUNTRIES_QTY, LABELS_MAP, INDICATORS_QTY, INDICATORS_TYPE_MAP } from '../constants/radialChart';
 import { capitalizeFirstLetter, setEllipsis } from '../lib/helpers';
 import styles from '../styles/world.module.css';
-import iso_country from '../data/iso_country.json'
+import countries from '../data/iso_country.json'
 import * as d3 from 'd3';
 
 const RadialChart = () => {
     const radialChart = useRef();
-    const { comparing_country, metrics } = endpoint_data;
+    const {
+      comparingCountry,
+      selectedCountry
+    } = useSelector((state) => ({
+      comparingCountry: state.sidebar.comparingCountry,
+      selectedCountry: state.sidebar.selectedCountry,
+    }));
+    const { metrics } = endpoint_data;
     const selectedIndicator = "GINI INDEX";
     const selectedIndicatorData = metrics.filter(metric => metric.indicator === selectedIndicator)[0];
     let selectedCountryIndex;
@@ -82,8 +91,23 @@ const RadialChart = () => {
 
         // bars
         const tooltip = d3.select('body').append('div')
+          .attr('height', "50px")
           .attr('class', styles.tooltip)
           .style('opacity', 0);
+
+        const getTooltipData = (indicator, metrics) => {
+          "https://flagcdn.com/w20/ua.png"
+          const country = metrics.filter(ind => ind.indicator === indicator)[0];
+          const imgSrc = `https://flagcdn.com/w20/${String(getCountryISO2(comparingCountry?.code)).toLowerCase()}.png`;
+          const imgSrcSet = `https://flagcdn.com/w40/${String(getCountryISO2(comparingCountry?.code)).toLowerCase()}.png 2x`;
+
+          return {
+            ranking: country.ranking,
+            value: country.sortedCountries?.filter(item => item.country === comparingCountry?.code)[0]?.value,
+            imgSrc,
+            imgSrcSet
+          };
+        };
 
         const mouseOver = function (d) {
           d3.selectAll('.radial-bar')
@@ -96,7 +120,23 @@ const RadialChart = () => {
             .duration(200)
             .style('opacity', 1)
             .style('stroke', 'black');
-          tooltip.style('left', `${d.pageX + 15}px`)
+          tooltip.html(
+              `<div style="margin-bottom:5px;text-align:center">
+                <img
+                  loading="lazy"
+                  width="30"
+                  src=${getTooltipData(d.target?.__data__?.indicator, metrics).imgSrc}
+                  srcSet=${getTooltipData(d.target?.__data__?.indicator, metrics).imgSrcSet}
+                  alt="${countries[comparingCountry.code]} flag"
+                />
+              </div>
+              <strong style="font-size:14px">${d.target?.__data__?.indicator}</strong>
+              <br>
+              <strong>Ranking:</strong> ${getTooltipData(d.target?.__data__?.indicator, metrics).ranking}
+              <br>
+              <strong>Score:</strong> ${getTooltipData(d.target?.__data__?.indicator, metrics).value}`
+            )
+            .style('left', `${d.pageX}px`)
             .style('top', `${d.pageY - 28}px`)
             .style('z-index', '2')
             .style('background', 'white')
@@ -104,7 +144,7 @@ const RadialChart = () => {
             .transition()
             .duration(400)
             .style('opacity', 1)
-            .text(d.target?.__data__?.indicator);
+            // .text(d.target?.__data__?.indicator)
         };
 
         const mouseLeave = function () {
@@ -213,7 +253,7 @@ const RadialChart = () => {
 
           center
             .append('text')
-            .text(iso_country[comparing_country])
+            .text(comparingCountry?.label)
             .attr('fill', '#DDDDDD')
             .attr('font-family', 'arial')
             .attr('font-weight', 700)
@@ -243,7 +283,7 @@ const RadialChart = () => {
 
           center
             .append('text')
-            .text(iso_country[selectedIndicatorData.sortedCountries[0].country])
+            .text(countries[selectedIndicatorData.sortedCountries[0].country])
             .attr('fill', '#DDDDDD')
             .attr('font-family', 'arial')
             .attr('font-weight', 400)
@@ -273,7 +313,7 @@ const RadialChart = () => {
 
           center
             .append('text')
-            .text(iso_country[selectedIndicatorData.sortedCountries[selectedIndicatorData.sortedCountries.length -1].country])
+            .text(countries[selectedIndicatorData.sortedCountries[selectedIndicatorData.sortedCountries.length -1].country])
             .attr('fill', '#DDDDDD')
             .attr('font-family', 'arial')
             .attr('font-weight', 400)
@@ -341,7 +381,7 @@ const RadialChart = () => {
           // MOCK DATA GENERATOR
           // const mockData = [];
           // let testValue= 274;
-          // Object.keys(iso_country).forEach((country, index) => {
+          // Object.keys(countries).forEach((country, index) => {
           //   if (index < 40) {
 
           //     mockData.push({
@@ -364,13 +404,13 @@ const RadialChart = () => {
 
           const getBarColor = (data, country, index) => {
             if (data.length <= 50) {
-              return country === comparing_country ? '#59C3C3CC' : '#59C3C340';
+              return country === comparingCountry?.code ? '#59C3C3CC' : '#59C3C340';
             } else {
               if (index%4 !== 0) {
-                if (country === comparing_country) selectedCountryIndex = index - (index%4);
+                if (country === comparingCountry?.code) selectedCountryIndex = index - (index%4);
                 return 'transparent';
               } else {
-                return country === comparing_country || index === selectedCountryIndex ? '#59C3C3CC' : '#59C3C340';
+                return country === comparingCountry?.code || index === selectedCountryIndex ? '#59C3C3CC' : '#59C3C340';
               }
             };
           };
@@ -414,12 +454,16 @@ const RadialChart = () => {
 
           // svg.append("g").call(xAxis);
           // svg.append("g").call(yAxis);
-  }, []);
+
+          // return () => {
+          //   document.getElementById("radialChartContainer").remove();
+          // }
+  }, [comparingCountry, selectedCountry]);
 
 
     return (
         <div id='radialChartContainer'>
-            <svg ref={radialChart}></svg>
+            <svg key={Math.random()} ref={radialChart}></svg>
         </div>
     );
 };
