@@ -318,9 +318,9 @@ const RadialChart = () => {
               .attr('y',legendYPosition)
               .attr('transform', 'translate(110,10)')
               .attr('fill', '#FFFFFF')
-              .style("font-size", 15)
+              .style("font-size", 12)
               .style("font-weight", 400)
-              .style("font-family", 'Roboto')
+              .style("font-family", 'Montserrat')
               .text(capitalizeFirstLetter(indicatorType));
 
             circleYPosition += 28;
