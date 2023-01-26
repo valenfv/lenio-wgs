@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getRadialChartData } from '../slices/radialChartSlice';
+import { getSelectedIndicator, getRadialChartData } from '../slices/radialChartSlice';
 import getCountryISO2 from 'country-iso-3-to-2';
 import endpoint_data from "../data/endpoint_data.json";
 import { COUNTRIES_QTY, LABELS_MAP, INDICATORS_QTY, INDICATORS_TYPE_MAP } from '../constants/radialChart';
@@ -15,15 +15,16 @@ const RadialChart = () => {
     const {
       comparingCountry,
       selectedCountry,
+      selectedIndicator,
       metrics,
       selectedIndicatorData
     } = useSelector((state) => ({
       comparingCountry: state.sidebar.comparingCountry,
       selectedCountry: state.sidebar.selectedCountry,
+      selectedIndicator: state.radialChart.selectedIndicator,
       metrics: state.radialChart.metrics,
       selectedIndicatorData: state.radialChart.selectedIndicatorData
     }));
-    const selectedIndicator = "GINI INDEX";
     const width = 750;
     const height = 750;
     const maxOuterRadius = (width / 2);
@@ -151,10 +152,15 @@ const RadialChart = () => {
           .data(metrics ? metrics : [])
           .join('path')
           .attr('class', 'radial-bar')
+          .attr('cursor', 'pointer')
           .attr('d', (d) => arc(d))
           .attr('fill', d => INDICATORS_TYPE_MAP[LABELS_MAP[d.indicator].type])
           .on('mouseover', mouseOver)
           .on('mouseleave', mouseLeave)
+          .on('click', (d) => {
+            dispatch(getSelectedIndicator(d.target.__data__.indicator));
+            mouseLeave();
+          })
 
         // outer and inner circles
         center
@@ -229,16 +235,30 @@ const RadialChart = () => {
               .text(setEllipsis(category.label, 4));
           });
 
-          // Selected insicator heading, selected country and score, highest country and score, lowest country and score
+          // Selected indicator heading, selected country and score, highest country and score, lowest country and score
           center
             .append('text')
-            .text(`${setEllipsis(selectedIndicator, 17)} Rankings`)
+            .text(`${setEllipsis(selectedIndicator, 22)}${selectedIndicator.length < 16 ? ' Rankings' : ''}`)
             .attr('fill', '#DDDDDD')
+            .attr('overflow', 'hidden')
             .attr('font-family', 'arial')
             .attr('font-weight', 700)
             .attr('font-size', '14px')
             .attr('text-anchor', 'middle')
-            .attr('transform', 'translate(0,-205)');
+            .attr('transform', 'translate(0,-205)')
+            .append('title')
+            .text(selectedIndicator.length > 22 ? selectedIndicator : '')
+
+          center
+            .append('text')
+            .text(`${selectedIndicator.length > 15 ? ' Rankings' : ''}`)
+            .attr('fill', '#DDDDDD')
+            .attr('overflow', 'hidden')
+            .attr('font-family', 'arial')
+            .attr('font-weight', 700)
+            .attr('font-size', '14px')
+            .attr('text-anchor', 'middle')
+            .attr('transform', 'translate(0,-190)');
 
           center
             .append('text')
@@ -389,7 +409,7 @@ const RadialChart = () => {
               .attr("width", selectedIndicatorData?.sortedCountries.length < 21 ? 14 : 4)
               .attr("transform", `translate(${getBarXPosition()}, 280)`);
 
-  }, [comparingCountry, selectedCountry, metrics, selectedIndicatorData]);
+  }, [comparingCountry, selectedCountry, selectedIndicator, metrics, selectedIndicatorData]);
 
 
     return (
