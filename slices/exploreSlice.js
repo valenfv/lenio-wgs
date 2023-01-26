@@ -50,8 +50,6 @@ export const fetchExploreData = createAsyncThunk(
             min: yMin,
             max: yMax,
         }
-
-        console.log({ filteredData })
         return { data: filteredData, indicatorX, indicatorY };
     });
 
@@ -69,7 +67,7 @@ export const exploreSlice = createSlice({
             state.loading = true;
         })
         builder.addCase(fetchExploreData.fulfilled, (state, action) => {
-            console.log()
+            console.log('asdasdasdasasd')
             // just an example
             state.data = action.payload.data;
             state.indicatorX = action.payload.indicatorX;
