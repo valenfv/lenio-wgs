@@ -24,7 +24,7 @@ export const LABELS_MAP = {
     type: "social"
   },
   "SUSTAINABLE ECONOMIC DEVELOPMENT ASSESSMENT (SEDA)": {
-    label: "ED",
+    label: "SEDA",
     type: "economic"
   },
   "GDP GROWTH\n(ANNUAL PERCENTAGE)": {
