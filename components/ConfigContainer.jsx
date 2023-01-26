@@ -11,14 +11,10 @@ const StyledContainer = styled('div')({
   rowGap: '15px'
 });
 
-function ConfigContainer() {
-  const {
-    comparingCountry,
-    selectedCountry
-  } = useSelector((state) => ({
-    comparingCountry: state.sidebar.comparingCountry,
-    selectedCountry: state.sidebar.selectedCountry,
-  }));
+function ConfigContainer({
+  showAxisSelection,
+  makeIndicatorListClickable,
+}) {
   const dispatch = useDispatch();
   return (
     <StyledContainer>
@@ -39,7 +35,8 @@ function ConfigContainer() {
         }}
       />
       <IndicatorsTable 
-        onIndicatorAxisChange={(indicators) => dispatch(changeAxis(indicators))} 
+        onIndicatorAxisChange={showAxisSelection && ((indicators) => dispatch(changeAxis(indicators)))} 
+        showIndicationSelection={makeIndicatorListClickable}
       />
     </StyledContainer>
   );

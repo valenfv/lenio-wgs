@@ -7,22 +7,34 @@ import {
   CHOROPLEITH_WIDTH,
   useChoropleth,
 } from "../lib/useChoropleth";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchWorldData } from "../slices/worldSlice";
 
 export default function World() {
   const svgRef = React.useRef(null);
-  useChoropleth(svgRef);
+  const dispatch = useDispatch();
+
+  const { selectedIndicator, worldData }= useSelector((store) => ({
+    selectedIndicator: store.sidebar.selectedIndicator,
+    worldData: store.world.data,
+  }));
+
+
+  React.useEffect(() => {
+    dispatch(fetchWorldData(selectedIndicator))
+  }, [selectedIndicator])
+
+  useChoropleth(svgRef, {
+    worldData,
+    selectedIndicator
+  });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return (
     <div className={styles.worldContainer}>
       <div className={[styles.floatingMenu]}>
-        <ConfigContainer />
+        <ConfigContainer showAxisSelection={false} makeIndicatorListClickable={true}/>
       </div>
-      <div className={styles.map}>
-        <svg
-          viewBox={`0 0 ${CHOROPLEITH_WIDTH} ${CHOROPLEITH_HEIGHT}`}
-          className={styles.svg}
-          ref={svgRef}
-        />
+      <div className={styles.map} ref={svgRef}>
       </div>
     </div>
   );
