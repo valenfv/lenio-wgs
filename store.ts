@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import sidebarSlice from "./slices/sidebarSlice";
 import exploreSlice from "./slices/exploreSlice";
+import worldSlice from "./slices/worldSlice";
 
 export const store = configureStore({
 	reducer: { 
 		sidebar: sidebarSlice,
 		explore: exploreSlice,
+		world: worldSlice,
 	},
 });
 

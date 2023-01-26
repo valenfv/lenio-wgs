@@ -56,7 +56,7 @@ export default function World() {
   return (
     <div className={commonStyles.container}>
       <div className={commonStyles.menu}>
-        <ConfigContainer />
+        <ConfigContainer showAxisSelection/>
       </div>
       <DataVisContainer>
         <div ref={svgRef} className={styles.chart} />

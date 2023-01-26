@@ -6,18 +6,20 @@ import { Menu, MenuItem, Typography } from '@mui/material';
 import TableBody, { tableBodyClasses } from '@mui/material/TableBody';
 import TableCell, { tableCellClasses, TableCellProps } from '@mui/material/TableCell';
 import TableHead, { tableHeadClasses } from '@mui/material/TableHead';
-import TableRow, { tableRowClasses } from '@mui/material/TableRow';
+import TableRow, { tableRowClasses, TableRowProps } from '@mui/material/TableRow';
 import { AxisLeftButton } from './AxisLeftButton';
 import indicators from '../../data/indicators.json';
 import { AxisBottomButton } from './AxisBottomButton';
 import { AddAxisButton } from './AddAxisButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeSelectedIndicator } from '../../slices/sidebarSlice';
 
 
 interface Cell {
   align?: string;
 }
 
-const StyledTableCell = styled(TableCell)<TableCellProps & Cell>(() => ({
+const StyledTableCell = styled(TableCell)<TableCellProps & Cell>((props) => ({
   [`&.${tableCellClasses.head}`]: {
     color: 'rgba(238, 238, 238, 0.7)',
     fontSize: '14px',
@@ -39,10 +41,23 @@ const StyledTableCell = styled(TableCell)<TableCellProps & Cell>(() => ({
     height: 50,
     //whiteSpace: 'nowrap',
     overflowWrap: 'break-word',
-  },
+  }
 }));
 
-const StyledTableRow = styled(TableRow)(() => ({
+const StyledTableRow = styled(TableRow)<TableRowProps & { showIndicationSelection?: boolean }>((props) => ({
+  [`&.${tableRowClasses.root}`]: {
+    ...(props.showIndicationSelection ? {
+      background: props.selected ? 'hsla(0, 0%, 100%, 15%)' : 'transparent',
+      cursor: 'pointer',
+    } : {})
+  },
+  [`&.${tableRowClasses.root}:hover`]: {
+    ...(props.showIndicationSelection && props.selected ? {
+      backgroundColor: 'hsla(0, 0%, 100%, 15%)',
+    } : {
+      backgroundColor: 'rgba(25, 118, 210, 0.12)',
+    })
+  },
   [`&.${tableRowClasses.root}:not(:last-child)`]: {
     '& td': {
       borderBottom: '1px solid rgba(238, 238, 238, 0.25)',
@@ -107,6 +122,10 @@ const Delta: React.FC<DeltaProps> = ({ up, children }) => {
   )
 }
 
+const StyledIndicator = styled('span')(() => ({
+  cursor: 'pointer',
+}));
+
 const TableContainer = styled('div')(() => ({
   height: 500,
   overflowY: 'auto',
@@ -129,16 +148,18 @@ const TableContainer = styled('div')(() => ({
 }))
 
 
-const useAxisChange = (onIndicatorAxisChange) => {
+const useAxisChange = (onIndicatorAxisChange: (arg: { x: string, y: string }) => void | null) => {
+  if(!onIndicatorAxisChange) return () => null;
   const [{ x: selectedX, y: selectedY }, setAxis] = React.useState({
     x: 'abf6788a66fbe940547ee9c108535f0be5b0eacbd2bec3796634f90a742202cd', // gini
     y: '80c1e29026bae838ab3275c67aed5010b25cc6c12cc109a75a4695a9c9735c56', // happy planet index
   });
 
-  const renderAxisSelectionButton = React.useCallback((indicatorId) => {
-    const [anchorEl, setAnchorEl] = React.useState(null);
+  const renderAxisSelectionButton = React.useCallback((indicatorId: string) => {  
+
+    const [anchorEl, setAnchorEl] = React.useState<EventTarget | null>(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event) => {
+    const handleClick = (event: Event) => {
       setAnchorEl(event.currentTarget);
     };
 
@@ -146,7 +167,7 @@ const useAxisChange = (onIndicatorAxisChange) => {
       setAnchorEl(null);
     };
 
-    const handleManuItemClick = (type) => {
+    const handleManuItemClick = (type: string) => {
       if(type === 'x'){
         setAxis(prev => {
           if(prev.y === indicatorId){
@@ -178,7 +199,7 @@ const useAxisChange = (onIndicatorAxisChange) => {
         {(indicatorId !== selectedX && indicatorId !== selectedY) && <AddAxisButton onClick={handleClick}/>}
         <Menu
           id="basic-menu"
-          anchorEl={anchorEl}
+          anchorEl={anchorEl as HTMLElement}
           open={open}
           onClose={handleClose}
         >
@@ -190,14 +211,36 @@ const useAxisChange = (onIndicatorAxisChange) => {
   }, [selectedX, selectedY]);
 
 
-  return { renderAxisSelectionButton };
+  return renderAxisSelectionButton;
 };
 
+
+const useIndicatorSelector = (showIndicationSelection: Boolean) => {
+  if(!showIndicationSelection) return ({
+    onClick: () => null,
+    isIndicatorSelected: () => false,
+  });
+
+  const selectedIndicator = useSelector((state: { sidebar: { selectedIndicator: string } }) => state.sidebar.selectedIndicator);
+  const dispatch = useDispatch();
+
+  const onClick = (indicatorId: string) => {
+    dispatch(changeSelectedIndicator(indicatorId))
+  };
+
+  const isIndicatorSelected = (indicatorId: string) => {
+    return selectedIndicator === indicatorId;
+  };
+
+  return {onClick, isIndicatorSelected}
+};
 const IndicatorsTable = ({
-  onIndicatorChange = () => null,
-  onIndicatorAxisChange = () => null,
+  showIndicationSelection = false,
+  onIndicatorAxisChange = null,
 }) => {
-  const { renderAxisSelectionButton } = useAxisChange(onIndicatorAxisChange);
+  const renderAxisSelectionButton = useAxisChange(onIndicatorAxisChange);
+  const { isIndicatorSelected, onClick } = useIndicatorSelector(showIndicationSelection);
+
   return (
     <TableContainer>
       <TableTitle />
@@ -212,9 +255,17 @@ const IndicatorsTable = ({
         </TableHead>
         <TableBody>
           {
-            Object.keys(indicators).map(indicator => (
-              <StyledTableRow key={indicator}>
-                <StyledTableCell align="left">{indicators[indicator].indicator_name} {renderAxisSelectionButton(indicator)}</StyledTableCell>
+            Object.keys(indicators).map((indicator: string) => (
+              <StyledTableRow 
+                key={indicator} 
+                showIndicationSelection={showIndicationSelection} 
+                selected={isIndicatorSelected(indicator)}
+                onClick={() => onClick(indicator)}
+              >
+                <StyledTableCell align="left">
+                  {(indicators as {[index: string]: { indicator_name: string }})[indicator].indicator_name}
+                  {renderAxisSelectionButton(indicator)}
+                </StyledTableCell>
                 <StyledTableCell align="left">50th</StyledTableCell>
                 <StyledTableCell align="left">41.5</StyledTableCell>
                 <StyledTableCell align="left"><Delta up> 0.7</Delta></StyledTableCell>
