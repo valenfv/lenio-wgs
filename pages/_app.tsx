@@ -29,12 +29,14 @@ const StyledHeader = styled("div")({
 
 const StyledButton = styled(Button)({
 	height: "51px",
-	width: "60px",
+	width: "auto",
 	border: "1px solid #191935",
+	color: "#fff",
+	textTransform: "capitalize",
 });
 
 interface NavButtonProps {
-	chartType: string;
+	text: string;
 	selected: boolean;
 	onClick: () => void;
 }
@@ -43,18 +45,21 @@ const charts = [
 	{
 		chartType: "pie",
 		href: "/",
+		text: "Overview",
 	},
 	{
 		chartType: "line",
 		href: "/explore",
+		text: "Compare",
 	},
 	{
 		chartType: "globe",
 		href: "/world",
+		text: "Explore",
 	},
 ];
 
-function NavButton({ chartType, selected, onClick }: NavButtonProps) {
+function NavButton({ text, selected, onClick }: NavButtonProps) {
 	return (
 		<StyledButton
 			variant="outlined"
@@ -62,12 +67,7 @@ function NavButton({ chartType, selected, onClick }: NavButtonProps) {
 				background: selected ? "#191935" : "#000020",
 			}}
 			onClick={onClick}>
-			<Image
-				src={`/lenio-wgs/button_icons/${chartType}.png`}
-				width={30}
-				height={30}
-				alt={`${chartType} Chart Icon`}
-			/>
+			{text}
 		</StyledButton>
 	);
 }
@@ -106,7 +106,7 @@ export default function App({ Component, pageProps }: AppProps) {
 									router.push(props.href);
 								}}
 								selected={currentChart === props.chartType}
-								chartType={props.chartType}
+								text={props.text}
 							/>
 						))}
 					</div>
