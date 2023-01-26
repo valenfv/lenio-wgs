@@ -1,17 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import {
-	Ranking,
-	RankingMetric,
-	CountriesData,
-	CountriesDataKeys,
-	CountryRankingData,
-	IndicatorsKeys,
-} from "../../interfaces";
+import { Ranking, RankingMetric, CountriesDataKeys, CountryRankingData, IndicatorsKeys } from "../../interfaces";
 import iso_countries from "../../data/iso_country.json";
 import indicators from "../../data/indicators.json";
-import { getLatestIndicatorValue, getLatestYear } from "../../utils/rankingUtils";
+import { getIndicatorValue, getRankingPosition, rankingSort } from "../../utils/rankingUtils";
 
-function getRankings(comparing_country: string, countries: Array<CountriesDataKeys>): Ranking {
+function getRankings(comparing_country: CountriesDataKeys, countries: Array<CountriesDataKeys>): Ranking {
 	const rankings: Ranking = {
 		comparing_country,
 		metrics: [],
@@ -26,23 +19,16 @@ function getRankings(comparing_country: string, countries: Array<CountriesDataKe
 		};
 
 		countries.forEach((iso_country_code: CountriesDataKeys) => {
-			const value = getLatestIndicatorValue(iso_country_code, indicator_key);
+			const countryIndicatorValue = getIndicatorValue(iso_country_code, indicator_key);
 			obj.sortedCountries.push({
 				country: iso_country_code,
 				country_name: iso_countries[iso_country_code],
-				value,
+				value: countryIndicatorValue?.value || null,
 			});
 		});
-		if (true) {
-			// higher is better
-			obj.sortedCountries.sort((a: CountryRankingData, b: CountryRankingData) => b.value - a.value);
-		} else {
-			// Lower is better
-			obj.sortedCountries.sort((a: CountryRankingData, b: CountryRankingData) => a.value - b.value);
-		}
 
-		const idx = obj.sortedCountries.findIndex((metric: CountryRankingData) => metric.country === comparing_country);
-		obj.ranking = idx + 1;
+		obj.sortedCountries = rankingSort(obj.sortedCountries, indicators[indicator_key].higher_is_better);
+		obj.ranking = getRankingPosition(obj.sortedCountries, comparing_country);
 		rankings.metrics.push(obj);
 	});
 

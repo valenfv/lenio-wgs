@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { CountriesDataKeys, IndicatorsKeys, IndicatorValue } from "../../interfaces";
 import iso_countries from "../../data/iso_country.json";
-import { getLatestIndicatorValue } from "../../utils/rankingUtils";
+import { getIndicatorValue } from "../../utils/rankingUtils";
 
 function getIndicatorsValues(indicators: Array<IndicatorsKeys>): Array<IndicatorValue> {
 	const indicatorsValues: Array<IndicatorValue> = [];
@@ -9,17 +9,17 @@ function getIndicatorsValues(indicators: Array<IndicatorsKeys>): Array<Indicator
 	const countries = Object.keys(iso_countries) as Array<CountriesDataKeys>;
 
 	countries.forEach((iso_country_code: CountriesDataKeys) => {
-		const temp: any = {
+		const indicatorValue: any = {
 			country: iso_country_code,
 		};
 		indicators.forEach((indicator_key: IndicatorsKeys) => {
-			const value = getLatestIndicatorValue(iso_country_code, indicator_key);
+			const value = getIndicatorValue(iso_country_code, indicator_key);
 			if (value) {
-				temp[indicator_key] = value;
+				indicatorValue[indicator_key] = value;
 			}
 		});
 
-		indicatorsValues.push(temp);
+		indicatorsValues.push(indicatorValue);
 	});
 
 	return indicatorsValues;
