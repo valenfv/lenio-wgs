@@ -10,7 +10,8 @@ export const fetchRankingData = createAsyncThunk(
             selected_countries
         });
         return formatRadialChartData(data) ;
-    });
+    }
+);
 
 export const radialChartSlice = createSlice({
     name: 'radialChart',
@@ -18,15 +19,11 @@ export const radialChartSlice = createSlice({
         comparing_country: '',
         metrics: null,
         selectedIndicator: "GINI INDEX",
-        selectedIndicatorData: null,
         test: null
     },
     reducers: {
         getSelectedIndicator: (state, action) => {
             state.selectedIndicator = action.payload
-        },
-        getRadialChartData: (state, action) => {
-            state.selectedIndicatorData = action.payload.selectedIndicatorData
         },
     },
     extraReducers: (builder) => {
@@ -41,5 +38,4 @@ export default radialChartSlice.reducer;
 
 export const {
     getSelectedIndicator,
-    getRadialChartData,
 } = radialChartSlice.actions;

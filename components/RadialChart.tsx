@@ -1,10 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSelectedIndicator, getRadialChartData, fetchRankingData } from '../slices/radialChartSlice';
+import { getSelectedIndicator, fetchRankingData } from '../slices/radialChartSlice';
 import getCountryISO2 from 'country-iso-3-to-2';
-import endpoint_data from "../data/endpoint_data.json";
 import { COUNTRIES_QTY, LABELS_MAP, INDICATORS_QTY, INDICATORS_TYPE_MAP } from '../constants/radialChart';
-import { capitalizeFirstLetter, setEllipsis, formatRadialChartData, getRadialChartLabes, getIndicatorsTypemap } from '../lib/helpers';
+import { capitalizeFirstLetter, setEllipsis, getRadialChartLabes, getIndicatorsTypemap, getCountries } from '../lib/helpers';
 import styles from '../styles/world.module.css';
 import countries from '../data/iso_country.json'
 import * as d3 from 'd3';
@@ -69,15 +68,17 @@ const RadialChart = () => {
 
     useEffect(() => {
       dispatch(
-        fetchRankingData({comparing_country: "USA", selected_countries: ["VEN", "VNM"]})
-      )
-    }, []);
+        fetchRankingData({comparing_country: comparingCountry?.code, selected_countries: selectedCountry?.code})
+      );
+    }, [comparingCountry, selectedCountry]);
 
     useEffect(() => {
       const chartLabels = getRadialChartLabes(metrics);
       const indicatorsTypeMap = getIndicatorsTypemap();
 
       const metricsData = [];
+
+      const outerRadiusPercentage = 174 / getCountries(comparingCountry?.code, selectedCountry?.code)?.length;
 
       metrics?.forEach((d, i) => {
         const metric = {...d};
@@ -86,13 +87,15 @@ const RadialChart = () => {
         const zeroRadius = valueScale(0);
         if (metric.ranking > 0) {
           metric.innerRadius = zeroRadius;
-          metric.outerRadius = valueScale(d.ranking * 174/3);
+          metric.outerRadius = valueScale(d.ranking * outerRadiusPercentage);
         } else {
           metric.innerRadius = valueScale(d.ranking);
           metric.outerRadius = zeroRadius;
         };
         metricsData.push(metric);
       });
+
+      const selectedIndicatorData = metricsData.filter(metric => metric.indicator === selectedIndicator)[0];
 
       //chart container
       const svg = d3.select(radialChart.current)
