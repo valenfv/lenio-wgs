@@ -7,9 +7,18 @@ export const fetchWorldData = createAsyncThunk(
         const { data } = await axios.post('/lenio-wgs/api/indicators-values', {
             indicators: [indicator]
         });
-        const serializedData = data.filter(d => d[indicator]).reduce((prev, curr) => ({
+        const iHib = data.find(countryData => Boolean(countryData[indicator]))[indicator].higher_is_better;
+        const rankedData = data.filter(d => d[indicator])
+            .sort((a, b) =>
+                iHib ?
+                    a[indicator].value - b[indicator].value
+                    : b[indicator].value - a[indicator].value);
+        const serializedData = rankedData.reduce((prev, curr, index) => ({
             ...prev,
-            [curr.country]: { ...curr }
+            [curr.country]: {
+                ...curr,
+                position: index + 1,
+            }
         }), {});
         return serializedData;
     }

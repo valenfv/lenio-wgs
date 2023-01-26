@@ -32,10 +32,10 @@ export const fetchExploreData = createAsyncThunk(
             xMin, xMax,
             yMin, yMax
         } = {
-            xMin: Math.min.apply(Math, filteredData.map(d => d[xAxis])),
-            xMax: Math.max.apply(Math, filteredData.map(d => d[xAxis])),
-            yMin: Math.min.apply(Math, filteredData.map(d => d[yAxis])),
-            yMax: Math.max.apply(Math, filteredData.map(d => d[yAxis])),
+            xMin: Math.min.apply(Math, filteredData.map(d => d[xAxis].value)),
+            xMax: Math.max.apply(Math, filteredData.map(d => d[xAxis].value)),
+            yMin: Math.min.apply(Math, filteredData.map(d => d[yAxis].value)),
+            yMax: Math.max.apply(Math, filteredData.map(d => d[yAxis].value)),
         };
 
         const indicatorX = {
@@ -63,12 +63,9 @@ export const exploreSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchExploreData.pending, (state) => {
-            // just an example
             state.loading = true;
         })
         builder.addCase(fetchExploreData.fulfilled, (state, action) => {
-            console.log('asdasdasdasasd')
-            // just an example
             state.data = action.payload.data;
             state.indicatorX = action.payload.indicatorX;
             state.indicatorY = action.payload.indicatorY;
