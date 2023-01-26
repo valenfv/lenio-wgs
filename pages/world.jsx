@@ -1,12 +1,14 @@
-import React from "react";
-import styles from "../styles/world.module.css";
-import { NEIGHBORS, ORGANIZATION, WORLD, COUNTRY } from '../components/CountryPicker';
-import { ConfigContainer } from "../components/ConfigContainer";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import styles from '../styles/world.module.css';
+import {
+  NEIGHBORS, ORGANIZATION, WORLD, COUNTRY,
+} from '../components/CountryPicker';
+import { ConfigContainer } from '../components/ConfigContainer';
 import {
   useChoropleth,
-} from "../lib/useChoropleth";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchWorldData } from "../slices/worldSlice";
+} from '../lib/useChoropleth';
+import { fetchWorldData } from '../slices/worldSlice';
 import bordering from '../data/bordering_countries.json';
 import organizations from '../data/organizations.json';
 
@@ -14,12 +16,12 @@ export default function World() {
   const svgRef = React.useRef(null);
   const dispatch = useDispatch();
 
-  const { 
-    selectedIndicator, 
-    worldData, 
+  const {
+    selectedIndicator,
+    worldData,
     selectedCountry,
-    comparingCountry
-  }= useSelector((store) => ({
+    comparingCountry,
+  } = useSelector((store) => ({
     selectedIndicator: store.sidebar.selectedIndicator,
     worldData: store.world.data,
     selectedCountry: store.sidebar.selectedCountry,
@@ -27,19 +29,19 @@ export default function World() {
   }));
 
   const highlights = React.useMemo(() => {
-    if(selectedCountry?.code === NEIGHBORS){
+    if (selectedCountry?.code === NEIGHBORS) {
       return bordering[comparingCountry?.code];
-    }else if(selectedCountry?.code === WORLD || selectedCountry?.code === COUNTRY){
+    } if (selectedCountry?.code === WORLD || selectedCountry?.code === COUNTRY) {
       return null;
-    }else if(selectedCountry?.group === ORGANIZATION){
+    } if (selectedCountry?.group === ORGANIZATION) {
       return organizations?.[selectedCountry?.code];
     }
+    return [];
   }, [comparingCountry, selectedCountry]);
 
-
   React.useEffect(() => {
-    dispatch(fetchWorldData(selectedIndicator))
-  }, [selectedIndicator])
+    dispatch(fetchWorldData(selectedIndicator));
+  }, [selectedIndicator]);
 
   useChoropleth(svgRef, {
     worldData,
@@ -51,10 +53,9 @@ export default function World() {
   return (
     <div className={styles.worldContainer}>
       <div className={[styles.floatingMenu]}>
-        <ConfigContainer showAxisSelection={false} makeIndicatorListClickable={true}/>
+        <ConfigContainer showAxisSelection={false} makeIndicatorListClickable />
       </div>
-      <div className={styles.map} ref={svgRef}>
-      </div>
+      <div className={styles.map} ref={svgRef} />
     </div>
   );
 }
