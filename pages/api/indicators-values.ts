@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { CountriesDataKeys, IndicatorsKeys, IndicatorValue } from "../../interfaces";
-import iso_countries from "../../data/iso_country.json";
 import { getIndicatorValue } from "../../utils/rankingUtils";
+import iso_countries from "../../data/iso_country.json";
+import indicators_data from "../../data/indicators.json";
 
 function getIndicatorsValues(indicators: Array<IndicatorsKeys>): Array<IndicatorValue> {
 	const indicatorsValues: Array<IndicatorValue> = [];
@@ -13,9 +14,12 @@ function getIndicatorsValues(indicators: Array<IndicatorsKeys>): Array<Indicator
 			country: iso_country_code,
 		};
 		indicators.forEach((indicator_key: IndicatorsKeys) => {
-			const value = getIndicatorValue(iso_country_code, indicator_key);
-			if (value) {
-				indicatorValue[indicator_key] = value;
+			const indicatorValueData = getIndicatorValue(iso_country_code, indicator_key);
+			if (indicatorValueData?.value) {
+				indicatorValue[indicator_key] = {
+					value: indicatorValueData.value,
+					higher_is_better: indicators_data[indicator_key].higher_is_better,
+				};
 			}
 		});
 
