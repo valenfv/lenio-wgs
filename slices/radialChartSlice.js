@@ -1,13 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { LABELS_MAP } from '../constants/radialChart';
 
 export const radialChartSlice = createSlice({
     name: 'radialChart',
     initialState: {
-        data: null,
+        comparing_country: '',
+        metrics: null,
+        selectedIndicatorData: null,
     },
     reducers: {
         getRadialChartData: (state, action) => {
-            state.data = action.payload;
+            state.comparing_country = action.payload.comparing_country
+            state.metrics = action.payload.metrics;
+            state.selectedIndicatorData = action.payload.selectedIndicatorData
         },
     },
 })
