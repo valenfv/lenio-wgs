@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Ranking, CountriesDataKeys, IndicatorsKeys } from "../../interfaces";
+import { CountriesDataKeys, IndicatorsKeys } from "../../interfaces";
 import iso_countries from "../../data/iso_country.json";
 import indicators from "../../data/indicators.json";
 import { getIndicatorValue, getRankingPosition, rankingSort, round2Decimals } from "../../utils/rankingUtils";
@@ -47,7 +47,7 @@ function getDeltaValues(comparing_country: CountriesDataKeys): any {
 	return deltaValues;
 }
 
-export default function rankingHandler(req: NextApiRequest, res: NextApiResponse<any>) {
+export default function deltaValuesHandler(req: NextApiRequest, res: NextApiResponse<any>) {
 	const { query, method } = req;
 	const iso_country_code = query.country as CountriesDataKeys;
 	switch (method) {
