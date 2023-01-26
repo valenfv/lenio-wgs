@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSelectedIndicator, getRadialChartData } from '../slices/radialChartSlice';
+import { getSelectedIndicator, getRadialChartData, fetchRankingData } from '../slices/radialChartSlice';
 import getCountryISO2 from 'country-iso-3-to-2';
 import endpoint_data from "../data/endpoint_data.json";
 import { COUNTRIES_QTY, LABELS_MAP, INDICATORS_QTY, INDICATORS_TYPE_MAP } from '../constants/radialChart';
@@ -27,6 +27,7 @@ const RadialChart = () => {
     }));
     const width = 750;
     const height = 750;
+    const eachAngle = (2 * Math.PI) / INDICATORS_QTY;
     const maxOuterRadius = (width / 2);
     const minInnerRadius = (width / 2) * 0.70;
     const valueScale = d3
@@ -67,12 +68,31 @@ const RadialChart = () => {
     };
 
     useEffect(() => {
-      dispatch(getRadialChartData(formatRadialChartData(endpoint_data, selectedIndicator, width, height, valueScale)));
+      dispatch(
+        fetchRankingData({comparing_country: "USA", selected_countries: ["VEN", "VNM"]})
+      )
     }, []);
 
     useEffect(() => {
       const chartLabels = getRadialChartLabes(metrics);
       const indicatorsTypeMap = getIndicatorsTypemap();
+
+      const metricsData = [];
+
+      metrics?.forEach((d, i) => {
+        const metric = {...d};
+        metric.startAngle = i * eachAngle;
+        metric.endAngle = (i + 1) * eachAngle;
+        const zeroRadius = valueScale(0);
+        if (metric.ranking > 0) {
+          metric.innerRadius = zeroRadius;
+          metric.outerRadius = valueScale(d.ranking * 174/3);
+        } else {
+          metric.innerRadius = valueScale(d.ranking);
+          metric.outerRadius = zeroRadius;
+        };
+        metricsData.push(metric);
+      });
 
       //chart container
       const svg = d3.select(radialChart.current)
@@ -116,16 +136,16 @@ const RadialChart = () => {
                 <img
                   loading="lazy"
                   width="30"
-                  src=${getTooltipData(d.target?.__data__?.indicator, metrics).imgSrc}
-                  srcSet=${getTooltipData(d.target?.__data__?.indicator, metrics).imgSrcSet}
+                  src=${getTooltipData(d.target?.__data__?.indicator, metricsData).imgSrc}
+                  srcSet=${getTooltipData(d.target?.__data__?.indicator, metricsData).imgSrcSet}
                   alt="${countries[comparingCountry.code]} flag"
                 />
               </div>
               <strong style="font-size:14px">${d.target?.__data__?.indicator}</strong>
               <br>
-              <strong>Ranking:</strong> ${getTooltipData(d.target?.__data__?.indicator, metrics).ranking}
+              <strong>Ranking:</strong> ${getTooltipData(d.target?.__data__?.indicator, metricsData).ranking}
               <br>
-              <strong>Score:</strong> ${getTooltipData(d.target?.__data__?.indicator, metrics).value}`
+              <strong>Score:</strong> ${getTooltipData(d.target?.__data__?.indicator, metricsData).value}`
             )
             .style('left', `${d.pageX}px`)
             .style('top', `${d.pageY - 28}px`)
@@ -149,7 +169,7 @@ const RadialChart = () => {
 
         center
           .selectAll('.radial-bar')
-          .data(metrics ? metrics : [])
+          .data(metricsData ? metricsData : [])
           .join('path')
           .attr('class', 'radial-bar')
           .attr('cursor', 'pointer')
