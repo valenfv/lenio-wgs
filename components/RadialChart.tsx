@@ -1,3 +1,7 @@
+/* eslint-disable no-shadow */
+/* eslint-disable max-len */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable camelcase */
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSelectedIndicator, fetchRankingData } from '../slices/radialChartSlice';

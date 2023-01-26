@@ -10,7 +10,6 @@ import { WorldIcon } from './icons/WorldIcon';
 import countries from '../data/iso_country.json';
 import organizations from '../data/organizations.json';
 
-
 export const ORGANIZATION = 'Organizations';
 export const GROUPS = 'Groups';
 export const COUNTRY = 'Countries';
@@ -18,12 +17,11 @@ export const COUNTRY = 'Countries';
 export const NEIGHBORS = 'NEIGHBORS';
 export const WORLD = 'WORLD';
 
-
-export const WORLD_ITEM = {code: WORLD, label: 'World', group: GROUPS};
+export const WORLD_ITEM = { code: WORLD, label: 'World', group: GROUPS };
 
 const getCountryFlag = (country, group) => {
-  if(group === GROUPS) return <WorldIcon />;
-  if(group === ORGANIZATION) return null;
+  if (group === GROUPS) return <WorldIcon />;
+  if (group === ORGANIZATION) return null;
   return (
     <img
       loading="lazy"
@@ -33,37 +31,37 @@ const getCountryFlag = (country, group) => {
       alt={`${countries[country]} flag`}
     />
   );
-}; 
+};
 const getPickerItems = ({
-  showOrganizations, 
-  showCountries, 
-  showNeighboring, 
-  showWorld
+  showOrganizations,
+  showCountries,
+  showNeighboring,
+  showWorld,
 }) => ([
   ...(showWorld ? [WORLD_ITEM] : []),
-  ...(showNeighboring ? [{code: NEIGHBORS, label: 'Neighboring Countries', group: GROUPS}] : []),
-  ...(showCountries ? Object.keys(countries).map(country => ({ 
-    code: country, 
-    label: countries[country], 
-    group: COUNTRY, 
+  ...(showNeighboring ? [{ code: NEIGHBORS, label: 'Neighboring Countries', group: GROUPS }] : []),
+  ...(showCountries ? Object.keys(countries).map((country) => ({
+    code: country,
+    label: countries[country],
+    group: COUNTRY,
   })) : []),
-  ...(showOrganizations ? Object.keys(organizations).map(organization => ({
+  ...(showOrganizations ? Object.keys(organizations).map((organization) => ({
     code: organization,
     label: organization,
     group: ORGANIZATION,
-  })) : [])
+  })) : []),
 ]);
 
 const StyledTextField = styled(TextField)({
   '& input, label': {
-    color: '#EEEEEE!important', 
+    color: '#EEEEEE!important',
   },
   '& svg': {
     fill: '#D9D9D9',
   },
-  //background: '#191935',
+  // background: '#191935',
   background: 'hsla(240, 100%, 6%, 0.4)',
-  //	hsla(240, 100%, 6%, 0.2)
+  // hsla(240, 100%, 6%, 0.2)
   border: '1px solid rgba(238, 238, 238, 0.2)',
   borderRadius: '2px',
 });
@@ -75,15 +73,15 @@ const StyledBox = styled(Box)({
 
 const StyledPopper = styled(Popper)({
   [`& .${autocompleteClasses.listbox}`]: {
-    background: '#191935' 
+    background: '#191935',
   },
   [`& .${autocompleteClasses.listbox} .MuiListSubheader-root`]: {
     background: '#191935',
     color: '#EEEEEE',
-  }
+  },
 });
 
-export function CountryPicker({ 
+export function CountryPicker({
   canBeNull = false,
   label = 'Select a country to compare',
   onChange = () => null,
@@ -91,10 +89,13 @@ export function CountryPicker({
   showCountries = false,
   showNeighboring = false,
   showWorld = false,
-  defaultCode = 'USA'
+  defaultCode = 'USA',
 }) {
-  const pickerItems = React.useMemo(() => getPickerItems({showOrganizations, showCountries, showNeighboring, showWorld}), [showOrganizations, showCountries, showNeighboring, showWorld]);
-  const [country, setCountry] = React.useState(pickerItems.find(item => item.code === defaultCode));
+  const pickerItems = React.useMemo(() => getPickerItems({
+    showOrganizations, showCountries, showNeighboring, showWorld,
+  }), [showOrganizations, showCountries, showNeighboring, showWorld]);
+  // eslint-disable-next-line max-len
+  const [country, setCountry] = React.useState(pickerItems.find((item) => item.code === defaultCode));
 
   React.useEffect(() => {
     onChange(country);
@@ -105,21 +106,21 @@ export function CountryPicker({
       id="country-select-demo"
       style={{ width: '100%' }}
       onBlur={() => {
-        if(!canBeNull && !country){
-          const defaultOption = pickerItems.find(item => item.code === defaultCode);
+        if (!canBeNull && !country) {
+          const defaultOption = pickerItems.find((item) => item.code === defaultCode);
           setCountry(defaultOption);
-          onChange(defaultOption)
+          onChange(defaultOption);
         }
       }}
-      onChange={(_, newValue)=> {
-        if(newValue){
-          setCountry(newValue) 
-          onChange(newValue)
-        }else{
-          setCountry(null)
-          onChange(null)
+      onChange={(_, newValue) => {
+        if (newValue) {
+          setCountry(newValue);
+          onChange(newValue);
+        } else {
+          setCountry(null);
+          onChange(null);
         }
-      }} 
+      }}
       value={country}
       sx={{ width: 300 }}
       options={pickerItems}
@@ -139,16 +140,14 @@ export function CountryPicker({
           label={label}
           InputProps={{
             ...params.InputProps,
+            autoComplete: 'off',
             ...(!country ? {} : {
               startAdornment: (
-              <InputAdornment position="start" sx={{ '& > img, svg': { ml: 1, flexShrink: 0 } }}>
+                <InputAdornment position="start" sx={{ '& > img, svg': { ml: 1, flexShrink: 0 } }}>
                   {getCountryFlag(country.code, country?.group)}
-              </InputAdornment>
-            )})
-          }}
-          inputProps={{
-            ...params.inputProps,
-            autoComplete: 'off', // disable autocomplete and autofill
+                </InputAdornment>
+              ),
+            }),
           }}
         />
       )}

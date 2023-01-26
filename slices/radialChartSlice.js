@@ -32,7 +32,8 @@ export const radialChartSlice = createSlice({
             state.metrics = action.payload.metrics
         })
     },
-})
+  },
+);
 
 export default radialChartSlice.reducer;
 

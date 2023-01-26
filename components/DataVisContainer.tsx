@@ -10,6 +10,7 @@ const StyledContainer = styled('div')({
 });
 
 interface DataVisContainerPropsT {
+  // eslint-disable-next-line no-undef
   children: JSX.Element
 }
 
@@ -18,7 +19,8 @@ function DataVisContainer(props: DataVisContainerPropsT) {
   return (
     <StyledContainer>
       {children}
-    </StyledContainer>);
+    </StyledContainer>
+  );
 }
 
 export default DataVisContainer;

@@ -1,20 +1,21 @@
-import * as d3 from "d3"
-import React from "react"
-
+/* eslint-disable no-param-reassign */
+import * as d3 from 'd3';
+import React from 'react';
 
 const data = [
-  { "letter": "A", "frequency": 0.08167 },
-  { "letter": "B", "frequency": 0.01492 },
-  { "letter": "C", "frequency": 0.02782 },
-  { "letter": "D", "frequency": 0.04253 },
-  { "letter": "E", "frequency": 0.12702 },
-  { "letter": "F", "frequency": 0.02288 },
-  { "letter": "G", "frequency": 0.02015 },
-  { "letter": "H", "frequency": 0.06094 },
-  { "letter": "I", "frequency": 0.06966 },
-  { "letter": "J", "frequency": 0.00153 },
-]
+  { letter: 'A', frequency: 0.08167 },
+  { letter: 'B', frequency: 0.01492 },
+  { letter: 'C', frequency: 0.02782 },
+  { letter: 'D', frequency: 0.04253 },
+  { letter: 'E', frequency: 0.12702 },
+  { letter: 'F', frequency: 0.02288 },
+  { letter: 'G', frequency: 0.02015 },
+  { letter: 'H', frequency: 0.06094 },
+  { letter: 'I', frequency: 0.06966 },
+  { letter: 'J', frequency: 0.00153 },
+];
 
+// eslint-disable-next-line no-shadow
 const createBarChart = (data: any, {
   x = (d: any, i: any) => i, // given d in data, returns the (ordinal) x-value
   y = (d: any) => d, // given d in data, returns the (quantitative) y-value
@@ -33,7 +34,7 @@ const createBarChart = (data: any, {
   xPadding = 0.1, // amount of x-range to reserve to separate bars
   yFormat, // a format specifier string for the y-axis
   yLabel, // a label for the y-axis
-  color = "currentColor" // bar fill color
+  color = 'currentColor', // bar fill color
 }: any) => {
   // Compute values.
   const X = d3.map(data, x);
@@ -44,7 +45,7 @@ const createBarChart = (data: any, {
   if (yDomain === undefined) yDomain = [0, d3.max(Y)];
   xDomain = new d3.InternSet(xDomain);
 
-  // Omit any data not present in the x-domain. 
+  // Omit any data not present in the x-domain.
   const I = d3.range(X.length).filter((i: any) => xDomain.has(X[i]));
 
   // Construct scales, axes, and formats.
@@ -63,60 +64,63 @@ const createBarChart = (data: any, {
     title = (i: any) => T(O[i], i, data);
   }
 
-  const svg = d3.select("#bar-chart")
-    .attr("width", width)
-    .attr("color", "#EEEEEE80")
-    .attr("height", height)
-    .attr("viewBox", [0, 0, width, height])
-    .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+  const svg = d3.select('#bar-chart')
+    .attr('width', width)
+    .attr('color', '#EEEEEE80')
+    .attr('height', height)
+    .attr('viewBox', [0, 0, width, height])
+    .attr('style', 'max-width: 100%; height: auto; height: intrinsic;');
 
-  svg.append("g")
-    .attr("transform", `translate(${marginLeft},0)`)
+  svg.append('g')
+    .attr('transform', `translate(${marginLeft},0)`)
     .call(yAxis)
-    .call((g: any) => g.select(".domain").remove())
-    .call((g: any) => g.selectAll(".tick line").clone()
-      .attr("x2", width - marginLeft - marginRight)
-      .attr("stroke-opacity", 0.1))
-    .call((g: any) => g.append("text")
-      .attr("x", -marginLeft)
-      .attr("y", 10)
-      .attr("fill", "#EEEEEE80")
-      .attr("text-anchor", "start")
+    .call((g: any) => g.select('.domain').remove())
+    .call((g: any) => g.selectAll('.tick line').clone()
+      .attr('x2', width - marginLeft - marginRight)
+      .attr('stroke-opacity', 0.1))
+    .call((g: any) => g.append('text')
+      .attr('x', -marginLeft)
+      .attr('y', 10)
+      .attr('fill', '#EEEEEE80')
+      .attr('text-anchor', 'start')
       .text(yLabel));
 
-  const bar = svg.append("g")
-    .attr("fill", color)
-    .selectAll("rect")
+  const bar = svg.append('g')
+    .attr('fill', color)
+    .selectAll('rect')
     .data(I)
-    .join("rect")
-    .attr("x", (i: any) => xScale(X[i]))
-    .attr("y", (i: any) => yScale(Y[i]))
-    .attr("height", (i: any) => yScale(0) - yScale(Y[i]))
-    .attr("width", xScale.bandwidth());
+    .join('rect')
+    .attr('x', (i: any) => xScale(X[i]))
+    .attr('y', (i: any) => yScale(Y[i]))
+    .attr('height', (i: any) => yScale(0) - yScale(Y[i]))
+    .attr('width', xScale.bandwidth());
 
-  if (title) bar.append("title")
-    .text(title);
+  if (title) {
+    bar.append('title')
+      .text(title);
+  }
 
-  svg.append("g")
-    .attr("color", "#EEEEEE80")
-    .attr("transform", `translate(0,${height - marginBottom})`)
-    .call(xAxis)
-}
+  svg.append('g')
+    .attr('color', '#EEEEEE80')
+    .attr('transform', `translate(0,${height - marginBottom})`)
+    .call(xAxis);
+};
 
-const BarChart = () => {
+function BarChart() {
   React.useEffect(() => {
     createBarChart(data, {
       x: (d: any) => d.letter,
       y: (d: any) => d.frequency,
+      // eslint-disable-next-line max-len
       xDomain: d3.groupSort(data, ([d]: any) => d.frequency, (d: any) => d.letter), // sort by descending frequency
-      yFormat: "%",
-      yLabel: "↑ Frequency",
-      color: "rgba(69, 249, 224, 0.8)",
-      xPadding: 0.5
-    })
-  }, [])
+      yFormat: '%',
+      yLabel: '↑ Frequency',
+      color: 'rgba(69, 249, 224, 0.8)',
+      xPadding: 0.5,
+    });
+  }, []);
 
-  return <svg id='bar-chart' />
+  return <svg id="bar-chart" />;
 }
 
 export default BarChart;
