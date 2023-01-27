@@ -17,11 +17,7 @@ export const deltaSlice = createSlice({
 	initialState: {
 		indicatorsDelta: [],
 	},
-	reducers: {
-		setIndicatorsDelta: (state, action) => {
-			state.indicatorsDelta = action.payload;
-		},
-	},
+
 	extraReducers: (builder) => {
 		builder.addCase(fetchDeltaData.fulfilled, (state, action) => {
 			state.indicatorsDelta = action.payload;
