@@ -6,17 +6,21 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import getCountryISO2 from 'country-iso-3-to-2';
 import * as d3 from 'd3';
-import { getSelectedIndicator, getRadialChartData } from '../slices/radialChartSlice';
-import endpoint_data from '../data/endpoint_data.json';
+import { getSelectedIndicator, fetchRankingData } from '../slices/radialChartSlice';
 import {
   COUNTRIES_QTY, LABELS_MAP, INDICATORS_QTY, INDICATORS_TYPE_MAP,
 } from '../constants/radialChart';
 import {
-  // eslint-disable-next-line max-len
-  capitalizeFirstLetter, setEllipsis, formatRadialChartData, getRadialChartLabes, getIndicatorsTypemap,
+  capitalizeFirstLetter, setEllipsis, getRadialChartLabes, getIndicatorsTypemap, getCountries,
 } from '../lib/helpers';
 import styles from '../styles/world.module.css';
 import countries from '../data/iso_country.json';
+import {
+  COUNTRY, NEIGHBORS, WORLD, ORGANIZATION,
+} from './CountryPicker';
+import organizations from '../data/organizations.json';
+import bordering from '../data/bordering_countries.json';
+import radialStyles from '../styles/radial.module.css';
 
 function RadialChart() {
   const radialChart = useRef();
@@ -36,12 +40,15 @@ function RadialChart() {
   }));
   const width = 750;
   const height = 750;
+  const eachAngle = (2 * Math.PI) / INDICATORS_QTY;
   const maxOuterRadius = (width / 2);
   const minInnerRadius = (width / 2) * 0.70;
+
   const valueScale = d3
     .scaleLinear()
-    .domain([-6, COUNTRIES_QTY])
+    .domain([-6, 175])
     .range([minInnerRadius, maxOuterRadius]);
+
   let selectedCountryIndex;
 
   // Bar Chart functions
@@ -67,21 +74,58 @@ function RadialChart() {
     const imgSrcSet = `https://flagcdn.com/w40/${String(getCountryISO2(comparingCountry?.code)).toLowerCase()}.png 2x`;
     return {
       ranking: country.ranking,
-      // eslint-disable-next-line max-len
       value: country.sortedCountries?.filter((item) => item.country === comparingCountry?.code)[0]?.value,
       imgSrc,
       imgSrcSet,
     };
   };
 
+  const highlights = React.useMemo(() => {
+    if (selectedCountry?.code === NEIGHBORS) {
+      return bordering[comparingCountry?.code];
+    } if (selectedCountry?.code === WORLD || selectedCountry?.code === COUNTRY) {
+      return Object.keys(bordering);
+    } if (selectedCountry?.group === ORGANIZATION) {
+      return organizations?.[selectedCountry?.code];
+    }
+    return [];
+  }, [comparingCountry, selectedCountry]);
+
   useEffect(() => {
-    // eslint-disable-next-line max-len
-    dispatch(getRadialChartData(formatRadialChartData(endpoint_data, selectedIndicator, width, height, valueScale)));
-  }, []);
+    dispatch(
+      fetchRankingData({
+        comparing_country: comparingCountry?.code,
+        selected_countries: highlights,
+      }),
+    );
+  }, [highlights, comparingCountry, dispatch]);
 
   useEffect(() => {
     const chartLabels = getRadialChartLabes(metrics);
     const indicatorsTypeMap = getIndicatorsTypemap();
+
+    const metricsData = [];
+
+    const outerRadiusPercentage = 175 / (getCountries(comparingCountry?.code, selectedCountry?.code)?.length + 1);
+
+    console.log({ outerRadiusPercentage });
+
+    metrics?.forEach((d, i) => {
+      const metric = { ...d };
+      metric.startAngle = i * eachAngle;
+      metric.endAngle = (i + 1) * eachAngle;
+      const zeroRadius = valueScale(0);
+      if (metric.ranking > 0) {
+        metric.innerRadius = zeroRadius;
+        metric.outerRadius = valueScale(d.ranking * outerRadiusPercentage);
+      } else {
+        metric.innerRadius = valueScale(d.ranking);
+        metric.outerRadius = zeroRadius;
+      }
+      metricsData.push(metric);
+    });
+
+    const selectedIndicatorData = metricsData.filter((metric) => metric.indicator === selectedIndicator)[0];
 
     // chart container
     const svg = d3.select(radialChart.current)
@@ -125,16 +169,16 @@ function RadialChart() {
                 <img
                   loading="lazy"
                   width="30"
-                  src=${getTooltipData(d.target?.__data__?.indicator, metrics).imgSrc}
-                  srcSet=${getTooltipData(d.target?.__data__?.indicator, metrics).imgSrcSet}
+                  src=${getTooltipData(d.target?.__data__?.indicator, metricsData).imgSrc}
+                  srcSet=${getTooltipData(d.target?.__data__?.indicator, metricsData).imgSrcSet}
                   alt="${countries[comparingCountry.code]} flag"
                 />
               </div>
               <strong style="font-size:14px">${d.target?.__data__?.indicator}</strong>
               <br>
-              <strong>Ranking:</strong> ${getTooltipData(d.target?.__data__?.indicator, metrics).ranking}
+              <strong>Ranking:</strong> ${getTooltipData(d.target?.__data__?.indicator, metricsData).ranking}
               <br>
-              <strong>Score:</strong> ${getTooltipData(d.target?.__data__?.indicator, metrics).value}`,
+              <strong>Score:</strong> ${getTooltipData(d.target?.__data__?.indicator, metricsData).value}`,
       )
         .style('left', `${d.pageX}px`)
         .style('top', `${d.pageY - 28}px`)
@@ -158,7 +202,7 @@ function RadialChart() {
 
     center
       .selectAll('.radial-bar')
-      .data(metrics || [])
+      .data(metricsData || [])
       .join('path')
       .attr('class', 'radial-bar')
       .attr('cursor', 'pointer')
@@ -218,6 +262,7 @@ function RadialChart() {
 
     const pie = svg.append('g');
 
+    // indicator labels
     pie.selectAll()
       .data(formattedData)
       .join('path')
@@ -243,7 +288,6 @@ function RadialChart() {
         .text(setEllipsis(category.label, 4));
     });
 
-    // eslint-disable-next-line max-len
     // Selected indicator heading, selected country and score, highest country and score, lowest country and score
     center
       .append('text')
@@ -269,9 +313,18 @@ function RadialChart() {
       .attr('text-anchor', 'middle')
       .attr('transform', 'translate(0,-190)');
 
+    //
+
+    center.append('foreignObject')
+      .append('xhtml:div')
+      .append('div')
+      .attr('class', radialStyles.centerLegendContainer)
+      .html('HELLO TEST')
+      .attr('transform', 'translate(0,-165)');
+
     center
       .append('text')
-      .text(comparingCountry?.label)
+      .text(`${comparingCountry?.label}1`)
       .attr('fill', '#DDDDDD')
       .attr('font-family', 'arial')
       .attr('font-weight', 700)
@@ -281,7 +334,7 @@ function RadialChart() {
 
     center
       .append('text')
-      .text(selectedIndicatorData?.ranking)
+      .text(`${selectedIndicatorData?.ranking} - 2`)
       .attr('fill', '#DDDDDD')
       .attr('font-family', 'arial')
       .attr('font-weight', 700)
@@ -298,6 +351,7 @@ function RadialChart() {
       .attr('font-size', '14px')
       .attr('text-anchor', 'middle')
       .attr('transform', 'translate(0,-110)');
+    //
 
     center
       .append('text')
@@ -363,6 +417,7 @@ function RadialChart() {
     let circleYPosition = 15;
     let legendYPosition = 10;
 
+    // legends
     Object.keys(INDICATORS_TYPE_MAP).forEach((indicatorType) => {
       svg.append('circle')
         .attr('cx', 660)

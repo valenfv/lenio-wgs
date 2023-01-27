@@ -1,0 +1,6 @@
+.centerLegendContainer {
+    width: 110px;
+    height: 80px;
+    overflow: hidden;
+    border: 1px solid white;
+}
