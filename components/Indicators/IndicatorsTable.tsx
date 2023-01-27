@@ -92,15 +92,16 @@ const TableTitle: React.FC = () => (
     />
     <Typography
       sx={{
-        fontSize: '20px',
+        fontSize: '16px',
         fontWeight: 500,
         textAlign: 'left',
         color: '#EEEEEE',
         marginLeft: '10px',
+        lineHeight: "24px"
       }}
       variant="h4"
     >
-      Key Indicators
+      key indicators
     </Typography>
   </TitleContainer>
 );
@@ -253,7 +254,7 @@ function IndicatorsTable({
                 onClick={() => onClick(indicator)}
               >
                 <StyledTableCell align="left">
-                  {(indicators as {[index: string]: { indicator_name: string }})[indicator].indicator_name}
+                  {(indicators as { [index: string]: { indicator_name: string } })[indicator].indicator_name}
                   {renderAxisSelectionButton(indicator)}
                 </StyledTableCell>
                 <StyledTableCell align="left">50th</StyledTableCell>

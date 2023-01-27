@@ -36,9 +36,9 @@ const StyledButton = styled(Button)({
 });
 
 interface NavButtonProps {
-text: string;
-selected: boolean;
-onClick: () => void;
+  text: string;
+  selected: boolean;
+  onClick: () => void;
 }
 
 const charts = [
@@ -65,6 +65,7 @@ function NavButton({ text, selected, onClick }: NavButtonProps) {
       variant="outlined"
       style={{
         background: selected ? '#191935' : '#000020',
+        opacity: selected ? 1 : 0.7
       }}
       onClick={onClick}
     >
@@ -72,6 +73,19 @@ function NavButton({ text, selected, onClick }: NavButtonProps) {
     </StyledButton>
   );
 }
+
+const NavButtonsContainer = styled('div')(() => ({
+  marginLeft: "auto",
+  "& button": {
+    borderRadius: 0
+  },
+  "& button:first-child": {
+    borderRadius: "4px 0 0 4px",
+  },
+  "& button:last-child": {
+    borderRadius: "0 4px 4px 0"
+  }
+}))
 
 export default function App({ Component, pageProps }: AppProps) {
   const [currentChart, setCurrentChart] = useState<string>('pie');
@@ -96,11 +110,7 @@ export default function App({ Component, pageProps }: AppProps) {
             }}
           />
           <div style={{ color: 'rgba(238, 238, 238, 0.5)' }}>« Dashboard of the Present Future »</div>
-          <div
-            style={{
-              marginLeft: 'auto',
-            }}
-          >
+          <NavButtonsContainer>
             {charts.map((props) => (
               <NavButton
                 onClick={() => {
@@ -111,7 +121,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 text={props.text}
               />
             ))}
-          </div>
+          </NavButtonsContainer>
         </StyledHeader>
         <Component {...pageProps} />
       </main>
