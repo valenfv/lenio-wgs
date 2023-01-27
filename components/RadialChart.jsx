@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable no-shadow */
 /* eslint-disable max-len */
 /* eslint-disable no-underscore-dangle */
@@ -107,8 +108,6 @@ function RadialChart() {
     const metricsData = [];
 
     const outerRadiusPercentage = 175 / (getCountries(comparingCountry?.code, selectedCountry?.code)?.length + 1);
-
-    console.log({ outerRadiusPercentage });
 
     metrics?.forEach((d, i) => {
       const metric = { ...d };
@@ -289,129 +288,189 @@ function RadialChart() {
     });
 
     // Selected indicator heading, selected country and score, highest country and score, lowest country and score
-    center
-      .append('text')
-      .text(`${setEllipsis(selectedIndicator, 22)}${selectedIndicator.length < 16 ? ' Rankings' : ''}`)
-      .attr('fill', '#DDDDDD')
-      .attr('overflow', 'hidden')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 700)
-      .attr('font-size', '14px')
-      .attr('text-anchor', 'middle')
-      .attr('transform', 'translate(0,-205)')
-      .append('title')
-      .text(selectedIndicator.length > 22 ? selectedIndicator : '');
+    // center
+    //   .append('text')
+    //   .text(`${setEllipsis(selectedIndicator, 22)}${selectedIndicator.length < 16 ? ' Rankings' : ''}`)
+    //   .attr('fill', '#DDDDDD')
+    //   .attr('overflow', 'hidden')
+    //   .attr('font-family', 'arial')
+    //   .attr('font-weight', 700)
+    //   .attr('font-size', '14px')
+    //   .attr('text-anchor', 'middle')
+    //   .attr('transform', 'translate(0,-205)');
 
-    center
-      .append('text')
-      .text(`${selectedIndicator.length > 15 ? ' Rankings' : ''}`)
-      .attr('fill', '#DDDDDD')
-      .attr('overflow', 'hidden')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 700)
-      .attr('font-size', '14px')
-      .attr('text-anchor', 'middle')
-      .attr('transform', 'translate(0,-190)');
-
-    //
-
-    center.append('foreignObject')
+    const indicatorLabel = center.append('foreignObject')
+      .attr('x', -100)
+      .attr('y', -225)
+      .style('width', 200)
+      .style('height', 60)
       .append('xhtml:div')
       .append('div')
       .attr('class', radialStyles.centerLegendContainer)
-      .html('HELLO TEST')
-      .attr('transform', 'translate(0,-165)');
+      .style('width', '200px')
+      .style('height', '60px');
 
-    center
-      .append('text')
-      .text(`${comparingCountry?.label}1`)
-      .attr('fill', '#DDDDDD')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 700)
-      .attr('font-size', '18px')
-      .attr('text-anchor', 'middle')
-      .attr('transform', 'translate(0,-165)');
+    indicatorLabel.append('div')
+      .attr('class', radialStyles.indicatorLabel)
+      .style('font-weight', 700)
+      .html(`${selectedIndicator}`);
 
-    center
-      .append('text')
-      .text(`${selectedIndicatorData?.ranking} - 2`)
-      .attr('fill', '#DDDDDD')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 700)
-      .attr('font-size', '22px')
-      .attr('text-anchor', 'middle')
-      .attr('transform', 'translate(0,-135)');
-
-    center
-      .append('text')
-      .text('Selected Country')
-      .attr('fill', '#FFFFFF80')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 700)
-      .attr('font-size', '14px')
-      .attr('text-anchor', 'middle')
-      .attr('transform', 'translate(0,-110)');
     //
 
-    center
-      .append('text')
-      .text(countries[selectedIndicatorData?.sortedCountries[0].country])
-      .attr('fill', '#DDDDDD')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 400)
-      .attr('font-size', '18px')
-      .attr('text-anchor', 'start')
-      .attr('transform', 'translate(-180,-145)');
+    const lowestCountryContainer = center.append('foreignObject')
+      .attr('x', -175)
+      .attr('y', -125)
+      .style('width', 110)
+      .style('height', 90)
+      .append('xhtml:div')
+      .append('div')
+      .attr('class', radialStyles.centerLegendContainer);
 
-    center
-      .append('text')
-      .text(selectedIndicatorData?.sortedCountries[0].value)
-      .attr('fill', '#DDDDDD')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 400)
-      .attr('font-size', '22px')
-      .attr('text-anchor', 'start')
-      .attr('transform', 'translate(-150,-115)');
+    lowestCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryLabel)
+      .html(`${countries[selectedIndicatorData?.sortedCountries[0].country]}`);
 
-    center
-      .append('text')
-      .text('Lowest ranking')
-      .attr('fill', '#FFFFFF80')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 400)
-      .attr('font-size', '14px')
-      .attr('text-anchor', 'start')
-      .attr('transform', 'translate(-185,-90)');
+    lowestCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryValue)
+      .html(`${selectedIndicatorData?.sortedCountries[0].value || '-'}`);
 
-    center
-      .append('text')
-      .text(countries[selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].country])
-      .attr('fill', '#DDDDDD')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 400)
-      .attr('font-size', '18px')
-      .attr('text-anchor', 'end')
-      .attr('transform', 'translate(180,-145)');
+    lowestCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryLegend)
+      .html('Lowest Ranked');
 
-    center
-      .append('text')
-      .text(selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].value)
-      .attr('fill', '#DDDDDD')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 400)
-      .attr('font-size', '22px')
-      .attr('text-anchor', 'end')
-      .attr('transform', 'translate(170,-115)');
+    const highestCountryContainer = center.append('foreignObject')
+      .attr('x', 65)
+      .attr('y', -125)
+      .style('width', 110)
+      .style('height', 90)
+      .append('xhtml:div')
+      .append('div')
+      .attr('class', radialStyles.centerLegendContainer);
 
-    center
-      .append('text')
-      .text('Highest ranking')
-      .attr('fill', '#FFFFFF80')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 400)
-      .attr('font-size', '14px')
-      .attr('text-anchor', 'start')
-      .attr('transform', 'translate(105,-90)');
+    highestCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryLabel)
+      .html(`${countries[selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].country]}`);
+
+    highestCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryValue)
+      .html(`${selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].value || '-'}`);
+
+    highestCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryLegend)
+      .html('Highest Ranked');
+
+    const comparingCountryContainer = center.append('foreignObject')
+      .attr('x', -55)
+      .attr('y', -145)
+      .style('width', 110)
+      .style('height', 90)
+      .append('xhtml:div')
+      .append('div')
+      .attr('class', radialStyles.centerLegendContainer);
+
+    comparingCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryLabel)
+      .style('font-weight', 700)
+      .html(`${comparingCountry?.label}`);
+
+    comparingCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryValue)
+      .html(`${selectedIndicatorData?.sortedCountries.find((c) => c.country === comparingCountry.code)?.value || '-'}`);
+
+    comparingCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryLegend)
+      .html('Selected Ranked');
+
+    // center
+    //   .append('text')
+    //   .text(`${comparingCountry?.label}1`)
+    //   .attr('fill', '#DDDDDD')
+    //   .attr('font-family', 'arial')
+    //   .attr('font-weight', 700)
+    //   .attr('font-size', '18px')
+    //   .attr('text-anchor', 'middle')
+    //   .attr('transform', 'translate(0,-165)');
+
+    // center
+    //   .append('text')
+    //   .text(`${selectedIndicatorData?.ranking} - 2`)
+    //   .attr('fill', '#DDDDDD')
+    //   .attr('font-family', 'arial')
+    //   .attr('font-weight', 700)
+    //   .attr('font-size', '22px')
+    //   .attr('text-anchor', 'middle')
+    //   .attr('transform', 'translate(0,-135)');
+
+    // center
+    //   .append('text')
+    //   .text('Selected Country')
+    //   .attr('fill', '#FFFFFF80')
+    //   .attr('font-family', 'arial')
+    //   .attr('font-weight', 700)
+    //   .attr('font-size', '14px')
+    //   .attr('text-anchor', 'middle')
+    //   .attr('transform', 'translate(0,-110)');
+    //
+
+    // center
+    //   .append('text')
+    //   .text(countries[selectedIndicatorData?.sortedCountries[0].country])
+    //   .attr('fill', '#DDDDDD')
+    //   .attr('font-family', 'arial')
+    //   .attr('font-weight', 400)
+    //   .attr('font-size', '18px')
+    //   .attr('text-anchor', 'start')
+    //   .attr('transform', 'translate(-180,-145)');
+
+    // center
+    //   .append('text')
+    //   .text(selectedIndicatorData?.sortedCountries[0].value)
+    //   .attr('fill', '#DDDDDD')
+    //   .attr('font-family', 'arial')
+    //   .attr('font-weight', 400)
+    //   .attr('font-size', '22px')
+    //   .attr('text-anchor', 'start')
+    //   .attr('transform', 'translate(-150,-115)');
+
+    // center
+    //   .append('text')
+    //   .text('Lowest ranking')
+    //   .attr('fill', '#FFFFFF80')
+    //   .attr('font-family', 'arial')
+    //   .attr('font-weight', 400)
+    //   .attr('font-size', '14px')
+    //   .attr('text-anchor', 'start')
+    //   .attr('transform', 'translate(-185,-90)');
+
+    // center
+    //   .append('text')
+    //   .text(countries[selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].country])
+    //   .attr('fill', '#DDDDDD')
+    //   .attr('font-family', 'arial')
+    //   .attr('font-weight', 400)
+    //   .attr('font-size', '18px')
+    //   .attr('text-anchor', 'end')
+    //   .attr('transform', 'translate(180,-145)');
+
+    // center
+    //   .append('text')
+    //   .text(selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].value)
+    //   .attr('fill', '#DDDDDD')
+    //   .attr('font-family', 'arial')
+    //   .attr('font-weight', 400)
+    //   .attr('font-size', '22px')
+    //   .attr('text-anchor', 'end')
+    //   .attr('transform', 'translate(170,-115)');
+
+    // center
+    //   .append('text')
+    //   .text('Highest ranking')
+    //   .attr('fill', '#FFFFFF80')
+    //   .attr('font-family', 'arial')
+    //   .attr('font-weight', 400)
+    //   .attr('font-size', '14px')
+    //   .attr('text-anchor', 'start')
+    //   .attr('transform', 'translate(105,-90)');
 
     // Indicator Type circles and legends (top right corner)
     let circleYPosition = 15;
