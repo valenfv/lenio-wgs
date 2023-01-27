@@ -16,19 +16,21 @@ function getDeltaValues(comparing_country: CountriesDataKeys): any {
     const currentYearIndicatorValues = getIndicatorValue(comparing_country, indicator_key);
     const lastYearIndicatorValues = getIndicatorValue(comparing_country, indicator_key, 1);
 
-    if (currentYearIndicatorValues && lastYearIndicatorValues) {
+    if (currentYearIndicatorValues) {
       deltaValues[indicator_key] = {
         values: [
           {
-            year: lastYearIndicatorValues.year,
-            value: lastYearIndicatorValues.value,
+            year: lastYearIndicatorValues?.year || null,
+            value: lastYearIndicatorValues?.value || null,
           },
           {
             year: currentYearIndicatorValues.year,
             value: currentYearIndicatorValues.value,
           },
         ],
-        delta: round2Decimals(currentYearIndicatorValues.value - lastYearIndicatorValues.value),
+        delta: lastYearIndicatorValues ?
+          round2Decimals(currentYearIndicatorValues.value - lastYearIndicatorValues.value) :
+          null,
       };
     } else {
       deltaValues[indicator_key] = null;
