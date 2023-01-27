@@ -51,10 +51,8 @@ function RadialChart() {
     .domain([-6, 175])
     .range([minInnerRadius, maxOuterRadius]);
 
-  let selectedCountryIndex;
-
   // Bar Chart functions
-  const getBarColor = (data, country, index) => {
+  const getBarColor = (data, country) => {
     if (country === comparingCountry?.code) {
       return '#59C3C3CC';
     }
