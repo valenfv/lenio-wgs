@@ -1,6 +1,5 @@
 import React from 'react';
 import { ConfigContainer } from '../components/ConfigContainer';
-import DataVisContainer from '../components/DataVisContainer';
 import RadialChart from '../components/RadialChart';
 import styles from '../styles/commons.module.css';
 
@@ -10,9 +9,7 @@ export default function Home() {
       <div className={styles.menu}>
         <ConfigContainer showAxisSelection={false} makeIndicatorListClickable={false} />
       </div>
-      <DataVisContainer>
-        <RadialChart />
-      </DataVisContainer>
+      <RadialChart />
     </div>
   );
 }

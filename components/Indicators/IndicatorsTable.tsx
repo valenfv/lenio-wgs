@@ -19,7 +19,7 @@ import { fetchDeltaData } from '../../slices/deltaSlice';
 import { RootState } from '../../store';
 
 interface Cell {
-  align?: string;
+align?: string;
 }
 
 const StyledTableCell = styled(TableCell)<TableCellProps & Cell>(() => ({
@@ -55,17 +55,13 @@ const StyledTableRow = styled(TableRow)<TableRowProps & { showIndicationSelectio
       ? {
         background: props.selected ? 'hsla(0, 0%, 100%, 15%)' : 'transparent',
         cursor: 'pointer',
-			  }
+      }
       : {}),
   },
   [`&.${tableRowClasses.root}:hover`]: {
     ...(props.showIndicationSelection && props.selected
-      ? {
-        backgroundColor: 'hsla(0, 0%, 100%, 15%)',
-			  }
-      : {
-        backgroundColor: 'rgba(25, 118, 210, 0.12)',
-			  }),
+      ? { backgroundColor: 'hsla(0, 0%, 100%, 15%)' }
+      : { backgroundColor: 'rgba(25, 118, 210, 0.12)' }),
   },
   [`&.${tableRowClasses.root}:not(:last-child)`]: {
     '& td': {
@@ -77,7 +73,7 @@ const StyledTableRow = styled(TableRow)<TableRowProps & { showIndicationSelectio
 const TitleContainer = styled('div')(() => ({
   padding: '1rem 15px',
   display: 'flex',
-  justifyContent: 'space-between',
+  justifyContent: 'flex-start',
   alignItems: 'center',
   width: '100%',
   boxSizing: 'border-box',
@@ -126,9 +122,9 @@ const TableTitle: React.FC = () => (
 );
 
 interface DeltaProps {
-  // eslint-disable-next-line react/require-default-props
-  up?: boolean;
-  children: React.ReactNode;
+// eslint-disable-next-line react/require-default-props
+up?: boolean;
+children: React.ReactNode;
 }
 
 // eslint-disable-next-line react/function-component-definition
@@ -283,10 +279,7 @@ function IndicatorsTable({ showIndicationSelection = false, onIndicatorAxisChang
               onClick={() => onClick(indicator)}
             >
               <StyledTableCell align="left">
-                {
-									(indicators as { [index: string]: { indicator_name: string } })[indicator]
-									  .indicator_name
-								}
+                {(indicators as { [index: string]: { indicator_name: string } })[indicator].indicator_name}
                 {renderAxisSelectionButton(indicator)}
               </StyledTableCell>
               <StyledTableCell align="left">

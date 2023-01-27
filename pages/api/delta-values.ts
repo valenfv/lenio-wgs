@@ -28,9 +28,9 @@ function getDeltaValues(comparing_country: CountriesDataKeys): any {
             value: currentYearIndicatorValues.value,
           },
         ],
-        delta: lastYearIndicatorValues ?
-          round2Decimals(currentYearIndicatorValues.value - lastYearIndicatorValues.value) :
-          null,
+        delta: lastYearIndicatorValues
+          ? round2Decimals(currentYearIndicatorValues.value - lastYearIndicatorValues.value)
+          : null,
       };
     } else {
       deltaValues[indicator_key] = null;
