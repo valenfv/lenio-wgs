@@ -12,7 +12,7 @@ import '../styles/main.css';
 // import ConfigContainer from '../components/ConfigContainer';
 // import DataVisContainer from '../components/DataVisContainer';
 
-const StyledHeader = styled('div')({
+const StyledHeader = styled('header')({
   width: '100%',
   height: '95px',
   display: 'flex',
@@ -98,31 +98,31 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
       </Head>
-      <main style={{ padding: '0 50px 50px 50px' }}>
-        <StyledHeader>
-          <Image
-            src="/lenio-wgs/header-logo1.png"
-            height={48}
-            width={200}
-            alt="Logo Image"
-            style={{
-              marginRight: 'auto',
-            }}
-          />
-          <div style={{ color: 'rgba(238, 238, 238, 0.5)' }}>« Dashboard of the Present Future »</div>
-          <NavButtonsContainer>
-            {charts.map((props) => (
-              <NavButton
-                onClick={() => {
-                  setCurrentChart(props.chartType);
-                  router.push(props.href);
-                }}
-                selected={currentChart === props.chartType}
-                text={props.text}
-              />
-            ))}
-          </NavButtonsContainer>
-        </StyledHeader>
+      <StyledHeader>
+        <Image
+          src="/lenio-wgs/header-logo1.png"
+          height={48}
+          width={200}
+          alt="Logo Image"
+          style={{
+            marginRight: 'auto',
+          }}
+        />
+        <div style={{ color: 'rgba(238, 238, 238, 0.5)' }}>« Dashboard of the Present Future »</div>
+        <NavButtonsContainer>
+          {charts.map((props) => (
+            <NavButton
+              onClick={() => {
+                setCurrentChart(props.chartType);
+                router.push(props.href);
+              }}
+              selected={currentChart === props.chartType}
+              text={props.text}
+            />
+          ))}
+        </NavButtonsContainer>
+      </StyledHeader>
+      <main style={{ padding: '0 50px 50px 25px' }}>
         <Component {...pageProps} />
       </main>
     </Provider>
