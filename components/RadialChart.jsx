@@ -127,7 +127,9 @@ function RadialChart() {
     const svg = d3.select(radialChart.current)
       .attr('width', width)
       .attr('height', height)
-      .style('background-color', 'transparent');
+      .style('background-color', 'transparent')
+      .append('g')
+      .attr('id', 'removeme');
 
     const center = svg
       .selectAll('.center')
@@ -441,11 +443,14 @@ function RadialChart() {
         .attr('width', selectedIndicatorData?.sortedCountries.length < 21 ? 14 : 4)
         .attr('transform', `translate(${getBarXPosition()}, 280)`);
     }
+    return () => {
+      d3.select(radialChart.current).select('#removeme').remove();
+    };
   }, [comparingCountry, selectedCountry, selectedIndicator, metrics, selectedIndicatorData]);
 
   return (
     <div id="radialChartContainer">
-      <svg key={Math.random()} ref={radialChart} />
+      <svg ref={radialChart} />
     </div>
   );
 }
