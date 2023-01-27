@@ -190,7 +190,7 @@ function RadialChart() {
       d3.selectAll('.radial-bar')
         .transition()
         .duration(200)
-        .style('opacity', 1)
+        .style('opacity', 0.5)
         .style('stroke', 'transparent');
       tooltip.transition().duration(300)
         .style('opacity', 0);
@@ -201,6 +201,7 @@ function RadialChart() {
       .data(metricsData || [])
       .join('path')
       .attr('class', 'radial-bar')
+      .attr('opacity', 0.5)
       .attr('cursor', 'pointer')
       .attr('d', (d) => arc(d))
       .attr('fill', (d) => INDICATORS_TYPE_MAP[LABELS_MAP[d.indicator].type])
