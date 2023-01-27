@@ -1,14 +1,17 @@
-import { configureStore } from "@reduxjs/toolkit";
-import sidebarSlice from "./slices/sidebarSlice";
-import exploreSlice from "./slices/exploreSlice";
-import worldSlice from "./slices/worldSlice";
+/* eslint-disable import/no-named-as-default */
+import { configureStore } from '@reduxjs/toolkit';
+import sidebarSlice from './slices/sidebarSlice';
+import exploreSlice from './slices/exploreSlice';
+import radialChartSlice from './slices/radialChartSlice';
+import worldSlice from './slices/worldSlice';
 
 export const store = configureStore({
-	reducer: { 
-		sidebar: sidebarSlice,
-		explore: exploreSlice,
-		world: worldSlice,
-	},
+  reducer: {
+    sidebar: sidebarSlice,
+    explore: exploreSlice,
+    radialChart: radialChartSlice,
+    world: worldSlice,
+  },
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
