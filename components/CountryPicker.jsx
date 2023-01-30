@@ -95,14 +95,6 @@ export function CountryPicker({
   const pickerItems = React.useMemo(() => getPickerItems({
     showOrganizations, showCountries, showNeighboring, showWorld,
   }), [showOrganizations, showCountries, showNeighboring, showWorld]);
-  // eslint-disable-next-line max-len
-  // const [country, setCountry] = React.useState(pickerItems.find((item) => item.code === defaultCode));
-
-  // React.useEffect(() => {
-  //   onChange(country);
-  // }, []);
-
-  // console.log(country)
 
   return (
     <Autocomplete
@@ -111,16 +103,13 @@ export function CountryPicker({
       onBlur={() => {
         if (!canBeNull && !country) {
           const defaultOption = pickerItems.find((item) => item.code === defaultCode);
-          // setCountry(defaultOption);
           onChange(defaultOption);
         }
       }}
       onChange={(_, newValue) => {
         if (newValue) {
-          // setCountry(newValue);
           onChange(newValue);
         } else {
-          // setCountry(null);
           onChange(null);
         }
       }}
