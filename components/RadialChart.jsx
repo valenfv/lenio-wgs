@@ -8,6 +8,7 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import getCountryISO2 from 'country-iso-3-to-2';
 import * as d3 from 'd3';
+import { abbreviateNumber } from 'js-abbreviation-number';
 import { fetchRankingData } from '../slices/radialChartSlice';
 import { changeSelectedIndicator } from '../slices/sidebarSlice';
 import {
@@ -322,7 +323,7 @@ function RadialChart() {
 
     lowestCountryContainer.append('div')
       .attr('class', radialStyles.clcCountryValue)
-      .html(`${selectedIndicatorData?.sortedCountries[0].value || '-'}`);
+      .html(`${abbreviateNumber(selectedIndicatorData?.sortedCountries[0].value) || '-'}`);
 
     lowestCountryContainer.append('div')
       .attr('class', radialStyles.clcCountryLegend)
@@ -343,7 +344,7 @@ function RadialChart() {
 
     highestCountryContainer.append('div')
       .attr('class', radialStyles.clcCountryValue)
-      .html(`${selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].value || '-'}`);
+      .html(`${abbreviateNumber(selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].value) || '-'}`);
 
     highestCountryContainer.append('div')
       .attr('class', radialStyles.clcCountryLegend)
@@ -365,7 +366,7 @@ function RadialChart() {
 
     comparingCountryContainer.append('div')
       .attr('class', radialStyles.clcCountryValue)
-      .html(`${selectedIndicatorData?.sortedCountries.find((c) => c.country === comparingCountry.code)?.value || '-'}`);
+      .html(`${abbreviateNumber(selectedIndicatorData?.sortedCountries.find((c) => c.country === comparingCountry.code)?.value) || '-'}`);
 
     comparingCountryContainer.append('div')
       .attr('class', radialStyles.clcCountryLegend)
@@ -398,7 +399,7 @@ function RadialChart() {
       legendYPosition += 28;
     });
 
-    if (selectedIndicatorData?.sortedCountries.length > 50) {
+    if (selectedIndicatorData?.sortedCountries.length > 7) {
       // workaround
       const duplicateCount = selectedIndicatorData?.sortedCountries.reduce((prev, curr) => (curr.country === comparingCountry.code ? prev + 1 : prev), 0);
       if (duplicateCount > 1) {
@@ -444,6 +445,98 @@ function RadialChart() {
         .attr('height', (d) => y(0) - y(d.value))
         .attr('width', selectedIndicatorData?.sortedCountries.length < 21 ? 14 : 4)
         .attr('transform', `translate(${getBarXPosition()}, 280)`);
+    } else {
+      // Bar Chart
+      const barChart = svg.append('g');
+      const barChartWidth = 450;
+      const barChartHeight = 300;
+      const margin = {
+        top: 50, bottom: 50, left: 50, right: 50,
+      };
+
+      barChart.selectAll()
+        .attr('width', barChartWidth - margin.left - margin.right)
+        .attr('height', barChartHeight - margin.top - margin.bottom)
+        .attr('viewBox', [0, 0, barChartWidth, barChartHeight]);
+
+      const {
+        xMin,
+        xMax,
+      } = {
+        xMin: Math.min.apply(Math, selectedIndicatorData?.sortedCountries.map((x) => x.value)),
+        xMax: Math.max.apply(Math, selectedIndicatorData?.sortedCountries.map((x) => x.value)),
+      };
+
+      const x = d3.scaleLinear()
+        .domain([xMin, xMax])
+        .range([margin.left, barChartWidth - margin.right]);
+
+      barChart.append('g')
+        .attr('transform', 'translate(150,500)')
+        .style('color', 'hsla(0, 0%, 93%, 0.7)')
+        .call(d3.axisBottom(x).ticks(5).tickFormat((v) => abbreviateNumber(v)));
+
+      svg
+        .append('g')
+        .selectAll('g')
+        .data(selectedIndicatorData?.sortedCountries ? selectedIndicatorData?.sortedCountries : [])
+        .join('g')
+        .attr('transform', (d) => `translate(${x(d.value) - 23}, -70)`)
+        .append('path')
+        .attr('width', '47')
+        .attr('height', '68')
+        .attr('viewBox', '0 0 47 68')
+        .attr('d', 'M0.85908 23.9301C0.808557 23.8311 0.77669 23.7396 0.76432 23.6292C0.5416 21.6415 -1.20447 0.746582 23.8168 0.746582C48.8381 0.746582 47.092 21.6415 46.8693 23.6292C46.8569 23.7396 46.8251 23.8311 46.7745 23.9301L24.7074 67.1449C24.3362 67.8718 23.2974 67.8718 22.9262 67.1449L0.85908 23.9301Z')
+        .attr('fill', '#59C3C3CC')
+        .attr('stroke', (d) => (d.country === comparingCountry.code ? 'black' : 'transparent'))
+        .attr('stroke-width', 4)
+        .attr('stroke-opacity', 1)
+        .attr('opacity', 0.8)
+        .attr('transform', 'translate(150, 500)');
+
+      setTimeout(() => { // terrible workaround
+        svg
+          .append('g')
+          .selectAll('foreignObject')
+          .data(selectedIndicatorData?.sortedCountries ? selectedIndicatorData?.sortedCountries : [])
+          .join('foreignObject')
+          .attr('x', (d) => `${x(d.value) + 136}`)
+          .attr('y', '437')
+          .attr('width', 30)
+          .attr('height', 30)
+          .append('xhtml:div')
+          .style('height', '30px')
+          .style('height', '30px')
+          .style('background-size', 'cover')
+          .style('background-position', 'center')
+          .style('border-radius', '50%')
+          .style('border', '1px solid')
+          .style('box-sizing', 'border-box')
+          .style('background-image', (d) => `url(https://flagcdn.com/w40/${getCountryISO2(d.country).toLowerCase()}.png)`)
+          .html('&nbsp;&nbsp;');
+      });
+
+      // flags
+
+      // <img
+      //           loading="lazy"
+      //           width="30"
+      //           src=${getTooltipData(d.target?.__data__?.indicator, metricsData).imgSrc}
+      //           srcSet=${getTooltipData(d.target?.__data__?.indicator, metricsData).imgSrcSet}
+      //           alt="${countries[comparingCountry.code]} flag"
+      //         />
+
+      svg
+        .append('g')
+        .selectAll('rect')
+        .data(selectedIndicatorData?.sortedCountries ? selectedIndicatorData?.sortedCountries : [])
+        .join('g')
+        .attr('transform', (d) => `translate(${x(d.value) - 23}, -70)`)
+        .append('path')
+        .attr('d', 'M0.85908 23.9301C0.808557 23.8311 0.77669 23.7396 0.76432 23.6292C0.5416 21.6415 -1.20447 0.746582 23.8168 0.746582C48.8381 0.746582 47.092 21.6415 46.8693 23.6292C46.8569 23.7396 46.8251 23.8311 46.7745 23.9301L24.7074 67.1449C24.3362 67.8718 23.2974 67.8718 22.9262 67.1449L0.85908 23.9301Z')
+        .attr('fill', '#59C3C3CC')
+        .attr('opacity', 0.8)
+        .attr('transform', 'translate(150, 500)');
     }
     return () => {
       d3.select(radialChart.current).select('#removeme').remove();
