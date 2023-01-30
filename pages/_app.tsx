@@ -1,5 +1,5 @@
 import type { AppProps } from 'next/app';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import Head from 'next/head';
 import { styled } from '@mui/material/styles';
@@ -64,7 +64,7 @@ function NavButton({ text, selected, onClick }: NavButtonProps) {
       variant="outlined"
       style={{
         background: selected ? '#191935' : '#000020',
-        opacity: selected ? 1 : 0.7
+        opacity: selected ? 1 : 0.7,
       }}
       onClick={onClick}
     >
@@ -74,28 +74,35 @@ function NavButton({ text, selected, onClick }: NavButtonProps) {
 }
 
 const NavButtonsContainer = styled('div')(() => ({
-  marginLeft: "auto",
-  "& button": {
-    borderRadius: 0
+  marginLeft: 'auto',
+  '& button': {
+    borderRadius: 0,
   },
-  "& button:first-child": {
-    borderRadius: "4px 0 0 4px",
+  '& button:first-child': {
+    borderRadius: '4px 0 0 4px',
   },
-  "& button:last-child": {
-    borderRadius: "0 4px 4px 0"
-  }
-}))
+  '& button:last-child': {
+    borderRadius: '0 4px 4px 0',
+  },
+}));
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [currentChart, setCurrentChart] = useState<string>('pie');
+  const [currentChart, setCurrentChart] = useState<string>('');
   const router = useRouter();
+
+  useEffect(() => {
+    const selectedPath = charts.find((chart) => chart.href === `/${window.location.pathname.split('/').pop()}`);
+    if (selectedPath) {
+      setCurrentChart(selectedPath.chartType);
+    } else {
+      setCurrentChart('pie');
+    }
+  }, []);
+
   return (
     <Provider store={store}>
       <Head>
         <title>WGS - Leniolabs</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
       </Head>
       <StyledHeader>
         <Image
