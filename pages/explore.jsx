@@ -11,6 +11,7 @@ import {
 import bordering from '../data/bordering_countries.json';
 import organizations from '../data/organizations.json';
 import { fetchExploreData } from '../slices/exploreSlice';
+import { Loading } from '../components/Loading';
 
 export default function World() {
   const svgRef = React.useRef(null);
@@ -23,6 +24,7 @@ export default function World() {
     selectedYAxis,
     indicatorX,
     indicatorY,
+    loading,
   } = useSelector((state) => ({
     comparingCountry: state.sidebar.comparingCountry,
     selectedCountry: state.sidebar.selectedCountry,
@@ -31,6 +33,7 @@ export default function World() {
     selectedYAxis: state.sidebar.yAxis,
     indicatorX: state.explore.indicatorX,
     indicatorY: state.explore.indicatorY,
+    loading: state.explore.loading,
   }));
 
   const dispatch = useDispatch();
@@ -60,7 +63,9 @@ export default function World() {
         <ConfigContainer showAxisSelection />
       </div>
       <DataVisContainer>
+        <Loading loading={loading} />
         <div ref={svgRef} className={styles.chart} />
+
       </DataVisContainer>
     </div>
   );

@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 
 const StyledContainer = styled('div')({
   display: 'flex',
+  position: 'relative',
   justifyContent: 'center',
   width: '100%',
   background: '#000020',
