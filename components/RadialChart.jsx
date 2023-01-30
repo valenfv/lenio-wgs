@@ -106,6 +106,8 @@ function RadialChart() {
 
     const outerRadiusPercentage = 175 / (getCountries(comparingCountry?.code, selectedCountry?.code)?.length + 1);
 
+    const maxRanking = Math.max(...(metrics?.map(metric => metric.ranking) || [0]));
+
     metrics?.forEach((d, i) => {
       const metric = { ...d };
       metric.startAngle = i * eachAngle;
@@ -113,7 +115,7 @@ function RadialChart() {
       const zeroRadius = valueScale(0);
       if (metric.ranking > 0) {
         metric.innerRadius = zeroRadius;
-        metric.outerRadius = valueScale(((d.ranking) * outerRadiusPercentage));
+        metric.outerRadius = valueScale(((maxRanking - d.ranking) * outerRadiusPercentage));
       } else {
         metric.innerRadius = valueScale(d.ranking);
         metric.outerRadius = zeroRadius;
