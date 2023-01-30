@@ -1,6 +1,45 @@
 .centerLegendContainer {
     width: 110px;
-    height: 80px;
+    height: 90px;
     overflow: hidden;
-    border: 1px solid white;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: end;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.indicatorLabel {
+    text-align: center;
+    width: 100%;
+    color: #DDDDDD;
+    font-weight: 400;
+    font-size: 18px;
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.clcCountryLabel {
+    text-align: center;
+    width: 100%;
+    color: #DDDDDD;
+    font-weight: 400;
+    font-size: 18px;
+    height: 49px;
+}
+
+.clcCountryValue {
+    font-weight: 400;
+    font-size: 22px;
+    width: 100%;
+    color: #DDDDDD;
+    text-align: center;
+}
+
+.clcCountryLegend {
+    font-weight: 400;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    width: 100%;
 }

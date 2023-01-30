@@ -18,9 +18,25 @@ export function getRankingPosition(arr: any, comparing_country: CountriesDataKey
 export function rankingSort(arr: any, isHigherBetter: boolean) {
 	const arrCopy = [...arr];
 	if (isHigherBetter) {
-		arrCopy.sort((a: CountryRankingData, b: CountryRankingData) => b?.value - a?.value);
+		arrCopy.sort((a: CountryRankingData, b: CountryRankingData) => {
+			if (!a || !a.value) {
+				return 1;
+			}
+			if (!b || !b.value) {
+				return -1;
+			}
+			return b?.value - a?.value;
+		});
 	} else {
-		arrCopy.sort((a: CountryRankingData, b: CountryRankingData) => a?.value - b?.value);
+		arrCopy.sort((a: CountryRankingData, b: CountryRankingData) => {
+			if (!a || !a.value) {
+				return 1;
+			}
+			if (!b || !b.value) {
+				return -1;
+			}
+			return a?.value - b?.value;
+		});
 	}
 	return [...arrCopy];
 }

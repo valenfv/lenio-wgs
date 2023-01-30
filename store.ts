@@ -4,6 +4,7 @@ import sidebarSlice from './slices/sidebarSlice';
 import exploreSlice from './slices/exploreSlice';
 import radialChartSlice from './slices/radialChartSlice';
 import worldSlice from './slices/worldSlice';
+import deltaSlice from './slices/deltaSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     explore: exploreSlice,
     radialChart: radialChartSlice,
     world: worldSlice,
+    delta: deltaSlice,
   },
 });
 

@@ -14,7 +14,7 @@
 } 
 
 .menu {
-  width: 500px;
+  width: 350px;
 }
 
 .container {
@@ -27,4 +27,5 @@
 
 .svgText {
   font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
 }

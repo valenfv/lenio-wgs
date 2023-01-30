@@ -20,11 +20,11 @@ export const radialChartSlice = createSlice({
   initialState: {
     comparing_country: '',
     metrics: null,
-    selectedIndicator: 'GINI INDEX',
+    selectedIndicator: 'abf6788a66fbe940547ee9c108535f0be5b0eacbd2bec3796634f90a742202cd',
     test: null,
   },
   reducers: {
-    getSelectedIndicator: (state, action) => {
+    setSelectedIndicator: (state, action) => {
       state.selectedIndicator = action.payload;
     },
   },
@@ -39,5 +39,5 @@ export const radialChartSlice = createSlice({
 export default radialChartSlice.reducer;
 
 export const {
-  getSelectedIndicator,
+  setSelectedIndicator,
 } = radialChartSlice.actions;

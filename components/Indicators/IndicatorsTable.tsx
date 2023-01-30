@@ -15,6 +15,8 @@ import indicators from '../../data/indicators.json';
 import { AxisBottomButton } from './AxisBottomButton';
 import { AddAxisButton } from './AddAxisButton';
 import { changeSelectedIndicator } from '../../slices/sidebarSlice';
+import { fetchDeltaData } from '../../slices/deltaSlice';
+import { RootState } from '../../store';
 
 interface Cell {
   align?: string;
@@ -42,23 +44,24 @@ const StyledTableCell = styled(TableCell)<TableCellProps & Cell>(() => ({
     height: 50,
     // whiteSpace: 'nowrap',
     overflowWrap: 'break-word',
+    position: 'relative',
   },
 }));
 
 // eslint-disable-next-line max-len
 const StyledTableRow = styled(TableRow)<TableRowProps & { showIndicationSelection?: boolean }>((props) => ({
   [`&.${tableRowClasses.root}`]: {
-    ...(props.showIndicationSelection ? {
-      background: props.selected ? 'hsla(0, 0%, 100%, 15%)' : 'transparent',
-      cursor: 'pointer',
-    } : {}),
+    ...(props.showIndicationSelection
+      ? {
+        background: props.selected ? 'hsla(0, 0%, 100%, 15%)' : 'transparent',
+        cursor: 'pointer',
+      }
+      : {}),
   },
   [`&.${tableRowClasses.root}:hover`]: {
-    ...(props.showIndicationSelection && props.selected ? {
-      backgroundColor: 'hsla(0, 0%, 100%, 15%)',
-    } : {
-      backgroundColor: 'rgba(25, 118, 210, 0.12)',
-    }),
+    ...(props.showIndicationSelection && props.selected
+      ? { backgroundColor: 'hsla(0, 0%, 100%, 15%)' }
+      : { backgroundColor: 'rgba(25, 118, 210, 0.12)' }),
   },
   [`&.${tableRowClasses.root}:not(:last-child)`]: {
     '& td': {
@@ -78,6 +81,19 @@ const TitleContainer = styled('div')(() => ({
   position: 'sticky',
   top: 0,
   zIndex: '100',
+}));
+
+const Tooltip = styled('div')(({ showTooltip }: { showTooltip: boolean }) => ({
+  background: '#fff',
+  display: showTooltip ? 'block' : 'none',
+  zIndex: 1000,
+  alignSelf: 'flex-end',
+  padding: '4px 6px',
+  position: 'absolute',
+  left: '-40px',
+  bottom: '-30px',
+  color: '#000',
+  borderRadius: '5px',
 }));
 
 // eslint-disable-next-line react/function-component-definition
@@ -115,12 +131,9 @@ interface DeltaProps {
 // eslint-disable-next-line react/function-component-definition
 const Delta: React.FC<DeltaProps> = ({ up, children }) => (
   <div style={{ display: 'flex', alignItems: 'center' }}>
-    <span style={{ color: up ? '#45F9E0CC' : '#DE3108CC' }}>
-      {up ? '▲' : '▼'}
-    </span>
+    <span style={{ color: up ? '#45F9E0CC' : '#DE3108CC' }}>{up ? '▲' : '▼'}</span>
     <span>{children}</span>
   </div>
-
 );
 
 const TableContainer = styled('div')(() => ({
@@ -151,70 +164,74 @@ const useAxisChange = (onIndicatorAxisChange: () => void | null) => {
     y: '80c1e29026bae838ab3275c67aed5010b25cc6c12cc109a75a4695a9c9735c56', // happy planet index
   });
 
-  const renderAxisSelectionButton = React.useCallback((indicatorId: string) => {
-    const [anchorEl, setAnchorEl] = React.useState<EventTarget | null>(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event: Event) => {
-      setAnchorEl(event.currentTarget);
-    };
+  const renderAxisSelectionButton = React.useCallback(
+    (indicatorId: string) => {
+      const [anchorEl, setAnchorEl] = React.useState<EventTarget | null>(null);
+      const open = Boolean(anchorEl);
+      const handleClick = (event: Event) => {
+        setAnchorEl(event.currentTarget);
+      };
 
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
+      const handleClose = () => {
+        setAnchorEl(null);
+      };
 
-    const handleManuItemClick = (type: string) => {
-      if (type === 'x') {
-        setAxis((prev) => {
-          if (prev.y === indicatorId) {
-            onIndicatorAxisChange({ y: prev.x, x: prev.y });
-            return { y: prev.x, x: prev.y };
-          }
-          onIndicatorAxisChange({ ...prev, x: indicatorId });
-          return { ...prev, x: indicatorId };
-        });
-        handleClose();
-      } else if (type === 'y') {
-        setAxis((prev) => {
-          if (prev.x === indicatorId) {
-            onIndicatorAxisChange({ y: prev.x, x: prev.y });
-            return { y: prev.x, x: prev.y };
-          }
-          onIndicatorAxisChange({ ...prev, y: indicatorId });
-          return { ...prev, y: indicatorId };
-        });
-        handleClose();
-      }
-    };
-    return (
-      <>
-        {(indicatorId === selectedX) && <AxisBottomButton onClick={handleClick} />}
-        {(indicatorId === selectedY) && <AxisLeftButton onClick={handleClick} />}
-        {(indicatorId !== selectedX && indicatorId !== selectedY) && <AddAxisButton onClick={handleClick} />}
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl as HTMLElement}
-          open={open}
-          onClose={handleClose}
-        >
-          {(indicatorId !== selectedX) && <MenuItem onClick={() => handleManuItemClick('x')}>Add to X axis</MenuItem>}
-          {(indicatorId !== selectedY) && <MenuItem onClick={() => handleManuItemClick('y')}>Add to Y axis</MenuItem>}
-        </Menu>
-      </>
-    );
-  }, [selectedX, selectedY]);
+      const handleManuItemClick = (type: string) => {
+        if (type === 'x') {
+          setAxis((prev) => {
+            if (prev.y === indicatorId) {
+              onIndicatorAxisChange({ y: prev.x, x: prev.y });
+              return { y: prev.x, x: prev.y };
+            }
+            onIndicatorAxisChange({ ...prev, x: indicatorId });
+            return { ...prev, x: indicatorId };
+          });
+          handleClose();
+        } else if (type === 'y') {
+          setAxis((prev) => {
+            if (prev.x === indicatorId) {
+              onIndicatorAxisChange({ y: prev.x, x: prev.y });
+              return { y: prev.x, x: prev.y };
+            }
+            onIndicatorAxisChange({ ...prev, y: indicatorId });
+            return { ...prev, y: indicatorId };
+          });
+          handleClose();
+        }
+      };
+      return (
+        <>
+          {indicatorId === selectedX && <AxisBottomButton onClick={handleClick} />}
+          {indicatorId === selectedY && <AxisLeftButton onClick={handleClick} />}
+          {indicatorId !== selectedX && indicatorId !== selectedY && <AddAxisButton onClick={handleClick} />}
+          <Menu id="basic-menu" anchorEl={anchorEl as HTMLElement} open={open} onClose={handleClose}>
+            {indicatorId !== selectedX && (
+              <MenuItem onClick={() => handleManuItemClick('x')}>Add to X axis</MenuItem>
+            )}
+            {indicatorId !== selectedY && (
+              <MenuItem onClick={() => handleManuItemClick('y')}>Add to Y axis</MenuItem>
+            )}
+          </Menu>
+        </>
+      );
+    },
+    [selectedX, selectedY],
+  );
 
   return renderAxisSelectionButton;
 };
 
 const useIndicatorSelector = (showIndicationSelection: Boolean) => {
   if (!showIndicationSelection) {
-    return ({
+    return {
       onClick: () => null,
       isIndicatorSelected: () => false,
-    });
+    };
   }
 
-  const selectedIndicator = useSelector((state: { sidebar: { selectedIndicator: string } }) => state.sidebar.selectedIndicator);
+  const selectedIndicator = useSelector(
+    (state: { sidebar: { selectedIndicator: string } }) => state.sidebar.selectedIndicator,
+  );
   const dispatch = useDispatch();
 
   const onClick = (indicatorId: string) => {
@@ -225,12 +242,22 @@ const useIndicatorSelector = (showIndicationSelection: Boolean) => {
 
   return { onClick, isIndicatorSelected };
 };
-function IndicatorsTable({
-  showIndicationSelection = false,
-  onIndicatorAxisChange = null,
-}) {
+
+function IndicatorsTable({ showIndicationSelection = false, onIndicatorAxisChange = null }) {
   const renderAxisSelectionButton = useAxisChange(onIndicatorAxisChange);
+  const [openTooltipIndicator, setOpenTooltipIndicator] = React.useState<string>('');
   const { isIndicatorSelected, onClick } = useIndicatorSelector(showIndicationSelection);
+  const { comparingCountry, indicatorsDelta } = useSelector((state: RootState) => ({
+    comparingCountry: state.sidebar.comparingCountry,
+    indicatorsDelta: state.delta.indicatorsDelta,
+  }));
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    if (comparingCountry?.code) {
+      dispatch(fetchDeltaData(comparingCountry.code));
+    }
+  }, [dispatch, comparingCountry]);
 
   return (
     <TableContainer>
@@ -245,24 +272,54 @@ function IndicatorsTable({
           </StyledTableRow>
         </TableHead>
         <TableBody>
-          {
-            Object.keys(indicators).map((indicator: string) => (
-              <StyledTableRow
-                key={indicator}
-                showIndicationSelection={showIndicationSelection}
-                selected={isIndicatorSelected(indicator)}
-                onClick={() => onClick(indicator)}
+          {Object.keys(indicators).map((indicator: string) => (
+            <StyledTableRow
+              key={indicator}
+              showIndicationSelection={showIndicationSelection}
+              selected={isIndicatorSelected(indicator)}
+              onClick={() => onClick(indicator)}
+            >
+              <StyledTableCell align="left">
+                {(indicators as { [index: string]: { indicator_name: string } })[indicator].indicator_name}
+                {renderAxisSelectionButton(indicator)}
+              </StyledTableCell>
+              <StyledTableCell align="left">
+                {indicatorsDelta?.[indicator]?.ranking || '-'}
+              </StyledTableCell>
+              <StyledTableCell align="left">
+                {indicatorsDelta?.[indicator]?.values[1].value || '-'}
+              </StyledTableCell>
+              <StyledTableCell
+                align="left"
+                onMouseEnter={() => {
+                  setOpenTooltipIndicator(indicator);
+                }}
+                onMouseLeave={() => {
+                  setOpenTooltipIndicator('');
+                }}
               >
-                <StyledTableCell align="left">
-                  {(indicators as { [index: string]: { indicator_name: string } })[indicator].indicator_name}
-                  {renderAxisSelectionButton(indicator)}
-                </StyledTableCell>
-                <StyledTableCell align="left">50th</StyledTableCell>
-                <StyledTableCell align="left">41.5</StyledTableCell>
-                <StyledTableCell align="left"><Delta up> 0.7</Delta></StyledTableCell>
-              </StyledTableRow>
-            ))
-          }
+                {indicatorsDelta?.[indicator]?.delta ? (
+                  <Delta up={indicatorsDelta?.[indicator]?.higher_is_better}>
+                    {indicatorsDelta?.[indicator]?.delta}
+                  </Delta>
+                ) : (
+                  '-'
+                )}
+                {indicatorsDelta?.[indicator]?.delta && (
+                  <Tooltip showTooltip={openTooltipIndicator === indicator}>
+                    {indicatorsDelta?.[indicator]?.values.map(({ year, value }) => (
+                      <div>
+                        {year}
+                        :
+                        {' '}
+                        {value}
+                      </div>
+                    ))}
+                  </Tooltip>
+                )}
+              </StyledTableCell>
+            </StyledTableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>

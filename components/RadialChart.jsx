@@ -1,3 +1,5 @@
+/* eslint-disable prefer-spread */
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable no-shadow */
 /* eslint-disable max-len */
 /* eslint-disable no-underscore-dangle */
@@ -6,7 +8,8 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import getCountryISO2 from 'country-iso-3-to-2';
 import * as d3 from 'd3';
-import { getSelectedIndicator, fetchRankingData } from '../slices/radialChartSlice';
+import { fetchRankingData } from '../slices/radialChartSlice';
+import { changeSelectedIndicator } from '../slices/sidebarSlice';
 import {
   COUNTRIES_QTY, LABELS_MAP, INDICATORS_QTY, INDICATORS_TYPE_MAP,
 } from '../constants/radialChart';
@@ -21,6 +24,7 @@ import {
 import organizations from '../data/organizations.json';
 import bordering from '../data/bordering_countries.json';
 import radialStyles from '../styles/radial.module.css';
+import indicators from '../data/indicators.json';
 
 function RadialChart() {
   const radialChart = useRef();
@@ -30,14 +34,13 @@ function RadialChart() {
     selectedCountry,
     selectedIndicator,
     metrics,
-    selectedIndicatorData,
   } = useSelector((state) => ({
     comparingCountry: state.sidebar.comparingCountry,
     selectedCountry: state.sidebar.selectedCountry,
-    selectedIndicator: state.radialChart.selectedIndicator,
+    selectedIndicator: state.sidebar.selectedIndicator,
     metrics: state.radialChart.metrics,
-    selectedIndicatorData: state.radialChart.selectedIndicatorData,
   }));
+
   const width = 750;
   const height = 750;
   const eachAngle = (2 * Math.PI) / INDICATORS_QTY;
@@ -49,21 +52,16 @@ function RadialChart() {
     .domain([-6, 175])
     .range([minInnerRadius, maxOuterRadius]);
 
-  let selectedCountryIndex;
-
   // Bar Chart functions
-  const getBarColor = (data, country, index) => {
-    if (data.length <= 50) {
-      return country === comparingCountry?.code ? '#59C3C3CC' : '#59C3C340';
+  const getBarColor = (data, country) => {
+    if (country === comparingCountry?.code) {
+      return '#59C3C3CC';
     }
-    if (index % 4 !== 0) {
-      if (country === comparingCountry?.code) selectedCountryIndex = index - (index % 4);
-      return 'transparent';
-    }
-    return country === comparingCountry?.code || index === selectedCountryIndex ? '#59C3C3CC' : '#59C3C340';
+    return '#59C3C340';
   };
 
   const getBarXPosition = () => {
+    return 115;
     if (selectedIndicatorData?.sortedCountries.length < 6) return 115;
     return selectedIndicatorData?.sortedCountries.length < 21 ? 145 : 155;
   };
@@ -108,8 +106,6 @@ function RadialChart() {
 
     const outerRadiusPercentage = 175 / (getCountries(comparingCountry?.code, selectedCountry?.code)?.length + 1);
 
-    console.log({ outerRadiusPercentage });
-
     metrics?.forEach((d, i) => {
       const metric = { ...d };
       metric.startAngle = i * eachAngle;
@@ -117,7 +113,7 @@ function RadialChart() {
       const zeroRadius = valueScale(0);
       if (metric.ranking > 0) {
         metric.innerRadius = zeroRadius;
-        metric.outerRadius = valueScale(d.ranking * outerRadiusPercentage);
+        metric.outerRadius = valueScale(((d.ranking) * outerRadiusPercentage));
       } else {
         metric.innerRadius = valueScale(d.ranking);
         metric.outerRadius = zeroRadius;
@@ -125,13 +121,15 @@ function RadialChart() {
       metricsData.push(metric);
     });
 
-    const selectedIndicatorData = metricsData.filter((metric) => metric.indicator === selectedIndicator)[0];
+    const selectedIndicatorData = metricsData.filter((metric) => metric.indicatorId === selectedIndicator)[0];
 
     // chart container
     const svg = d3.select(radialChart.current)
       .attr('width', width)
       .attr('height', height)
-      .style('background-color', 'transparent');
+      .style('background-color', 'transparent')
+      .append('g')
+      .attr('id', 'removeme');
 
     const center = svg
       .selectAll('.center')
@@ -157,12 +155,12 @@ function RadialChart() {
       d3.selectAll('.radial-bar')
         .transition()
         .duration(200)
-        .style('opacity', 0.5)
+        // .style('opacity', 0.5)
         .style('stroke', 'transparent');
       d3.select(this)
         .transition()
         .duration(200)
-        .style('opacity', 1)
+        // .style('opacity', 1)
         .style('stroke', 'black');
       tooltip.html(
         `<div style="margin-bottom:5px;text-align:center">
@@ -194,7 +192,7 @@ function RadialChart() {
       d3.selectAll('.radial-bar')
         .transition()
         .duration(200)
-        .style('opacity', 1)
+        // .style('opacity', 0.5)
         .style('stroke', 'transparent');
       tooltip.transition().duration(300)
         .style('opacity', 0);
@@ -205,14 +203,16 @@ function RadialChart() {
       .data(metricsData || [])
       .join('path')
       .attr('class', 'radial-bar')
+      .attr('opacity', (d) => (d.indicatorId === selectedIndicator ? 1 : 0.5))
       .attr('cursor', 'pointer')
       .attr('d', (d) => arc(d))
       .attr('fill', (d) => INDICATORS_TYPE_MAP[LABELS_MAP[d.indicator].type])
       .on('mouseover', mouseOver)
       .on('mouseleave', mouseLeave)
       .on('click', (d) => {
-        dispatch(getSelectedIndicator(d.target.__data__.indicator));
-        mouseLeave();
+        const { indicatorId } = d3.select(d.currentTarget).datum();
+        dispatch(changeSelectedIndicator(indicatorId));
+        // mouseLeave();
       });
 
     // outer and inner circles
@@ -285,133 +285,90 @@ function RadialChart() {
         .attr('font-size', '12px')
         .attr('overflow', 'ellipsis')
         .attr('xlink:href', `#${category.label}`)
-        .text(setEllipsis(category.label, 4));
+        .text(setEllipsis(category.label, 4).toUpperCase());
     });
 
-    // Selected indicator heading, selected country and score, highest country and score, lowest country and score
-    center
-      .append('text')
-      .text(`${setEllipsis(selectedIndicator, 22)}${selectedIndicator.length < 16 ? ' Rankings' : ''}`)
-      .attr('fill', '#DDDDDD')
-      .attr('overflow', 'hidden')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 700)
-      .attr('font-size', '14px')
-      .attr('text-anchor', 'middle')
-      .attr('transform', 'translate(0,-205)')
-      .append('title')
-      .text(selectedIndicator.length > 22 ? selectedIndicator : '');
-
-    center
-      .append('text')
-      .text(`${selectedIndicator.length > 15 ? ' Rankings' : ''}`)
-      .attr('fill', '#DDDDDD')
-      .attr('overflow', 'hidden')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 700)
-      .attr('font-size', '14px')
-      .attr('text-anchor', 'middle')
-      .attr('transform', 'translate(0,-190)');
-
-    //
-
-    center.append('foreignObject')
+    const indicatorLabel = center.append('foreignObject')
+      .attr('x', -100)
+      .attr('y', -225)
+      .style('width', 200)
+      .style('height', 60)
       .append('xhtml:div')
       .append('div')
       .attr('class', radialStyles.centerLegendContainer)
-      .html('HELLO TEST')
-      .attr('transform', 'translate(0,-165)');
+      .style('width', '200px')
+      .style('height', '60px');
 
-    center
-      .append('text')
-      .text(`${comparingCountry?.label}1`)
-      .attr('fill', '#DDDDDD')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 700)
-      .attr('font-size', '18px')
-      .attr('text-anchor', 'middle')
-      .attr('transform', 'translate(0,-165)');
+    indicatorLabel.append('div')
+      .attr('class', radialStyles.indicatorLabel)
+      .style('font-weight', 700)
+      .html(`${indicators[selectedIndicator].indicator_name}`);
 
-    center
-      .append('text')
-      .text(`${selectedIndicatorData?.ranking} - 2`)
-      .attr('fill', '#DDDDDD')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 700)
-      .attr('font-size', '22px')
-      .attr('text-anchor', 'middle')
-      .attr('transform', 'translate(0,-135)');
-
-    center
-      .append('text')
-      .text('Selected Country')
-      .attr('fill', '#FFFFFF80')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 700)
-      .attr('font-size', '14px')
-      .attr('text-anchor', 'middle')
-      .attr('transform', 'translate(0,-110)');
     //
 
-    center
-      .append('text')
-      .text(countries[selectedIndicatorData?.sortedCountries[0].country])
-      .attr('fill', '#DDDDDD')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 400)
-      .attr('font-size', '18px')
-      .attr('text-anchor', 'start')
-      .attr('transform', 'translate(-180,-145)');
+    const lowestCountryContainer = center.append('foreignObject')
+      .attr('x', -175)
+      .attr('y', -125)
+      .style('width', 110)
+      .style('height', 90)
+      .append('xhtml:div')
+      .append('div')
+      .attr('class', radialStyles.centerLegendContainer);
 
-    center
-      .append('text')
-      .text(selectedIndicatorData?.sortedCountries[0].value)
-      .attr('fill', '#DDDDDD')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 400)
-      .attr('font-size', '22px')
-      .attr('text-anchor', 'start')
-      .attr('transform', 'translate(-150,-115)');
+    lowestCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryLabel)
+      .html(`${countries[selectedIndicatorData?.sortedCountries[0].country]}`);
 
-    center
-      .append('text')
-      .text('Lowest ranking')
-      .attr('fill', '#FFFFFF80')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 400)
-      .attr('font-size', '14px')
-      .attr('text-anchor', 'start')
-      .attr('transform', 'translate(-185,-90)');
+    lowestCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryValue)
+      .html(`${selectedIndicatorData?.sortedCountries[0].value || '-'}`);
 
-    center
-      .append('text')
-      .text(countries[selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].country])
-      .attr('fill', '#DDDDDD')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 400)
-      .attr('font-size', '18px')
-      .attr('text-anchor', 'end')
-      .attr('transform', 'translate(180,-145)');
+    lowestCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryLegend)
+      .html('Lowest Ranked');
 
-    center
-      .append('text')
-      .text(selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].value)
-      .attr('fill', '#DDDDDD')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 400)
-      .attr('font-size', '22px')
-      .attr('text-anchor', 'end')
-      .attr('transform', 'translate(170,-115)');
+    const highestCountryContainer = center.append('foreignObject')
+      .attr('x', 65)
+      .attr('y', -125)
+      .style('width', 110)
+      .style('height', 90)
+      .append('xhtml:div')
+      .append('div')
+      .attr('class', radialStyles.centerLegendContainer);
 
-    center
-      .append('text')
-      .text('Highest ranking')
-      .attr('fill', '#FFFFFF80')
-      .attr('font-family', 'arial')
-      .attr('font-weight', 400)
-      .attr('font-size', '14px')
-      .attr('text-anchor', 'start')
-      .attr('transform', 'translate(105,-90)');
+    highestCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryLabel)
+      .html(`${countries[selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].country]}`);
+
+    highestCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryValue)
+      .html(`${selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].value || '-'}`);
+
+    highestCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryLegend)
+      .html('Highest Ranked');
+
+    const comparingCountryContainer = center.append('foreignObject')
+      .attr('x', -55)
+      .attr('y', -145)
+      .style('width', 110)
+      .style('height', 90)
+      .append('xhtml:div')
+      .append('div')
+      .attr('class', radialStyles.centerLegendContainer);
+
+    comparingCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryLabel)
+      .style('font-weight', 700)
+      .html(`${comparingCountry?.label}`);
+
+    comparingCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryValue)
+      .html(`${selectedIndicatorData?.sortedCountries.find((c) => c.country === comparingCountry.code)?.value || '-'}`);
+
+    comparingCountryContainer.append('div')
+      .attr('class', radialStyles.clcCountryLegend)
+      .html('Selected Ranked');
 
     // Indicator Type circles and legends (top right corner)
     let circleYPosition = 15;
@@ -440,45 +397,62 @@ function RadialChart() {
       legendYPosition += 28;
     });
 
-    // Bar Chart
-    const barChart = svg.append('g');
-    const barChartWidth = 450;
-    const barChartHeight = 300;
-    const margin = {
-      top: 50, bottom: 50, left: 50, right: 50,
+    if (selectedIndicatorData?.sortedCountries.length > 50) {
+      // workaround
+      const duplicateCount = selectedIndicatorData?.sortedCountries.reduce((prev, curr) => (curr.country === comparingCountry.code ? prev + 1 : prev), 0);
+      if (duplicateCount > 1) {
+        // remove duplicate
+        const removeIndex = selectedIndicatorData?.sortedCountries.findIndex((c) => c.country === comparingCountry.code);
+        selectedIndicatorData.sortedCountries = selectedIndicatorData?.sortedCountries.reduce((prev, curr, i) => (i === removeIndex ? [...prev] : [...prev, curr]), []);
+      }
+      selectedIndicatorData.sortedCountries = selectedIndicatorData?.sortedCountries.filter((country, i) => country.country === comparingCountry.code || i % 4 === 0);
+      // Bar Chart
+      const barChart = svg.append('g');
+      const barChartWidth = 450;
+      const barChartHeight = 300;
+      const margin = {
+        top: 50, bottom: 50, left: 50, right: 50,
+      };
+
+      barChart.selectAll()
+        .attr('width', barChartWidth - margin.left - margin.right)
+        .attr('height', barChartHeight - margin.top - margin.bottom)
+        .attr('viewBox', [0, 0, barChartWidth, barChartHeight]);
+
+      const x = d3.scaleBand()
+        .domain(d3.range(selectedIndicatorData?.sortedCountries.length))
+        .range([margin.left, barChartWidth - margin.right]);
+
+      const maxYRange = Math.max.apply(Math, selectedIndicatorData?.sortedCountries.map((d) => d.value));
+
+      const y = d3.scaleLinear()
+        .domain([0, maxYRange])
+        .range([barChartHeight - margin.bottom, margin.top]);
+
+      svg
+        .append('g')
+        .selectAll('rect')
+        .data(selectedIndicatorData?.sortedCountries ? selectedIndicatorData?.sortedCountries : [])
+        .join('rect')
+        .attr('x', (d, i) => barChartWidth - 10 - x(i))
+        .attr('y', (d) => y(d.value))
+        .attr('title', (d) => d.value)
+        .attr('isocc', (d) => d.country)
+        .attr('fill', (d, i) => getBarColor(selectedIndicatorData?.sortedCountries, d.country, i))
+        .attr('class', 'rect')
+        .attr('height', (d) => y(0) - y(d.value))
+        .attr('width', selectedIndicatorData?.sortedCountries.length < 21 ? 14 : 4)
+        .attr('transform', `translate(${getBarXPosition()}, 280)`);
+    }
+    return () => {
+      d3.select(radialChart.current).select('#removeme').remove();
+      tooltip.remove();
     };
-
-    barChart.selectAll()
-      .attr('width', barChartWidth - margin.left - margin.right)
-      .attr('height', barChartHeight - margin.top - margin.bottom)
-      .attr('viewBox', [0, 0, barChartWidth, barChartHeight]);
-
-    const x = d3.scaleBand()
-      .domain(d3.range(selectedIndicatorData?.sortedCountries.length))
-      .range([margin.left, barChartWidth - margin.right]);
-
-    const y = d3.scaleLinear()
-      .domain([0, selectedIndicatorData?.sortedCountries[0].value])
-      .range([barChartHeight - margin.bottom, margin.top]);
-
-    svg
-      .append('g')
-      .selectAll('rect')
-      .data(selectedIndicatorData?.sortedCountries ? selectedIndicatorData?.sortedCountries : [])
-      .join('rect')
-      .attr('x', (d, i) => barChartWidth - 10 - x(i))
-      .attr('y', (d) => y(d.value))
-      .attr('title', (d) => d.value)
-      .attr('fill', (d, i) => getBarColor(selectedIndicatorData?.sortedCountries, d.country, i))
-      .attr('class', 'rect')
-      .attr('height', (d) => y(0) - y(d.value))
-      .attr('width', selectedIndicatorData?.sortedCountries.length < 21 ? 14 : 4)
-      .attr('transform', `translate(${getBarXPosition()}, 280)`);
-  }, [comparingCountry, selectedCountry, selectedIndicator, metrics, selectedIndicatorData]);
+  }, [comparingCountry, selectedCountry, selectedIndicator, metrics]);
 
   return (
     <div id="radialChartContainer">
-      <svg key={Math.random()} ref={radialChart} />
+      <svg ref={radialChart} />
     </div>
   );
 }
