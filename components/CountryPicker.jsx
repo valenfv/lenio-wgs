@@ -55,6 +55,8 @@ const getPickerItems = ({
 const StyledTextField = styled(TextField)({
   '& input, label': {
     color: '#EEEEEE!important',
+    background: '#000022',
+    padding: '0 10px',
   },
   '& svg': {
     fill: '#D9D9D9',
