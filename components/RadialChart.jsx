@@ -8,7 +8,8 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import getCountryISO2 from 'country-iso-3-to-2';
 import * as d3 from 'd3';
-import { getSelectedIndicator, fetchRankingData } from '../slices/radialChartSlice';
+import { fetchRankingData } from '../slices/radialChartSlice';
+import { changeSelectedIndicator } from '../slices/sidebarSlice';
 import {
   COUNTRIES_QTY, LABELS_MAP, INDICATORS_QTY, INDICATORS_TYPE_MAP,
 } from '../constants/radialChart';
@@ -23,6 +24,7 @@ import {
 import organizations from '../data/organizations.json';
 import bordering from '../data/bordering_countries.json';
 import radialStyles from '../styles/radial.module.css';
+import indicators from '../data/indicators.json';
 
 function RadialChart() {
   const radialChart = useRef();
@@ -32,14 +34,13 @@ function RadialChart() {
     selectedCountry,
     selectedIndicator,
     metrics,
-    selectedIndicatorData,
   } = useSelector((state) => ({
     comparingCountry: state.sidebar.comparingCountry,
     selectedCountry: state.sidebar.selectedCountry,
-    selectedIndicator: state.radialChart.selectedIndicator,
+    selectedIndicator: state.sidebar.selectedIndicator,
     metrics: state.radialChart.metrics,
-    selectedIndicatorData: state.radialChart.selectedIndicatorData,
   }));
+
   const width = 750;
   const height = 750;
   const eachAngle = (2 * Math.PI) / INDICATORS_QTY;
@@ -60,6 +61,7 @@ function RadialChart() {
   };
 
   const getBarXPosition = () => {
+    return 115;
     if (selectedIndicatorData?.sortedCountries.length < 6) return 115;
     return selectedIndicatorData?.sortedCountries.length < 21 ? 145 : 155;
   };
@@ -111,7 +113,7 @@ function RadialChart() {
       const zeroRadius = valueScale(0);
       if (metric.ranking > 0) {
         metric.innerRadius = zeroRadius;
-        metric.outerRadius = valueScale(d.ranking * outerRadiusPercentage);
+        metric.outerRadius = valueScale(((d.ranking) * outerRadiusPercentage));
       } else {
         metric.innerRadius = valueScale(d.ranking);
         metric.outerRadius = zeroRadius;
@@ -119,7 +121,7 @@ function RadialChart() {
       metricsData.push(metric);
     });
 
-    const selectedIndicatorData = metricsData.filter((metric) => metric.indicator === selectedIndicator)[0];
+    const selectedIndicatorData = metricsData.filter((metric) => metric.indicatorId === selectedIndicator)[0];
 
     // chart container
     const svg = d3.select(radialChart.current)
@@ -153,12 +155,12 @@ function RadialChart() {
       d3.selectAll('.radial-bar')
         .transition()
         .duration(200)
-        .style('opacity', 0.5)
+        // .style('opacity', 0.5)
         .style('stroke', 'transparent');
       d3.select(this)
         .transition()
         .duration(200)
-        .style('opacity', 1)
+        // .style('opacity', 1)
         .style('stroke', 'black');
       tooltip.html(
         `<div style="margin-bottom:5px;text-align:center">
@@ -190,7 +192,7 @@ function RadialChart() {
       d3.selectAll('.radial-bar')
         .transition()
         .duration(200)
-        .style('opacity', 0.5)
+        // .style('opacity', 0.5)
         .style('stroke', 'transparent');
       tooltip.transition().duration(300)
         .style('opacity', 0);
@@ -201,15 +203,16 @@ function RadialChart() {
       .data(metricsData || [])
       .join('path')
       .attr('class', 'radial-bar')
-      .attr('opacity', 0.5)
+      .attr('opacity', (d) => (d.indicatorId === selectedIndicator ? 1 : 0.5))
       .attr('cursor', 'pointer')
       .attr('d', (d) => arc(d))
       .attr('fill', (d) => INDICATORS_TYPE_MAP[LABELS_MAP[d.indicator].type])
       .on('mouseover', mouseOver)
       .on('mouseleave', mouseLeave)
       .on('click', (d) => {
-        dispatch(getSelectedIndicator(d.target.__data__.indicator));
-        mouseLeave();
+        const { indicatorId } = d3.select(d.currentTarget).datum();
+        dispatch(changeSelectedIndicator(indicatorId));
+        // mouseLeave();
       });
 
     // outer and inner circles
@@ -299,7 +302,7 @@ function RadialChart() {
     indicatorLabel.append('div')
       .attr('class', radialStyles.indicatorLabel)
       .style('font-weight', 700)
-      .html(`${selectedIndicator}`);
+      .html(`${indicators[selectedIndicator].indicator_name}`);
 
     //
 
@@ -443,8 +446,9 @@ function RadialChart() {
     }
     return () => {
       d3.select(radialChart.current).select('#removeme').remove();
+      tooltip.remove();
     };
-  }, [comparingCountry, selectedCountry, selectedIndicator, metrics, selectedIndicatorData]);
+  }, [comparingCountry, selectedCountry, selectedIndicator, metrics]);
 
   return (
     <div id="radialChartContainer">

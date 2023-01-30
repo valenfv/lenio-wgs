@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <div className={styles.menu}>
-        <ConfigContainer showAxisSelection={false} makeIndicatorListClickable={false} />
+        <ConfigContainer showAxisSelection={false} makeIndicatorListClickable />
       </div>
       <RadialChart />
     </div>
