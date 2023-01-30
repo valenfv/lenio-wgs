@@ -39,6 +39,7 @@ div.tooltip {
   width: 350px;
   background-color: transparent;
   margin-top: 40px;
+  z-index: 100;
 }
 
 .worldContainer{

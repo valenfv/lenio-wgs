@@ -23,7 +23,6 @@ const StyledHeader = styled('div')({
   alignItems: 'center',
   fontSize: '28px',
   lineHeight: '40px',
-  maxWidth: 1280,
   margin: '0 auto',
 });
 

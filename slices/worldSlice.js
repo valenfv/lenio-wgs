@@ -29,10 +29,15 @@ export const worldSlice = createSlice({
   name: 'world',
   initialState: {
     data: null,
+    loading: false,
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchWorldData.pending, (state) => {
+      state.loading = true;
+    });
     builder.addCase(fetchWorldData.fulfilled, (state, action) => {
       state.data = action.payload;
+      state.loading = false;
     });
   },
 });

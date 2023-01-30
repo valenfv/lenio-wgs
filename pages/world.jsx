@@ -11,6 +11,7 @@ import {
 import { fetchWorldData } from '../slices/worldSlice';
 import bordering from '../data/bordering_countries.json';
 import organizations from '../data/organizations.json';
+import { Loading } from '../components/Loading';
 
 export default function World() {
   const svgRef = React.useRef(null);
@@ -21,11 +22,13 @@ export default function World() {
     worldData,
     selectedCountry,
     comparingCountry,
+    loading,
   } = useSelector((store) => ({
     selectedIndicator: store.sidebar.selectedIndicator,
     worldData: store.world.data,
     selectedCountry: store.sidebar.selectedCountry,
     comparingCountry: store.sidebar.comparingCountry,
+    loading: store.world.loading,
   }));
 
   const highlights = React.useMemo(() => {
@@ -55,6 +58,7 @@ export default function World() {
       <div className={[styles.floatingMenu]}>
         <ConfigContainer showAxisSelection={false} makeIndicatorListClickable />
       </div>
+      <Loading loading={loading} />
       <div className={styles.map} ref={svgRef} />
     </div>
   );
