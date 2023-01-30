@@ -107,6 +107,8 @@ function RadialChart() {
 
     const outerRadiusPercentage = 175 / (getCountries(comparingCountry?.code, selectedCountry?.code)?.length + 1);
 
+    const maxRanking = Math.max(...(metrics?.map(metric => metric.ranking) || [0]));
+
     metrics?.forEach((d, i) => {
       const metric = { ...d };
       metric.startAngle = i * eachAngle;
@@ -114,7 +116,7 @@ function RadialChart() {
       const zeroRadius = valueScale(0);
       if (metric.ranking > 0) {
         metric.innerRadius = zeroRadius;
-        metric.outerRadius = valueScale(((d.ranking) * outerRadiusPercentage));
+        metric.outerRadius = valueScale(((maxRanking - d.ranking) * outerRadiusPercentage));
       } else {
         metric.innerRadius = valueScale(d.ranking);
         metric.outerRadius = zeroRadius;
@@ -126,8 +128,6 @@ function RadialChart() {
 
     // chart container
     const svg = d3.select(radialChart.current)
-      .attr('width', width)
-      .attr('height', height)
       .style('background-color', 'transparent')
       .append('g')
       .attr('id', 'removeme');
@@ -379,14 +379,14 @@ function RadialChart() {
     // legends
     Object.keys(INDICATORS_TYPE_MAP).forEach((indicatorType) => {
       svg.append('circle')
-        .attr('cx', 660)
+        .attr('cx', 700)
         .attr('cy', circleYPosition)
         .attr('r', 10)
         .attr('fill', INDICATORS_TYPE_MAP[indicatorType]);
 
       svg.append('text')
         .attr('text-anchor', 'start')
-        .attr('x', 570)
+        .attr('x', 610)
         .attr('y', legendYPosition)
         .attr('transform', 'translate(110,10)')
         .attr('fill', '#FFFFFF')
@@ -548,10 +548,15 @@ function RadialChart() {
     <div
       id="radialChartContainer"
       style={{
-        width: '100%', height: '100%', display: 'flex', justifyContent: 'center',
+        width: '65%',
+        height: '65%',
+        display: 'flex',
+        justifyContent: 'left',
+        margin: '0 auto',
+        paddingLeft: '2rem'
       }}
     >
-      <svg ref={radialChart} />
+      <svg viewBox={`0 0 ${width + 80} ${height}`} ref={radialChart} />
     </div>
   );
 }
