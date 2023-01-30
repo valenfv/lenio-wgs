@@ -126,6 +126,7 @@ export function CountryPicker({
           {option.label}
         </StyledBox>
       )}
+      isOptionEqualToValue={(opt, value) => opt.code === value.code }
       renderInput={(params) => (
         <StyledTextField
           {...params}

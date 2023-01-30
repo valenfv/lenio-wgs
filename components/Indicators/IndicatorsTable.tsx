@@ -308,7 +308,7 @@ function IndicatorsTable({ showIndicationSelection = false, onIndicatorAxisChang
                 {indicatorsDelta?.[indicator]?.delta && (
                   <Tooltip showTooltip={openTooltipIndicator === indicator}>
                     {indicatorsDelta?.[indicator]?.values.map(({ year, value }) => (
-                      <div>
+                      <div key={`${year}-${value}`}>
                         {year}
                         :
                         {' '}

@@ -118,6 +118,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <NavButtonsContainer>
           {charts.map((props) => (
             <NavButton
+              key={props.href}
               onClick={() => {
                 setCurrentChart(props.chartType);
                 router.push(props.href);
