@@ -77,11 +77,7 @@ function RadialChart() {
     return '#59C3C340';
   };
 
-  const getBarXPosition = () => {
-    return 115;
-    if (selectedIndicatorData?.sortedCountries.length < 6) return 115;
-    return selectedIndicatorData?.sortedCountries.length < 21 ? 145 : 155;
-  };
+  const getBarXPosition = () => 115;
 
   const getTooltipData = (indicator, metrics) => {
     const country = metrics.filter((ind) => ind.indicator === indicator)[0];
