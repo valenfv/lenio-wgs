@@ -410,10 +410,10 @@ function RadialChart() {
       selectedIndicatorData.sortedCountries = selectedIndicatorData?.sortedCountries.filter((country, i) => country.country === comparingCountry.code || i % 4 === 0);
       // Bar Chart
       const barChart = svg.append('g');
-      const barChartWidth = 450;
+      const barChartWidth = 495;
       const barChartHeight = 300;
       const margin = {
-        top: 50, bottom: 50, left: 50, right: 50,
+        top: 70, bottom: 50, left: 50, right: 85,
       };
 
       barChart.selectAll()
