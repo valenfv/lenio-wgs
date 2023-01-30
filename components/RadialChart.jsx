@@ -115,7 +115,7 @@ function RadialChart() {
       const zeroRadius = valueScale(0);
       if (metric.ranking > 0) {
         metric.innerRadius = zeroRadius;
-        metric.outerRadius = valueScale(((maxRanking - d.ranking) * outerRadiusPercentage));
+        metric.outerRadius = valueScale((((1+ maxRanking) - d.ranking) * outerRadiusPercentage));
       } else {
         metric.innerRadius = valueScale(d.ranking);
         metric.outerRadius = zeroRadius;
