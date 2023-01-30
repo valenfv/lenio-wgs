@@ -10,6 +10,7 @@ import TableCell, { tableCellClasses, TableCellProps } from '@mui/material/Table
 import TableHead from '@mui/material/TableHead';
 import TableRow, { tableRowClasses, TableRowProps } from '@mui/material/TableRow';
 import { useDispatch, useSelector } from 'react-redux';
+import { abbreviateNumber } from 'js-abbreviation-number';
 import { AxisLeftButton } from './AxisLeftButton';
 import indicators from '../../data/indicators.json';
 import { AxisBottomButton } from './AxisBottomButton';
@@ -113,7 +114,7 @@ const TableTitle: React.FC = () => (
         textAlign: 'left',
         color: '#EEEEEE',
         marginLeft: '10px',
-        lineHeight: "24px"
+        lineHeight: '24px',
       }}
       variant="h4"
     >
@@ -132,7 +133,7 @@ interface DeltaProps {
 const Delta: React.FC<DeltaProps> = ({ up, children }) => (
   <div style={{ display: 'flex', alignItems: 'center' }}>
     <span style={{ color: up ? '#45F9E0CC' : '#DE3108CC' }}>{up ? '▲' : '▼'}</span>
-    <span>{children}</span>
+    <span>{abbreviateNumber(Number(children))}</span>
   </div>
 );
 
