@@ -90,16 +90,11 @@ export function CountryPicker({
   showNeighboring = false,
   showWorld = false,
   defaultCode = 'USA',
+  country
 }) {
   const pickerItems = React.useMemo(() => getPickerItems({
     showOrganizations, showCountries, showNeighboring, showWorld,
   }), [showOrganizations, showCountries, showNeighboring, showWorld]);
-  // eslint-disable-next-line max-len
-  const [country, setCountry] = React.useState(pickerItems.find((item) => item.code === defaultCode));
-
-  React.useEffect(() => {
-    onChange(country);
-  }, []);
 
   return (
     <Autocomplete
@@ -108,16 +103,13 @@ export function CountryPicker({
       onBlur={() => {
         if (!canBeNull && !country) {
           const defaultOption = pickerItems.find((item) => item.code === defaultCode);
-          setCountry(defaultOption);
           onChange(defaultOption);
         }
       }}
       onChange={(_, newValue) => {
         if (newValue) {
-          setCountry(newValue);
           onChange(newValue);
         } else {
-          setCountry(null);
           onChange(null);
         }
       }}
@@ -134,6 +126,7 @@ export function CountryPicker({
           {option.label}
         </StyledBox>
       )}
+      isOptionEqualToValue={(opt, value) => opt.code === value.code }
       renderInput={(params) => (
         <StyledTextField
           {...params}

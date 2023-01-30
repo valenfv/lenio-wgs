@@ -306,6 +306,7 @@ function RadialChart() {
 
     //
 
+    if (selectedIndicatorData) { selectedIndicatorData.sortedCountries = selectedIndicatorData?.sortedCountries.filter((d) => d.value !== null && d.value !== undefined); }
     const lowestCountryContainer = center.append('foreignObject')
       .attr('x', -175)
       .attr('y', -125)
@@ -451,7 +452,12 @@ function RadialChart() {
   }, [comparingCountry, selectedCountry, selectedIndicator, metrics]);
 
   return (
-    <div id="radialChartContainer">
+    <div
+      id="radialChartContainer"
+      style={{
+        width: '100%', height: '100%', display: 'flex', justifyContent: 'center',
+      }}
+    >
       <svg ref={radialChart} />
     </div>
   );

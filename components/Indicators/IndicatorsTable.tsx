@@ -19,7 +19,7 @@ import { fetchDeltaData } from '../../slices/deltaSlice';
 import { RootState } from '../../store';
 
 interface Cell {
-align?: string;
+  align?: string;
 }
 
 const StyledTableCell = styled(TableCell)<TableCellProps & Cell>(() => ({
@@ -83,7 +83,7 @@ const TitleContainer = styled('div')(() => ({
   zIndex: '100',
 }));
 
-const Tooltip = styled('div')(({ showTooltip }: { showTooltip:boolean }) => ({
+const Tooltip = styled('div')(({ showTooltip }: { showTooltip: boolean }) => ({
   background: '#fff',
   display: showTooltip ? 'block' : 'none',
   zIndex: 1000,
@@ -108,23 +108,24 @@ const TableTitle: React.FC = () => (
     />
     <Typography
       sx={{
-        fontSize: '20px',
+        fontSize: '16px',
         fontWeight: 500,
         textAlign: 'left',
         color: '#EEEEEE',
         marginLeft: '10px',
+        lineHeight: "24px"
       }}
       variant="h4"
     >
-      Key Indicators
+      key indicators
     </Typography>
   </TitleContainer>
 );
 
 interface DeltaProps {
-// eslint-disable-next-line react/require-default-props
-up?: boolean;
-children: React.ReactNode;
+  // eslint-disable-next-line react/require-default-props
+  up?: boolean;
+  children: React.ReactNode;
 }
 
 // eslint-disable-next-line react/function-component-definition
@@ -205,10 +206,10 @@ const useAxisChange = (onIndicatorAxisChange: () => void | null) => {
           {indicatorId !== selectedX && indicatorId !== selectedY && <AddAxisButton onClick={handleClick} />}
           <Menu id="basic-menu" anchorEl={anchorEl as HTMLElement} open={open} onClose={handleClose}>
             {indicatorId !== selectedX && (
-            <MenuItem onClick={() => handleManuItemClick('x')}>Add to X axis</MenuItem>
+              <MenuItem onClick={() => handleManuItemClick('x')}>Add to X axis</MenuItem>
             )}
             {indicatorId !== selectedY && (
-            <MenuItem onClick={() => handleManuItemClick('y')}>Add to Y axis</MenuItem>
+              <MenuItem onClick={() => handleManuItemClick('y')}>Add to Y axis</MenuItem>
             )}
           </Menu>
         </>
@@ -307,7 +308,7 @@ function IndicatorsTable({ showIndicationSelection = false, onIndicatorAxisChang
                 {indicatorsDelta?.[indicator]?.delta && (
                   <Tooltip showTooltip={openTooltipIndicator === indicator}>
                     {indicatorsDelta?.[indicator]?.values.map(({ year, value }) => (
-                      <div>
+                      <div key={`${year}-${value}`}>
                         {year}
                         :
                         {' '}

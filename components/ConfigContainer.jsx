@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import IndicatorsTable from './Indicators/IndicatorsTable';
 import { CountryPicker } from './CountryPicker';
 import { changeComparingCountry, changeSelectedCountry, changeAxis } from '../slices/sidebarSlice';
@@ -17,12 +17,15 @@ function ConfigContainer({
   makeIndicatorListClickable,
 }) {
   const dispatch = useDispatch();
+  const { comparingCountry, selectedCountry } = useSelector((state) => state.sidebar);
+
   return (
     <StyledContainer>
       <CountryPicker
         showCountries
         showWorld={false}
         onChange={(value) => dispatch(changeComparingCountry(value))}
+        country={comparingCountry}
       />
       <CountryPicker
         canBeNull={false}
@@ -31,6 +34,7 @@ function ConfigContainer({
         showWorld
         showCountries={false}
         defaultCode="WORLD"
+        country={selectedCountry}
         onChange={(value) => {
           dispatch(changeSelectedCountry(value));
         }}

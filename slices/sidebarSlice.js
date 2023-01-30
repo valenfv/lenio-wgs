@@ -4,8 +4,16 @@ import { createSlice } from '@reduxjs/toolkit';
 export const sidebarSlice = createSlice({
   name: 'sidebar',
   initialState: {
-    comparingCountry: null,
-    selectedCountry: null,
+    comparingCountry: {
+      code: 'USA',
+      label: 'United States',
+      group: 'Countries',
+    },
+    selectedCountry: {
+      code: 'WORLD',
+      label: 'World',
+      group: 'Groups',
+    },
     xAxis: 'abf6788a66fbe940547ee9c108535f0be5b0eacbd2bec3796634f90a742202cd', // gini
     yAxis: '80c1e29026bae838ab3275c67aed5010b25cc6c12cc109a75a4695a9c9735c56', // happy planet index
     selectedIndicator: 'abf6788a66fbe940547ee9c108535f0be5b0eacbd2bec3796634f90a742202cd', // gini
