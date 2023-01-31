@@ -417,6 +417,8 @@ function RadialChart() {
         (d) => d.value !== null && d.value !== undefined,
       );
     }
+
+    // highest
     const lowestCountryContainer = center
       .append('foreignObject')
       .attr('x', -175)
@@ -439,7 +441,7 @@ function RadialChart() {
       .attr('class', radialStyles.clcCountryValue)
       .html(
         `${
-          abbreviateNumber(selectedIndicatorData?.sortedCountries[0].value)
+          abbreviateNumber(selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].value)
           || '-'
         }`,
       );
@@ -449,6 +451,7 @@ function RadialChart() {
       .attr('class', radialStyles.clcCountryLegend)
       .html('Highest Ranked');
 
+    // lowest
     const highestCountryContainer = center
       .append('foreignObject')
       .attr('x', 65)
@@ -479,7 +482,7 @@ function RadialChart() {
         `${
           abbreviateNumber(
             selectedIndicatorData?.sortedCountries[
-              selectedIndicatorData.sortedCountries.length - 1
+              0
             ].value,
           ) || '-'
         }`,
@@ -490,6 +493,7 @@ function RadialChart() {
       .attr('class', radialStyles.clcCountryLegend)
       .html('Lowest Ranked');
 
+    // comparing
     const comparingCountryContainer = center
       .append('foreignObject')
       .attr('x', -55)
