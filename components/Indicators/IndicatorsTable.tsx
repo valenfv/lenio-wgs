@@ -72,7 +72,7 @@ const StyledTableRow = styled(TableRow)<TableRowProps & { showIndicationSelectio
 }));
 
 const TitleContainer = styled('div')(() => ({
-  padding: '1rem 15px',
+  padding: '1.01rem 15px',
   display: 'flex',
   justifyContent: 'flex-start',
   alignItems: 'center',
@@ -118,7 +118,7 @@ const TableTitle: React.FC = () => (
       }}
       variant="h4"
     >
-      key indicators
+      Key indicators
     </Typography>
   </TitleContainer>
 );
