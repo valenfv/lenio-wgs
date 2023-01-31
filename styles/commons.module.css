@@ -15,6 +15,7 @@
 
 .menu {
   width: 350px;
+  z-index: 10;
 }
 
 .container {
