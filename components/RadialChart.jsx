@@ -345,6 +345,22 @@ function RadialChart() {
       .attr('class', 'center');
     // .attr("transform", `translate(${width / 2},${height / 2})`);
 
+    const mouseOverText = function (d) {
+      if (d.target.scrollHeight > d.target.clientHeight + 3) {
+        tooltip
+          .text(d.srcElement.innerText)
+          .style('left', `${d.pageX}px`)
+          .style('top', `${d.pageY - 28}px`)
+          .style('z-index', '2')
+          .style('background', 'white')
+          .style('position', 'absolute')
+          .style('font-weight', 'bold')
+          .transition()
+          .duration(400)
+          .style('opacity', 1);
+      }
+    };
+
     categories.forEach((category, index) => {
       const text = radialElementsContainer
         .append('text')
@@ -372,6 +388,8 @@ function RadialChart() {
       .append('xhtml:div')
       .append('div')
       .attr('class', radialStyles.centerLegendContainer)
+      .on('mouseover', mouseOverText)
+      .on('mouseleave', mouseLeave)
       .style('width', '200px')
       .style('height', '60px');
 
@@ -400,6 +418,8 @@ function RadialChart() {
 
     lowestCountryContainer
       .append('div')
+      .on('mouseover', mouseOverText)
+      .on('mouseleave', mouseLeave)
       .attr('class', radialStyles.clcCountryLabel)
       .html(`${countries[selectedIndicatorData?.sortedCountries[0].country]}`);
 
@@ -426,6 +446,8 @@ function RadialChart() {
     highestCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryLabel)
+      .on('mouseover', mouseOverText)
+      .on('mouseleave', mouseLeave)
       .html(
         `${
           countries[
@@ -458,6 +480,8 @@ function RadialChart() {
     comparingCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryLabel)
+      .on('mouseover', mouseOverText)
+      .on('mouseleave', mouseLeave)
       .style('font-weight', 700)
       .html(`${comparingCountry?.label}`);
 
