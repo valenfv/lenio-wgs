@@ -552,13 +552,15 @@ function RadialChart() {
       legendYPosition += 28;
     });
 
+    const higherIsBetter = indicators[selectedIndicator].higher_is_better;
+
     svg
       .append('text')
-      .attr('x', 300)
+      .attr('x', 270)
       .attr('y', 550)
       .style('font-size', '12px')
       .attr('fill', '#FFFFFF')
-      .text('values of selected metric');
+      .text(`Values of selected metric. ${higherIsBetter ? 'Higher is better' : 'Lower is better'}`);
 
     if (selectedIndicatorData?.sortedCountries.length > 10) {
       // workaround
