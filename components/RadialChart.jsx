@@ -123,7 +123,6 @@ function RadialChart() {
   }, [highlights, comparingCountry, dispatch]);
 
   useEffect(() => {
-    console.log({ metrics });
     if (!metrics) return;
     const chartLabels = getRadialChartLabes(metrics);
     const indicatorsTypeMap = getIndicatorsTypemap();
@@ -247,6 +246,7 @@ function RadialChart() {
                   alt="${countries[comparingCountry.code]} flag"
                 />
               </div>
+              <span style="font-size: 14px; display: block; margin-bottom: 2px;">Position of selected country for metric </span>
               <strong style="font-size:14px">${
   d.target?.__data__?.indicator
 }</strong>
@@ -256,7 +256,7 @@ function RadialChart() {
     .ranking
 }
               <br>
-              <strong>Score:</strong> ${
+              <strong>Value:</strong> ${
   getTooltipData(d.target?.__data__?.indicator, metricsData).value || 'No data'
 }`,
         )
@@ -394,10 +394,9 @@ function RadialChart() {
       .append('foreignObject')
       .attr('x', -100)
       .attr('y', -225)
-      .style('width', 200)
-      .style('height', 60)
+      .attr('width', 200)
+      .attr('height', 60)
       .append('xhtml:div')
-      .append('div')
       .attr('class', radialStyles.centerLegendContainer)
       .on('mouseover', mouseOverText)
       .on('mouseleave', mouseLeave)
@@ -410,8 +409,6 @@ function RadialChart() {
       .style('font-weight', 700)
       .html(`${indicators[selectedIndicator].indicator_name}`);
 
-    //
-
     if (selectedIndicatorData) {
       selectedIndicatorData.sortedCountries = selectedIndicatorData?.sortedCountries.filter(
         (d) => d.value !== null && d.value !== undefined,
@@ -423,8 +420,8 @@ function RadialChart() {
       .append('foreignObject')
       .attr('x', -175)
       .attr('y', -125)
-      .style('width', 110)
-      .style('height', 90)
+      .attr('width', 110)
+      .attr('height', 90)
       .append('xhtml:div')
       .append('div')
       .attr('class', radialStyles.centerLegendContainer);
@@ -456,10 +453,9 @@ function RadialChart() {
       .append('foreignObject')
       .attr('x', 65)
       .attr('y', -125)
-      .style('width', 110)
-      .style('height', 90)
+      .attr('width', 110)
+      .attr('height', 90)
       .append('xhtml:div')
-      .append('div')
       .attr('class', radialStyles.centerLegendContainer);
 
     highestCountryContainer
@@ -498,8 +494,8 @@ function RadialChart() {
       .append('foreignObject')
       .attr('x', -55)
       .attr('y', -145)
-      .style('width', 110)
-      .style('height', 90)
+      .attr('width', 110)
+      .attr('height', 90)
       .append('xhtml:div')
       .append('div')
       .attr('class', radialStyles.centerLegendContainer);
@@ -555,6 +551,14 @@ function RadialChart() {
       circleYPosition += 28;
       legendYPosition += 28;
     });
+
+    svg
+      .append('text')
+      .attr('x', 300)
+      .attr('y', 550)
+      .style('font-size', '12px')
+      .attr('fill', '#FFFFFF')
+      .text('values of selected metric');
 
     if (selectedIndicatorData?.sortedCountries.length > 10) {
       // workaround
@@ -742,8 +746,7 @@ function RadialChart() {
           .attr('width', 30)
           .attr('height', 30)
           .append('xhtml:div')
-          .style('height', '30px')
-          .style('height', '30px')
+          .attr('height', '30px')
           .style('background-size', 'cover')
           .style('background-position', 'center')
           .style('border-radius', '50%')
@@ -797,13 +800,20 @@ function RadialChart() {
         width: '65%',
         height: '65%',
         display: 'flex',
-        justifyContent: 'left',
+        flexDirection: 'column',
         margin: '0 auto',
         paddingLeft: '2rem',
         position: 'relative',
       }}
     >
       <Loading loading={loading} />
+      <p style={{ color: 'white', fontSize: 14, marginBottom: 16 }}>
+        The chart shows the position of the country in ranking form different
+        standpoints. The wedges represent the various metrics available, their
+        height represent the position in the ranking of the selected country
+        within the group of countries compared against. The closer to the outer
+        ring, the better the selected country is in the ranking.
+      </p>
       <svg viewBox={`0 0 ${width + 80} ${height}`} ref={radialChart} />
     </div>
   );
