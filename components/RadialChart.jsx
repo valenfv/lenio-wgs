@@ -506,19 +506,13 @@ function RadialChart() {
       .html(`${comparingCountry?.label}`);
 
     const comparingCountryValue = selectedIndicatorData?.sortedCountries.find((c) => c.country === comparingCountry.code)?.value;
-    const abbreviatedNumber = comparingCountryValue ? abbreviateNumber(comparingCountryValue) : '-';
+    const abbreviatedNumber = comparingCountryValue ? abbreviateNumber(comparingCountryValue) : 'No data';
 
     comparingCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryValue)
       .html(
-        `${
-          abbreviateNumber(
-            selectedIndicatorData?.sortedCountries.find(
-              (c) => c.country === comparingCountry.code,
-            )?.value,
-          ) || '-'
-        }`,
+        `${abbreviatedNumber}`,
       );
 
     comparingCountryContainer
