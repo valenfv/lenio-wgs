@@ -34,6 +34,7 @@ import organizations from '../data/organizations.json';
 import bordering from '../data/bordering_countries.json';
 import radialStyles from '../styles/radial.module.css';
 import indicators from '../data/indicators.json';
+import { Loading } from './Loading';
 
 function usePrevious(state) {
   const ref = React.useRef(state || null);
@@ -422,17 +423,17 @@ function RadialChart() {
       .on('mouseover', mouseOverText)
       .on('mouseleave', mouseLeave)
       .attr('class', radialStyles.clcCountryLabel)
-      .html(`${countries[selectedIndicatorData?.sortedCountries[0].country]}`);
+      .html(`${countries[selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].country]}`);
 
     lowestCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryValue)
-      .html(`${abbreviateNumber(selectedIndicatorData?.sortedCountries[0].value) || '-'}`);
+      .html(`${abbreviateNumber(selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].value) || '-'}`);
 
     lowestCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryLegend)
-      .html('Lowest Ranked');
+      .html('Highest Ranked');
 
     const highestCountryContainer = center
       .append('foreignObject')
@@ -452,9 +453,7 @@ function RadialChart() {
       .html(
         `${
           countries[
-            selectedIndicatorData?.sortedCountries[
-              selectedIndicatorData.sortedCountries.length - 1
-            ].country
+            selectedIndicatorData?.sortedCountries[0].country
           ]
         }`,
       );
@@ -462,11 +461,11 @@ function RadialChart() {
     highestCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryValue)
-      .html(`${abbreviateNumber(selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].value) || '-'}`);
+      .html(`${abbreviateNumber(selectedIndicatorData?.sortedCountries[0].value) || '-'}`);
 
     highestCountryContainer.append('div')
       .attr('class', radialStyles.clcCountryLegend)
-      .html('Highest Ranked');
+      .html('Lowest Ranked');
 
     const comparingCountryContainer = center
       .append('foreignObject')
@@ -674,7 +673,7 @@ function RadialChart() {
         // .attr('stroke', (d) => (d.country === comparingCountry.code ? 'black' : 'transparent'))
         .attr('stroke-width', 4)
         .attr('stroke-opacity', 1)
-        .attr('opacity', 0.8)
+        .attr('opacity', 1)
         .attr('transform', 'translate(150, 500)');
 
       setTimeout(() => { // terrible workaround
@@ -729,6 +728,8 @@ function RadialChart() {
     };
   }, [comparingCountry, selectedCountry, selectedIndicator, metrics]);
 
+  const loading = useSelector((state) => state.radialChart.loading);
+
   return (
     <div
       id="radialChartContainer"
@@ -739,8 +740,10 @@ function RadialChart() {
         justifyContent: 'left',
         margin: '0 auto',
         paddingLeft: '2rem',
+        position: 'relative',
       }}
     >
+      <Loading loading={loading} />
       <svg viewBox={`0 0 ${width + 80} ${height}`} ref={radialChart} />
     </div>
   );
