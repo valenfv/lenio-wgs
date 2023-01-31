@@ -18,12 +18,13 @@ import { AddAxisButton } from './AddAxisButton';
 import { changeSelectedIndicator } from '../../slices/sidebarSlice';
 import { fetchDeltaData } from '../../slices/deltaSlice';
 import { RootState } from '../../store';
+import { INDICATORS_TYPE_MAP, LABELS_MAP } from '../../constants/radialChart';
 
 interface Cell {
   align?: string;
 }
 
-const StyledTableCell = styled(TableCell)<TableCellProps & Cell>(() => ({
+const StyledTableCell = styled(TableCell)<TableCellProps & { indicatorColor?: string } & Cell>((props) => ({
   [`&.${tableCellClasses.head}`]: {
     color: 'rgba(238, 238, 238, 0.7)',
     fontSize: '14px',
@@ -46,11 +47,12 @@ const StyledTableCell = styled(TableCell)<TableCellProps & Cell>(() => ({
     // whiteSpace: 'nowrap',
     overflowWrap: 'break-word',
     position: 'relative',
+    ...(props.indicatorColor && { borderLeft: `2px solid ${props.indicatorColor}` }),
   },
 }));
 
 // eslint-disable-next-line max-len
-const StyledTableRow = styled(TableRow)<TableRowProps & { showIndicationSelection?: boolean }>((props) => ({
+const StyledTableRow = styled(TableRow)<TableRowProps & { showIndicationSelection?: boolean, indicatorColor?: string }>((props) => ({
   [`&.${tableRowClasses.root}`]: {
     ...(props.showIndicationSelection
       ? {
@@ -138,7 +140,7 @@ const Delta: React.FC<DeltaProps> = ({ up, children }) => (
 );
 
 const TableContainer = styled('div')(() => ({
-  height: 550,
+  maxHeight: '67.5vh',
   overflowY: 'auto',
   border: '1px solid rgba(238, 238, 238, 0.25)',
   boxSizing: 'border-box',
@@ -273,54 +275,58 @@ function IndicatorsTable({ showIndicationSelection = false, onIndicatorAxisChang
           </StyledTableRow>
         </TableHead>
         <TableBody>
-          {Object.keys(indicators).map((indicator: string) => (
-            <StyledTableRow
-              key={indicator}
-              showIndicationSelection={showIndicationSelection}
-              selected={isIndicatorSelected(indicator)}
-              onClick={() => onClick(indicator)}
-            >
-              <StyledTableCell align="left">
-                {(indicators as { [index: string]: { indicator_name: string } })[indicator].indicator_name}
-                {renderAxisSelectionButton(indicator)}
-              </StyledTableCell>
-              <StyledTableCell align="left">
-                {indicatorsDelta?.[indicator]?.ranking || '-'}
-              </StyledTableCell>
-              <StyledTableCell align="left">
-                {abbreviateNumber(indicatorsDelta?.[indicator]?.values[1].value) || '-'}
-              </StyledTableCell>
-              <StyledTableCell
-                align="left"
-                onMouseEnter={() => {
-                  setOpenTooltipIndicator(indicator);
-                }}
-                onMouseLeave={() => {
-                  setOpenTooltipIndicator('');
-                }}
+          {Object.entries(indicators).map(([indicator, { indicator_name: indName }]) => {
+            const indicatorColor = INDICATORS_TYPE_MAP[LABELS_MAP[indName].type];
+
+            return (
+              <StyledTableRow
+                key={indicator}
+                showIndicationSelection={showIndicationSelection}
+                selected={isIndicatorSelected(indicator)}
+                onClick={() => onClick(indicator)}
               >
-                {indicatorsDelta?.[indicator]?.delta ? (
-                  <Delta up={indicatorsDelta?.[indicator]?.higher_is_better}>
-                    {indicatorsDelta?.[indicator]?.delta}
-                  </Delta>
-                ) : (
-                  '-'
-                )}
-                {indicatorsDelta?.[indicator]?.delta && (
-                  <Tooltip showTooltip={openTooltipIndicator === indicator}>
-                    {indicatorsDelta?.[indicator]?.values.map(({ year, value }) => (
-                      <div key={`${year}-${value}`}>
-                        {year}
-                        :
-                        {' '}
-                        {value}
-                      </div>
-                    ))}
-                  </Tooltip>
-                )}
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
+                <StyledTableCell align="left" indicatorColor={indicatorColor}>
+                  {(indicators as { [index: string]: { indicator_name: string } })[indicator].indicator_name}
+                  {renderAxisSelectionButton(indicator)}
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  {indicatorsDelta?.[indicator]?.ranking || '-'}
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  {abbreviateNumber(indicatorsDelta?.[indicator]?.values[1].value) || '-'}
+                </StyledTableCell>
+                <StyledTableCell
+                  align="left"
+                  onMouseEnter={() => {
+                    setOpenTooltipIndicator(indicator);
+                  }}
+                  onMouseLeave={() => {
+                    setOpenTooltipIndicator('');
+                  }}
+                >
+                  {indicatorsDelta?.[indicator]?.delta ? (
+                    <Delta up={indicatorsDelta?.[indicator]?.higher_is_better}>
+                      {indicatorsDelta?.[indicator]?.delta}
+                    </Delta>
+                  ) : (
+                    '-'
+                  )}
+                  {indicatorsDelta?.[indicator]?.delta && (
+                    <Tooltip showTooltip={openTooltipIndicator === indicator}>
+                      {indicatorsDelta?.[indicator]?.values.map(({ year, value }) => (
+                        <div key={`${year}-${value}`}>
+                          {year}
+                          :
+                          {' '}
+                          {value}
+                        </div>
+                      ))}
+                    </Tooltip>
+                  )}
+                </StyledTableCell>
+              </StyledTableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>
