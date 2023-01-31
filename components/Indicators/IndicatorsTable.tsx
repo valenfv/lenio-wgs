@@ -138,7 +138,7 @@ const Delta: React.FC<DeltaProps> = ({ up, children }) => (
 );
 
 const TableContainer = styled('div')(() => ({
-  height: 550,
+  maxHeight: '67.5vh',
   overflowY: 'auto',
   border: '1px solid rgba(238, 238, 238, 0.25)',
   boxSizing: 'border-box',
