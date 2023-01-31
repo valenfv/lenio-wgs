@@ -24,7 +24,8 @@ function ConfigContainer({
       <CountryPicker
         showCountries
         showWorld={false}
-        onChange={(value) => dispatch(changeComparingCountry(value))}
+        canBeNull={false}
+        onChange={(value) => value && dispatch(changeComparingCountry(value))}
         country={comparingCountry}
       />
       <CountryPicker
@@ -36,7 +37,7 @@ function ConfigContainer({
         defaultCode="WORLD"
         country={selectedCountry}
         onChange={(value) => {
-          dispatch(changeSelectedCountry(value));
+          if (value) { dispatch(changeSelectedCountry(value)); }
         }}
       />
       <IndicatorsTable

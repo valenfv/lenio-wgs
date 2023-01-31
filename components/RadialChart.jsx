@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-inner-declarations */
 /* eslint-disable prefer-spread */
 /* eslint-disable no-unsafe-optional-chaining */
@@ -122,6 +123,8 @@ function RadialChart() {
   }, [highlights, comparingCountry, dispatch]);
 
   useEffect(() => {
+    console.log({ metrics });
+    if (!metrics) return;
     const chartLabels = getRadialChartLabes(metrics);
     const indicatorsTypeMap = getIndicatorsTypemap();
 
@@ -779,7 +782,7 @@ function RadialChart() {
       d3.select(radialChart.current).select('#removeme').remove();
       tooltip.remove();
     };
-  }, [comparingCountry, selectedCountry, selectedIndicator, metrics]);
+  }, [comparingCountry, selectedIndicator, metrics]);
 
   const loading = useSelector((state) => state.radialChart.loading);
 
