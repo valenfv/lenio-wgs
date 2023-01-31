@@ -736,7 +736,6 @@ function RadialChart() {
         justifyContent: 'left',
         margin: '0 auto',
         paddingLeft: '2rem',
-        maxHeight: '80vh',
       }}
     >
       <svg viewBox={`0 0 ${width + 80} ${height}`} ref={radialChart} />
