@@ -54,15 +54,11 @@ const StyledTableCell = styled(TableCell)<TableCellProps & { indicatorColor?: st
 // eslint-disable-next-line max-len
 const StyledTableRow = styled(TableRow)<TableRowProps & { showIndicationSelection?: boolean, indicatorColor?: string }>((props) => ({
   [`&.${tableRowClasses.root}`]: {
-    ...(props.showIndicationSelection
-      ? {
-        background: props.selected ? 'hsla(0, 0%, 100%, 15%)' : 'transparent',
-        cursor: 'pointer',
-      }
-      : {}),
+    background: props.selected ? 'hsla(0, 0%, 100%, 15%)' : 'transparent',
+    cursor: props.showIndicationSelection ? 'pointer' : 'default',
   },
   [`&.${tableRowClasses.root}:hover`]: {
-    ...(props.showIndicationSelection && props.selected
+    ...(props.selected
       ? { backgroundColor: 'hsla(0, 0%, 100%, 15%)' }
       : { backgroundColor: 'rgba(25, 118, 210, 0.12)' }),
   },
@@ -254,6 +250,9 @@ function IndicatorsTable({ showIndicationSelection = false, onIndicatorAxisChang
     comparingCountry: state.sidebar.comparingCountry,
     indicatorsDelta: state.delta.indicatorsDelta,
   }));
+  const { xAxis, yAxis } = useSelector(
+    (state: { sidebar: { xAxis: string, yAxis: string } }) => state.sidebar,
+  );
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -282,7 +281,7 @@ function IndicatorsTable({ showIndicationSelection = false, onIndicatorAxisChang
               <StyledTableRow
                 key={indicator}
                 showIndicationSelection={showIndicationSelection}
-                selected={isIndicatorSelected(indicator)}
+                selected={isIndicatorSelected(indicator) || Boolean(onIndicatorAxisChange && (xAxis === indicator || yAxis === indicator))}
                 onClick={() => onClick(indicator)}
               >
                 <StyledTableCell align="left" indicatorColor={indicatorColor}>
