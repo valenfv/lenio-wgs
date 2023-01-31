@@ -9,6 +9,7 @@ const StyledContainer = styled('div')({
   background: '#000020',
   border: '1px solid rgba(238, 238, 238, 0.2)',
   marginLeft: '20px',
+  maxHeight: '80vh',
 });
 
 interface DataVisContainerPropsT {
