@@ -7,7 +7,7 @@ import { formatRadialChartData } from "../lib/helpers";
 export const fetchRankingData = createAsyncThunk(
   "radialChart/fetchRankingData",
   async ({ comparing_country, selected_countries }) => {
-    const { data } = await axios.post("/lenio-wgs/api/ranking", {
+    const { data } = await axios.post('/api/ranking', {
       comparing_country,
       selected_countries,
     });
@@ -20,7 +20,7 @@ export const fetchInsight = createAsyncThunk(
   async ({ key, dataset }) => {
     console.log("execute fetch insight");
 
-    const reply = await axios.post("/lenio-wgs/api/get-insight", {
+    const reply = await axios.post("/api/get-insight", {
       key,
       dataset,
     });
@@ -40,17 +40,25 @@ export const radialChartSlice = createSlice({
       "abf6788a66fbe940547ee9c108535f0be5b0eacbd2bec3796634f90a742202cd",
     test: null,
     insight: null,
+    loading: false,
   },
   reducers: {
     setSelectedIndicator: (state, action) => {
       state.insight = null;
       state.selectedIndicator = action.payload;
     },
+    clearInsight: (state) => {
+      state.insight = null;
+    }
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchRankingData.pending, (state) => {
+      state.loading = true;
+    });
     builder.addCase(fetchRankingData.fulfilled, (state, action) => {
       state.comparing_country = action.payload.comparing_country;
       state.metrics = action.payload.metrics;
+      state.loading = false;
     });
 
     builder.addCase(fetchInsight.fulfilled, (state, action) => {

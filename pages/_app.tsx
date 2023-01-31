@@ -1,7 +1,6 @@
 import type { AppProps } from 'next/app';
 import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
-import Head from 'next/head';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Image from 'next/image';
@@ -101,12 +100,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <Provider store={store}>
-      <Head>
-        <title>WGS - Leniolabs</title>
-      </Head>
       <StyledHeader>
         <Image
-          src="/lenio-wgs/header-logo1.png"
+          src="/header-logo1.png"
           height={48}
           width={200}
           alt="Logo Image"

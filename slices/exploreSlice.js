@@ -21,7 +21,7 @@ export const generateData = (indicatorX, indicatorY) => {
 export const fetchExploreData = createAsyncThunk(
   'explore/fetchExploreData',
   async ({ xAxis, yAxis }) => {
-    const { data } = await axios.post('/lenio-wgs/api/indicators-values', {
+    const { data } = await axios.post('/api/indicators-values', {
       indicators: [xAxis, yAxis],
     });
 

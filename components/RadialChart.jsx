@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-inner-declarations */
 /* eslint-disable prefer-spread */
 /* eslint-disable no-unsafe-optional-chaining */
@@ -36,6 +37,7 @@ import organizations from "../data/organizations.json";
 import bordering from "../data/bordering_countries.json";
 import radialStyles from "../styles/radial.module.css";
 import indicators from "../data/indicators.json";
+import { Loading } from "./Loading";
 
 function usePrevious(state) {
   const ref = React.useRef(state || null);
@@ -96,7 +98,7 @@ function RadialChart() {
     if (metrics && selectedIndicator) {
       loadInsight(selectedIndicator, metrics);
     }
-  }, [metrics, selectedIndicator]);
+  }, [metrics, selectedIndicator, loadInsight]);
 
   const width = 750;
   const height = 750;
@@ -160,6 +162,8 @@ function RadialChart() {
   }, [highlights, comparingCountry, dispatch]);
 
   useEffect(() => {
+    console.log({ insight });
+    if (!metrics) return;
     const chartLabels = getRadialChartLabes(metrics);
     const indicatorsTypeMap = getIndicatorsTypemap();
 
@@ -224,16 +228,19 @@ function RadialChart() {
         (x) => x.indicatorId === selectedIndicator
       );
 
-      return [
-        initialElement ? getElementAngle(initialElement) : 0,
-        element ? getElementAngle(element) : 0,
-      ];
+      const initialAngle = initialElement ? getElementAngle(initialElement) : 0;
+      const endAngle = element ? getElementAngle(element) : 0;
+
+      const offset = endAngle - initialAngle > 180 ? -360 : 0;
+
+      return [initialAngle, endAngle + offset];
     })();
 
     const radialElementsContainer = center
       .append("g")
       .attr("class", "radial-elements")
       // .style("transform", `rotate(${angle}deg)`)
+      .style("--rotation-duration", `${10 * Math.abs(angle[1] - angle[0])}ms`)
       .style("--initial-rotation", `${angle[0]}deg`)
       .style("--end-rotation", `${angle[1]}deg`);
 
@@ -290,7 +297,8 @@ function RadialChart() {
               }
               <br>
               <strong>Score:</strong> ${
-                getTooltipData(d.target?.__data__?.indicator, metricsData).value
+                getTooltipData(d.target?.__data__?.indicator, metricsData)
+                  .value || "No data"
               }`
         )
         .style("left", `${d.pageX}px`)
@@ -326,6 +334,7 @@ function RadialChart() {
       .on("click", (d) => {
         const { indicatorId } = d3.select(d.currentTarget).datum();
         dispatch(changeSelectedIndicator(indicatorId));
+        dispatch(clearInsight());
         // mouseLeave();
       });
 
@@ -423,11 +432,15 @@ function RadialChart() {
         .text(setEllipsis(category.label, 4).toUpperCase());
     });
 
+    console.log("mouseOverIndicatorLabel", insight);
+
     const mouseOverIndicatorLabel = function (d) {
       const tooltipHTML = `
       <div style="display: flex; flex-wrap: wrap;  max-width: 300px;">
       <b style="flex: 100%">${d.srcElement.innerText}</b>
-      ${insight ? `<br/>
+      ${
+        insight
+          ? `<br/>
       <br/>
       <span style="flex: 100%; font-weight: normal;">
         ${insight}
@@ -437,7 +450,9 @@ function RadialChart() {
       <b style="flex: 100%; margin-top: 12px; text-align: right;">
         powered by OpenAI
       </b>
-      </div>` : ""}
+      </div>`
+          : ""
+      }
       `;
 
       tooltip
@@ -481,6 +496,8 @@ function RadialChart() {
           (d) => d.value !== null && d.value !== undefined
         );
     }
+
+    // highest
     const lowestCountryContainer = center
       .append("foreignObject")
       .attr("x", -175)
@@ -496,23 +513,35 @@ function RadialChart() {
       .on("mouseover", mouseOverText)
       .on("mouseleave", mouseLeave)
       .attr("class", radialStyles.clcCountryLabel)
-      .html(`${countries[selectedIndicatorData?.sortedCountries[0].country]}`);
+      .html(
+        `${
+          countries[
+            selectedIndicatorData?.sortedCountries[
+              selectedIndicatorData.sortedCountries.length - 1
+            ].country
+          ]
+        }`
+      );
 
     lowestCountryContainer
       .append("div")
       .attr("class", radialStyles.clcCountryValue)
       .html(
         `${
-          abbreviateNumber(selectedIndicatorData?.sortedCountries[0].value) ||
-          "-"
+          abbreviateNumber(
+            selectedIndicatorData?.sortedCountries[
+              selectedIndicatorData.sortedCountries.length - 1
+            ].value
+          ) || "-"
         }`
       );
 
     lowestCountryContainer
       .append("div")
       .attr("class", radialStyles.clcCountryLegend)
-      .html("Lowest Ranked");
+      .html("Highest Ranked");
 
+    // lowest
     const highestCountryContainer = center
       .append("foreignObject")
       .attr("x", 65)
@@ -528,34 +557,24 @@ function RadialChart() {
       .attr("class", radialStyles.clcCountryLabel)
       .on("mouseover", mouseOverText)
       .on("mouseleave", mouseLeave)
-      .html(
-        `${
-          countries[
-            selectedIndicatorData?.sortedCountries[
-              selectedIndicatorData.sortedCountries.length - 1
-            ].country
-          ]
-        }`
-      );
+      .html(`${countries[selectedIndicatorData?.sortedCountries[0].country]}`);
 
     highestCountryContainer
       .append("div")
       .attr("class", radialStyles.clcCountryValue)
       .html(
         `${
-          abbreviateNumber(
-            selectedIndicatorData?.sortedCountries[
-              selectedIndicatorData.sortedCountries.length - 1
-            ].value
-          ) || "-"
+          abbreviateNumber(selectedIndicatorData?.sortedCountries[0].value) ||
+          "-"
         }`
       );
 
     highestCountryContainer
       .append("div")
       .attr("class", radialStyles.clcCountryLegend)
-      .html("Highest Ranked");
+      .html("Lowest Ranked");
 
+    // comparing
     const comparingCountryContainer = center
       .append("foreignObject")
       .attr("x", -55)
@@ -574,18 +593,17 @@ function RadialChart() {
       .style("font-weight", 700)
       .html(`${comparingCountry?.label}`);
 
+    const comparingCountryValue = selectedIndicatorData?.sortedCountries.find(
+      (c) => c.country === comparingCountry.code
+    )?.value;
+    const abbreviatedNumber = comparingCountryValue
+      ? abbreviateNumber(comparingCountryValue)
+      : "No data";
+
     comparingCountryContainer
       .append("div")
       .attr("class", radialStyles.clcCountryValue)
-      .html(
-        `${
-          abbreviateNumber(
-            selectedIndicatorData?.sortedCountries.find(
-              (c) => c.country === comparingCountry.code
-            )?.value
-          ) || "-"
-        }`
-      );
+      .html(`${abbreviatedNumber}`);
 
     comparingCountryContainer
       .append("div")
@@ -668,9 +686,10 @@ function RadialChart() {
           barData.value
         }
             `;
+        console.log({ d });
         tooltip
-          .style("left", `${d.layerX + 15}px`)
-          .style("top", `${d.layerY - 28}px`)
+          .style("left", `${d.pageX + 15}px`)
+          .style("top", `${d.pageY - 28}px`)
           .html(tooltipHtml)
           .transition()
           .duration(400)
@@ -790,13 +809,17 @@ function RadialChart() {
           "d",
           "M0.85908 23.9301C0.808557 23.8311 0.77669 23.7396 0.76432 23.6292C0.5416 21.6415 -1.20447 0.746582 23.8168 0.746582C48.8381 0.746582 47.092 21.6415 46.8693 23.6292C46.8569 23.7396 46.8251 23.8311 46.7745 23.9301L24.7074 67.1449C24.3362 67.8718 23.2974 67.8718 22.9262 67.1449L0.85908 23.9301Z"
         )
-        .attr("fill", "#59C3C3CC")
-        .attr("stroke", (d) =>
-          d.country === comparingCountry.code ? "black" : "transparent"
-        )
+        .attr("fill", () => {
+          const pinColor =
+            INDICATORS_TYPE_MAP[
+              LABELS_MAP[indicators[selectedIndicator].indicator_name].type
+            ];
+          return pinColor;
+        })
+        // .attr('stroke', (d) => (d.country === comparingCountry.code ? 'black' : 'transparent'))
         .attr("stroke-width", 4)
         .attr("stroke-opacity", 1)
-        .attr("opacity", 0.8)
+        .attr("opacity", 1)
         .attr("transform", "translate(150, 500)");
 
       setTimeout(() => {
@@ -842,30 +865,27 @@ function RadialChart() {
       //           alt="${countries[comparingCountry.code]} flag"
       //         />
 
-      svg
-        .append("g")
-        .selectAll("rect")
-        .data(
-          selectedIndicatorData?.sortedCountries
-            ? selectedIndicatorData?.sortedCountries
-            : []
-        )
-        .join("g")
-        .attr("transform", (d) => `translate(${x(d.value) - 23}, -70)`)
-        .append("path")
-        .attr(
-          "d",
-          "M0.85908 23.9301C0.808557 23.8311 0.77669 23.7396 0.76432 23.6292C0.5416 21.6415 -1.20447 0.746582 23.8168 0.746582C48.8381 0.746582 47.092 21.6415 46.8693 23.6292C46.8569 23.7396 46.8251 23.8311 46.7745 23.9301L24.7074 67.1449C24.3362 67.8718 23.2974 67.8718 22.9262 67.1449L0.85908 23.9301Z"
-        )
-        .attr("fill", "#59C3C3CC")
-        .attr("opacity", 0.8)
-        .attr("transform", "translate(150, 500)");
+      // svg
+      //   .append('g')
+      //   .selectAll('rect')
+      //   .data(selectedIndicatorData?.sortedCountries ? selectedIndicatorData?.sortedCountries : [])
+      //   .join('g')
+      //   .attr('transform', (d) => `translate(${x(d.value) - 23}, -70)`)
+      //   .append('path')
+      //   .attr('d', 'M0.85908 23.9301C0.808557 23.8311 0.77669 23.7396 0.76432 23.6292C0.5416 21.6415 -1.20447 0.746582 23.8168 0.746582C48.8381 0.746582 47.092 21.6415 46.8693 23.6292C46.8569 23.7396 46.8251 23.8311 46.7745 23.9301L24.7074 67.1449C24.3362 67.8718 23.2974 67.8718 22.9262 67.1449L0.85908 23.9301Z')
+      //   // .attr('fill', '#59C3C3CC')
+      //   .attr('fill', 'transparent')
+      //   .attr('stroke', 'white')
+      //   .attr('opacity', 1)
+      //   .attr('transform', 'translate(150, 500)');
     }
     return () => {
       d3.select(radialChart.current).select("#removeme").remove();
       tooltip.remove();
     };
-  }, [comparingCountry, selectedCountry, selectedIndicator, metrics, insight]);
+  }, [comparingCountry, selectedIndicator, metrics, insight]);
+
+  const loading = useSelector((state) => state.radialChart.loading);
 
   return (
     <div
@@ -877,8 +897,10 @@ function RadialChart() {
         justifyContent: "left",
         margin: "0 auto",
         paddingLeft: "2rem",
+        position: "relative",
       }}
     >
+      <Loading loading={loading} />
       <svg viewBox={`0 0 ${width + 80} ${height}`} ref={radialChart} />
     </div>
   );
