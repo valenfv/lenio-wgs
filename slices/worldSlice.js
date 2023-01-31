@@ -5,7 +5,7 @@ import axios from 'axios';
 export const fetchWorldData = createAsyncThunk(
   'world/fetchWorldData',
   async (indicator) => {
-    const { data } = await axios.post('/lenio-wgs/api/indicators-values', {
+    const { data } = await axios.post('/api/indicators-values', {
       indicators: [indicator],
     });
     // eslint-disable-next-line max-len

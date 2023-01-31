@@ -100,7 +100,7 @@ const TableTitle: React.FC = () => (
   <TitleContainer>
     <Image
       style={{ color: 'white' }}
-      src="/lenio-wgs/bars-icon.svg"
+      src="/bars-icon.svg"
       alt="indicators table icon"
       width="20"
       height="20"

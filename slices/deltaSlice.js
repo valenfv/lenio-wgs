@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const fetchDeltaData = createAsyncThunk('delta/fetchDeltaData', async (country) => {
-  const { data } = await axios.get('/lenio-wgs/api/delta-values', {
+  const { data } = await axios.get('/api/delta-values', {
     params: {
       country,
     },

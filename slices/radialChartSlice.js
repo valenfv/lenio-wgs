@@ -7,7 +7,7 @@ import { formatRadialChartData } from '../lib/helpers';
 export const fetchRankingData = createAsyncThunk(
   'radialChart/fetchRankingData',
   async ({ comparing_country, selected_countries }) => {
-    const { data } = await axios.post('/lenio-wgs/api/ranking', {
+    const { data } = await axios.post('/api/ranking', {
       comparing_country,
       selected_countries,
     });

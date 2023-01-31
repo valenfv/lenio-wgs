@@ -102,7 +102,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <Provider store={store}>
       <StyledHeader>
         <Image
-          src="/lenio-wgs/header-logo1.png"
+          src="/header-logo1.png"
           height={48}
           width={200}
           alt="Logo Image"

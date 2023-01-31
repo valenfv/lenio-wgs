@@ -8,7 +8,7 @@ interface SEOProps {
 }
 
 const AUTHOR = 'Karl Mosche, Alexander Carol, Leniolabs_';
-const SITE_URL = 'https://wdvp.leniolabs.com/lenio-wgs/';
+const SITE_URL = 'https://wdvp.leniolabs.com/';
 const BASE_DESCRIPTION = 'Visualization dashboard of the present future visualization.';
 const BASE_TITLE = 'World Data Visualization';
 const BASE_IMAGE = 'wdvp.png';
