@@ -486,10 +486,13 @@ function RadialChart() {
       .style('font-weight', 700)
       .html(`${comparingCountry?.label}`);
 
+    const comparingCountryValue = selectedIndicatorData?.sortedCountries.find((c) => c.country === comparingCountry.code)?.value;
+    const abbreviatedNumber = comparingCountryValue ? abbreviateNumber(comparingCountryValue) : '-';
+
     comparingCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryValue)
-      .html(`${abbreviateNumber(selectedIndicatorData?.sortedCountries.find((c) => c.country === comparingCountry.code)?.value) || '-'}`);
+      .html(`${abbreviatedNumber}`);
 
     comparingCountryContainer.append('div')
       .attr('class', radialStyles.clcCountryLegend)
@@ -731,6 +734,7 @@ function RadialChart() {
         justifyContent: 'left',
         margin: '0 auto',
         paddingLeft: '2rem',
+        maxHeight: '80vh',
       }}
     >
       <svg viewBox={`0 0 ${width + 80} ${height}`} ref={radialChart} />
