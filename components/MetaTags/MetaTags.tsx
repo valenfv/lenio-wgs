@@ -1,5 +1,5 @@
+/* eslint-disable react/require-default-props */
 import * as React from 'react';
-import Head from 'next/head';
 
 interface SEOProps {
   title?: string;
@@ -21,7 +21,7 @@ export function MetaTags(props: SEOProps) {
   const image = React.useMemo(() => {
     if (_image && _image.includes('http')) {
       return _image;
-    } else if (_image) {
+    } if (_image) {
       return `${SITE_URL}${_image}`;
     }
     return `${SITE_URL}${BASE_IMAGE}`;
