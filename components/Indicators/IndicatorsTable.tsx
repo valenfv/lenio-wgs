@@ -292,7 +292,7 @@ function IndicatorsTable({ showIndicationSelection = false, onIndicatorAxisChang
                   {indicatorsDelta?.[indicator]?.ranking || '-'}
                 </StyledTableCell>
                 <StyledTableCell align="left">
-                  {abbreviateNumber(indicatorsDelta?.[indicator]?.values[1].value) || '-'}
+                  {indicatorsDelta?.[indicator]?.values[1].value ? abbreviateNumber(indicatorsDelta?.[indicator]?.values[1].value) : 'No data'}
                 </StyledTableCell>
                 <StyledTableCell
                   align="left"
