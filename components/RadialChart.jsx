@@ -34,6 +34,7 @@ import organizations from '../data/organizations.json';
 import bordering from '../data/bordering_countries.json';
 import radialStyles from '../styles/radial.module.css';
 import indicators from '../data/indicators.json';
+import { Loading } from './Loading';
 
 function usePrevious(state) {
   const ref = React.useRef(state || null);
@@ -140,7 +141,9 @@ function RadialChart() {
       const zeroRadius = valueScale(0);
       if (metric.ranking > 0) {
         metric.innerRadius = zeroRadius;
-        metric.outerRadius = valueScale((((1 + maxRanking) - d.ranking) * outerRadiusPercentage));
+        metric.outerRadius = valueScale(
+          (1 + maxRanking - d.ranking) * outerRadiusPercentage,
+        );
       } else {
         metric.innerRadius = valueScale(d.ranking);
         metric.outerRadius = zeroRadius;
@@ -153,7 +156,8 @@ function RadialChart() {
     )[0];
 
     // chart container
-    const svg = d3.select(radialChart.current)
+    const svg = d3
+      .select(radialChart.current)
       .style('background-color', 'transparent')
       .append('g')
       .attr('id', 'removeme');
@@ -181,16 +185,19 @@ function RadialChart() {
         (x) => x.indicatorId === selectedIndicator,
       );
 
-      return [
-        initialElement ? getElementAngle(initialElement) : 0,
-        element ? getElementAngle(element) : 0,
-      ];
+      const initialAngle = initialElement ? getElementAngle(initialElement) : 0;
+      const endAngle = element ? getElementAngle(element) : 0;
+
+      const offset = endAngle - initialAngle > 180 ? -360 : 0;
+
+      return [initialAngle, endAngle + offset];
     })();
 
     const radialElementsContainer = center
       .append('g')
       .attr('class', 'radial-elements')
       // .style("transform", `rotate(${angle}deg)`)
+      .style('--rotation-duration', `${10 * Math.abs(angle[1] - angle[0])}ms`)
       .style('--initial-rotation', `${angle[0]}deg`)
       .style('--end-rotation', `${angle[1]}deg`);
 
@@ -422,17 +429,22 @@ function RadialChart() {
       .on('mouseover', mouseOverText)
       .on('mouseleave', mouseLeave)
       .attr('class', radialStyles.clcCountryLabel)
-      .html(`${countries[selectedIndicatorData?.sortedCountries[0].country]}`);
+      .html(`${countries[selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].country]}`);
 
     lowestCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryValue)
-      .html(`${abbreviateNumber(selectedIndicatorData?.sortedCountries[0].value) || '-'}`);
+      .html(
+        `${
+          abbreviateNumber(selectedIndicatorData?.sortedCountries[0].value)
+          || '-'
+        }`,
+      );
 
     lowestCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryLegend)
-      .html('Lowest Ranked');
+      .html('Highest Ranked');
 
     const highestCountryContainer = center
       .append('foreignObject')
@@ -452,9 +464,7 @@ function RadialChart() {
       .html(
         `${
           countries[
-            selectedIndicatorData?.sortedCountries[
-              selectedIndicatorData.sortedCountries.length - 1
-            ].country
+            selectedIndicatorData?.sortedCountries[0].country
           ]
         }`,
       );
@@ -462,11 +472,20 @@ function RadialChart() {
     highestCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryValue)
-      .html(`${abbreviateNumber(selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].value) || '-'}`);
+      .html(
+        `${
+          abbreviateNumber(
+            selectedIndicatorData?.sortedCountries[
+              selectedIndicatorData.sortedCountries.length - 1
+            ].value,
+          ) || '-'
+        }`,
+      );
 
-    highestCountryContainer.append('div')
+    highestCountryContainer
+      .append('div')
       .attr('class', radialStyles.clcCountryLegend)
-      .html('Highest Ranked');
+      .html('Lowest Ranked');
 
     const comparingCountryContainer = center
       .append('foreignObject')
@@ -492,9 +511,18 @@ function RadialChart() {
     comparingCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryValue)
-      .html(`${abbreviatedNumber}`);
+      .html(
+        `${
+          abbreviateNumber(
+            selectedIndicatorData?.sortedCountries.find(
+              (c) => c.country === comparingCountry.code,
+            )?.value,
+          ) || '-'
+        }`,
+      );
 
-    comparingCountryContainer.append('div')
+    comparingCountryContainer
+      .append('div')
       .attr('class', radialStyles.clcCountryLegend)
       .html('Selected Ranked');
 
@@ -504,7 +532,8 @@ function RadialChart() {
 
     // legends
     Object.keys(INDICATORS_TYPE_MAP).forEach((indicatorType) => {
-      svg.append('circle')
+      svg
+        .append('circle')
         .attr('cx', 700)
         .attr('cy', circleYPosition)
         .attr('r', 10)
@@ -552,21 +581,26 @@ function RadialChart() {
       const barChartWidth = 495;
       const barChartHeight = 300;
       const margin = {
-        top: 70, bottom: 50, left: 50, right: 85,
+        top: 70,
+        bottom: 50,
+        left: 50,
+        right: 85,
       };
 
       function onMouseEnter(d) {
-        const bar = d3.select(this)
-          .attr('stroke', 'black');
+        const bar = d3.select(this).attr('stroke', 'black');
         const barData = bar.datum();
         const tooltipHtml = `
                 <b>${countries[barData.country]}</b>
                 <hr />
-                <b>${indicators[selectedIndicator].indicator_name}: </b>${barData.value}
+                <b>${indicators[selectedIndicator].indicator_name}: </b>${
+  barData.value
+}
             `;
+        console.log({ d });
         tooltip
-          .style('left', `${d.layerX + 15}px`)
-          .style('top', `${d.layerY - 28}px`)
+          .style('left', `${d.pageX + 15}px`)
+          .style('top', `${d.pageY - 28}px`)
           .html(tooltipHtml)
           .transition()
           .duration(400)
@@ -574,8 +608,7 @@ function RadialChart() {
           .style('max-width', '300px');
       }
       function onMouseLeave() {
-        d3.select(this)
-          .attr('stroke', 'transparent');
+        d3.select(this).attr('stroke', 'transparent');
 
         tooltip.transition().duration(200).style('opacity', 0);
       }
@@ -617,10 +650,7 @@ function RadialChart() {
         .attr('fill', (d, i) => getBarColor(selectedIndicatorData?.sortedCountries, d.country, i))
         .attr('class', 'rect')
         .attr('height', (d) => y(0) - y(d.value))
-        .attr(
-          'width',
-          4,
-        )
+        .attr('width', 4)
         .style('cursor', 'pointer')
         .on('mouseover', onMouseEnter)
         .on('mouseleave', onMouseLeave)
@@ -631,35 +661,53 @@ function RadialChart() {
       const barChartWidth = 450;
       const barChartHeight = 300;
       const margin = {
-        top: 50, bottom: 50, left: 50, right: 50,
+        top: 50,
+        bottom: 50,
+        left: 50,
+        right: 50,
       };
 
-      barChart.selectAll()
+      barChart
+        .selectAll()
         .attr('width', barChartWidth - margin.left - margin.right)
         .attr('height', barChartHeight - margin.top - margin.bottom)
         .attr('viewBox', [0, 0, barChartWidth, barChartHeight]);
 
-      const {
-        xMin,
-        xMax,
-      } = {
-        xMin: Math.min.apply(Math, selectedIndicatorData?.sortedCountries.map((x) => x.value)),
-        xMax: Math.max.apply(Math, selectedIndicatorData?.sortedCountries.map((x) => x.value)),
+      const { xMin, xMax } = {
+        xMin: Math.min.apply(
+          Math,
+          selectedIndicatorData?.sortedCountries.map((x) => x.value),
+        ),
+        xMax: Math.max.apply(
+          Math,
+          selectedIndicatorData?.sortedCountries.map((x) => x.value),
+        ),
       };
 
-      const x = d3.scaleLinear()
+      const x = d3
+        .scaleLinear()
         .domain([xMin, xMax])
         .range([margin.left, barChartWidth - margin.right]);
 
-      barChart.append('g')
+      barChart
+        .append('g')
         .attr('transform', 'translate(150,500)')
         .style('color', 'hsla(0, 0%, 93%, 0.7)')
-        .call(d3.axisBottom(x).ticks(5).tickFormat((v) => abbreviateNumber(v)));
+        .call(
+          d3
+            .axisBottom(x)
+            .ticks(5)
+            .tickFormat((v) => abbreviateNumber(v)),
+        );
 
       svg
         .append('g')
         .selectAll('g')
-        .data(selectedIndicatorData?.sortedCountries ? selectedIndicatorData?.sortedCountries : [])
+        .data(
+          selectedIndicatorData?.sortedCountries
+            ? selectedIndicatorData?.sortedCountries
+            : [],
+        )
         .join('g')
         .attr('transform', (d) => `translate(${x(d.value) - 23}, -70)`)
         .append('path')
@@ -667,18 +715,26 @@ function RadialChart() {
         .attr('height', '68')
         .attr('viewBox', '0 0 47 68')
         .attr('d', 'M0.85908 23.9301C0.808557 23.8311 0.77669 23.7396 0.76432 23.6292C0.5416 21.6415 -1.20447 0.746582 23.8168 0.746582C48.8381 0.746582 47.092 21.6415 46.8693 23.6292C46.8569 23.7396 46.8251 23.8311 46.7745 23.9301L24.7074 67.1449C24.3362 67.8718 23.2974 67.8718 22.9262 67.1449L0.85908 23.9301Z')
-        .attr('fill', '#59C3C3CC')
-        .attr('stroke', (d) => (d.country === comparingCountry.code ? 'black' : 'transparent'))
+        .attr('fill', () => {
+          const pinColor = INDICATORS_TYPE_MAP[LABELS_MAP[indicators[selectedIndicator].indicator_name].type];
+          return pinColor;
+        })
+        // .attr('stroke', (d) => (d.country === comparingCountry.code ? 'black' : 'transparent'))
         .attr('stroke-width', 4)
         .attr('stroke-opacity', 1)
-        .attr('opacity', 0.8)
+        .attr('opacity', 1)
         .attr('transform', 'translate(150, 500)');
 
-      setTimeout(() => { // terrible workaround
+      setTimeout(() => {
+        // terrible workaround
         svg
           .append('g')
           .selectAll('foreignObject')
-          .data(selectedIndicatorData?.sortedCountries ? selectedIndicatorData?.sortedCountries : [])
+          .data(
+            selectedIndicatorData?.sortedCountries
+              ? selectedIndicatorData?.sortedCountries
+              : [],
+          )
           .join('foreignObject')
           .attr('x', (d) => `${x(d.value) + 136}`)
           .attr('y', '437')
@@ -692,7 +748,12 @@ function RadialChart() {
           .style('border-radius', '50%')
           .style('border', '1px solid')
           .style('box-sizing', 'border-box')
-          .style('background-image', (d) => `url(https://flagcdn.com/w40/${getCountryISO2(d.country).toLowerCase()}.png)`)
+          .style(
+            'background-image',
+            (d) => `url(https://flagcdn.com/w40/${getCountryISO2(
+              d.country,
+            ).toLowerCase()}.png)`,
+          )
           .html('&nbsp;&nbsp;');
       });
 
@@ -706,23 +767,27 @@ function RadialChart() {
       //           alt="${countries[comparingCountry.code]} flag"
       //         />
 
-      svg
-        .append('g')
-        .selectAll('rect')
-        .data(selectedIndicatorData?.sortedCountries ? selectedIndicatorData?.sortedCountries : [])
-        .join('g')
-        .attr('transform', (d) => `translate(${x(d.value) - 23}, -70)`)
-        .append('path')
-        .attr('d', 'M0.85908 23.9301C0.808557 23.8311 0.77669 23.7396 0.76432 23.6292C0.5416 21.6415 -1.20447 0.746582 23.8168 0.746582C48.8381 0.746582 47.092 21.6415 46.8693 23.6292C46.8569 23.7396 46.8251 23.8311 46.7745 23.9301L24.7074 67.1449C24.3362 67.8718 23.2974 67.8718 22.9262 67.1449L0.85908 23.9301Z')
-        .attr('fill', '#59C3C3CC')
-        .attr('opacity', 0.8)
-        .attr('transform', 'translate(150, 500)');
+      // svg
+      //   .append('g')
+      //   .selectAll('rect')
+      //   .data(selectedIndicatorData?.sortedCountries ? selectedIndicatorData?.sortedCountries : [])
+      //   .join('g')
+      //   .attr('transform', (d) => `translate(${x(d.value) - 23}, -70)`)
+      //   .append('path')
+      //   .attr('d', 'M0.85908 23.9301C0.808557 23.8311 0.77669 23.7396 0.76432 23.6292C0.5416 21.6415 -1.20447 0.746582 23.8168 0.746582C48.8381 0.746582 47.092 21.6415 46.8693 23.6292C46.8569 23.7396 46.8251 23.8311 46.7745 23.9301L24.7074 67.1449C24.3362 67.8718 23.2974 67.8718 22.9262 67.1449L0.85908 23.9301Z')
+      //   // .attr('fill', '#59C3C3CC')
+      //   .attr('fill', 'transparent')
+      //   .attr('stroke', 'white')
+      //   .attr('opacity', 1)
+      //   .attr('transform', 'translate(150, 500)');
     }
     return () => {
       d3.select(radialChart.current).select('#removeme').remove();
       tooltip.remove();
     };
   }, [comparingCountry, selectedCountry, selectedIndicator, metrics]);
+
+  const loading = useSelector((state) => state.radialChart.loading);
 
   return (
     <div
@@ -734,9 +799,10 @@ function RadialChart() {
         justifyContent: 'left',
         margin: '0 auto',
         paddingLeft: '2rem',
-        maxHeight: '80vh',
+        position: 'relative',
       }}
     >
+      <Loading loading={loading} />
       <svg viewBox={`0 0 ${width + 80} ${height}`} ref={radialChart} />
     </div>
   );

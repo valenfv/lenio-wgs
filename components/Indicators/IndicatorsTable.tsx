@@ -47,22 +47,18 @@ const StyledTableCell = styled(TableCell)<TableCellProps & { indicatorColor?: st
     // whiteSpace: 'nowrap',
     overflowWrap: 'break-word',
     position: 'relative',
-    ...(props.indicatorColor && { borderLeft: `2px solid ${props.indicatorColor}` })
+    ...(props.indicatorColor && { borderLeft: `2px solid ${props.indicatorColor}` }),
   },
 }));
 
 // eslint-disable-next-line max-len
 const StyledTableRow = styled(TableRow)<TableRowProps & { showIndicationSelection?: boolean }>((props) => ({
   [`&.${tableRowClasses.root}`]: {
-    ...(props.showIndicationSelection
-      ? {
-        background: props.selected ? 'hsla(0, 0%, 100%, 15%)' : 'transparent',
-        cursor: 'pointer',
-      }
-      : {}),
+    background: props.selected ? 'hsla(0, 0%, 100%, 15%)' : 'transparent',
+    cursor: props.showIndicationSelection ? 'pointer' : 'default',
   },
   [`&.${tableRowClasses.root}:hover`]: {
-    ...(props.showIndicationSelection && props.selected
+    ...(props.selected
       ? { backgroundColor: 'hsla(0, 0%, 100%, 15%)' }
       : { backgroundColor: 'rgba(25, 118, 210, 0.12)' }),
   },
@@ -254,6 +250,9 @@ function IndicatorsTable({ showIndicationSelection = false, onIndicatorAxisChang
     comparingCountry: state.sidebar.comparingCountry,
     indicatorsDelta: state.delta.indicatorsDelta,
   }));
+  const { xAxis, yAxis } = useSelector(
+    (state: { sidebar: { xAxis: string, yAxis: string } }) => state.sidebar,
+  );
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -275,7 +274,6 @@ function IndicatorsTable({ showIndicationSelection = false, onIndicatorAxisChang
           </StyledTableRow>
         </TableHead>
         <TableBody>
-
           {Object.entries(indicators).map(([indicator, { indicator_name: indName }]) => {
             const indicatorColor = INDICATORS_TYPE_MAP[LABELS_MAP[indName].type];
 
@@ -283,7 +281,7 @@ function IndicatorsTable({ showIndicationSelection = false, onIndicatorAxisChang
               <StyledTableRow
                 key={indicator}
                 showIndicationSelection={showIndicationSelection}
-                selected={isIndicatorSelected(indicator)}
+                selected={isIndicatorSelected(indicator) || Boolean(onIndicatorAxisChange && (xAxis === indicator || yAxis === indicator))}
                 onClick={() => onClick(indicator)}
               >
                 <StyledTableCell align="left" indicatorColor={indicatorColor}>
@@ -294,7 +292,7 @@ function IndicatorsTable({ showIndicationSelection = false, onIndicatorAxisChang
                   {indicatorsDelta?.[indicator]?.ranking || '-'}
                 </StyledTableCell>
                 <StyledTableCell align="left">
-                  {indicatorsDelta?.[indicator]?.values[1].value || '-'}
+                  {abbreviateNumber(indicatorsDelta?.[indicator]?.values[1].value) || '-'}
                 </StyledTableCell>
                 <StyledTableCell
                   align="left"
@@ -326,7 +324,7 @@ function IndicatorsTable({ showIndicationSelection = false, onIndicatorAxisChang
                   )}
                 </StyledTableCell>
               </StyledTableRow>
-            )
+            );
           })}
         </TableBody>
       </Table>

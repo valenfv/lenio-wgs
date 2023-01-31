@@ -22,6 +22,7 @@ export const radialChartSlice = createSlice({
     metrics: null,
     selectedIndicator: 'abf6788a66fbe940547ee9c108535f0be5b0eacbd2bec3796634f90a742202cd',
     test: null,
+    loading: false,
   },
   reducers: {
     setSelectedIndicator: (state, action) => {
@@ -29,9 +30,13 @@ export const radialChartSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchRankingData.pending, (state) => {
+      state.loading = true;
+    });
     builder.addCase(fetchRankingData.fulfilled, (state, action) => {
       state.comparing_country = action.payload.comparing_country;
       state.metrics = action.payload.metrics;
+      state.loading = false;
     });
   },
 });
