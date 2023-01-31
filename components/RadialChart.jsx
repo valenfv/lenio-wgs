@@ -361,7 +361,7 @@ function RadialChart() {
       }
     };
 
-    categories.forEach((category, index) => {
+    categories.forEach((category) => {
       const text = radialElementsContainer
         .append('text')
         .attr('x', 7)
