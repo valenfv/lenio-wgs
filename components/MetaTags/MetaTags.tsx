@@ -8,10 +8,10 @@ interface SEOProps {
 }
 
 const AUTHOR = 'Karl Mosche, Alexander Carol, Leniolabs_';
-const SITE_URL = 'https://wdvp.leniolabs.com/lenio-wgs';
+const SITE_URL = 'https://wdvp.leniolabs.com/lenio-wgs/';
 const BASE_DESCRIPTION = 'Visualization dashboard of the present future visualization.';
 const BASE_TITLE = 'World Data Visualization';
-const BASE_IMAGE = 'https://wdvp.leniolabs.com/lenio-wgs/wdvp.png';
+const BASE_IMAGE = 'wdvp.png';
 
 export function MetaTags(props: SEOProps) {
   const { title: _title, description: _description, image: _image } = props;
@@ -36,7 +36,6 @@ export function MetaTags(props: SEOProps) {
     <>
       <title>{title}</title>
       <meta name="description" content={description} />
-      <link rel="icon" href={`${SITE_URL}rocket_launch.png`} />
       <meta name="canonical" content={SITE_URL} />
 
       <meta name="type" property="og:type" content="website" />
