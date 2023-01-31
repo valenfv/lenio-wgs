@@ -92,7 +92,7 @@ export function CountryPicker({
   showNeighboring = false,
   showWorld = false,
   defaultCode = 'USA',
-  country
+  country,
 }) {
   const pickerItems = React.useMemo(() => getPickerItems({
     showOrganizations, showCountries, showNeighboring, showWorld,
@@ -128,7 +128,7 @@ export function CountryPicker({
           {option.label}
         </StyledBox>
       )}
-      isOptionEqualToValue={(opt, value) => opt.code === value.code }
+      isOptionEqualToValue={(opt, value) => opt.code === value.code}
       renderInput={(params) => (
         <StyledTextField
           {...params}

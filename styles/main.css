@@ -1,3 +1,25 @@
 * {
-    font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes initialRender {
+  0% {
+    transform: rotate(var(--initial-rotation));
+  }
+
+  100% {
+    transform: rotate(var(--end-rotation));
+  }
+}
+
+.radial-elements {
+  --initial-rotation: 0deg;
+  --end-rotation: 0deg;
+
+  transform: rotate(var(--end-rotation));
+
+  animation-name: initialRender;
+  animation-direction: normal;
+  animation-iteration-count: 1;
+  animation-duration: 1s;
 }
