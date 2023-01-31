@@ -11,7 +11,7 @@ export const fetchWorldData = createAsyncThunk(
     // eslint-disable-next-line max-len
     const iHib = data.find((countryData) => Boolean(countryData[indicator]))[indicator].higher_is_better;
     const rankedData = data.filter((d) => d[indicator])
-      .sort((a, b) => (iHib
+      .sort((a, b) => (!iHib
         ? a[indicator].value - b[indicator].value
         : b[indicator].value - a[indicator].value));
     const serializedData = rankedData.reduce((prev, curr, index) => ({
@@ -21,7 +21,7 @@ export const fetchWorldData = createAsyncThunk(
         position: index + 1,
       },
     }), {});
-    return serializedData;
+    return { serializedData, iHib };
   },
 );
 
@@ -30,13 +30,15 @@ export const worldSlice = createSlice({
   initialState: {
     data: null,
     loading: false,
+    iHib: false,
   },
   extraReducers: (builder) => {
     builder.addCase(fetchWorldData.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(fetchWorldData.fulfilled, (state, action) => {
-      state.data = action.payload;
+      state.data = action.payload.serializedData;
+      state.iHib = action.payload.iHib;
       state.loading = false;
     });
   },

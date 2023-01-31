@@ -23,12 +23,14 @@ export default function World() {
     selectedCountry,
     comparingCountry,
     loading,
+    iHib,
   } = useSelector((store) => ({
     selectedIndicator: store.sidebar.selectedIndicator,
     worldData: store.world.data,
     selectedCountry: store.sidebar.selectedCountry,
     comparingCountry: store.sidebar.comparingCountry,
     loading: store.world.loading,
+    iHib: store.world.iHib,
   }));
 
   const highlights = React.useMemo(() => {
@@ -51,6 +53,7 @@ export default function World() {
     selectedIndicator,
     highlights,
     comparingCountry,
+    iHib,
   });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return (

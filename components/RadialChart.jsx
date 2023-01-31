@@ -667,7 +667,10 @@ function RadialChart() {
         .attr('height', '68')
         .attr('viewBox', '0 0 47 68')
         .attr('d', 'M0.85908 23.9301C0.808557 23.8311 0.77669 23.7396 0.76432 23.6292C0.5416 21.6415 -1.20447 0.746582 23.8168 0.746582C48.8381 0.746582 47.092 21.6415 46.8693 23.6292C46.8569 23.7396 46.8251 23.8311 46.7745 23.9301L24.7074 67.1449C24.3362 67.8718 23.2974 67.8718 22.9262 67.1449L0.85908 23.9301Z')
-        .attr('fill', '#59C3C3CC')
+        .attr('fill', (d) => {
+          const pinColor = INDICATORS_TYPE_MAP[LABELS_MAP[indicators[selectedIndicator].indicator_name].type];
+          return pinColor;
+        })
         // .attr('stroke', (d) => (d.country === comparingCountry.code ? 'black' : 'transparent'))
         .attr('stroke-width', 4)
         .attr('stroke-opacity', 1)
