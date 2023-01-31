@@ -296,6 +296,10 @@ function RadialChart() {
       .attr('border', '1px solid #EEEEEE');
 
     const g = center
+      .append('g')
+      // .style('--initial-rotation', `${angle[0]}deg`)
+      // .style('--end-rotation', `${angle[1]}deg`)
+      .attr('transform', `rotate(${angle[0]})`)
       .selectAll('.radial-axis-g')
       .data(chartLabels)
       .join('g')
