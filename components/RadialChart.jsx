@@ -162,7 +162,6 @@ function RadialChart() {
   }, [highlights, comparingCountry, dispatch]);
 
   useEffect(() => {
-    console.log({ insight });
     if (!metrics) return;
     const chartLabels = getRadialChartLabes(metrics);
     const indicatorsTypeMap = getIndicatorsTypemap();
@@ -432,8 +431,6 @@ function RadialChart() {
         .text(setEllipsis(category.label, 4).toUpperCase());
     });
 
-    console.log("mouseOverIndicatorLabel", insight);
-
     const mouseOverIndicatorLabel = function (d) {
       const tooltipHTML = `
       <div style="display: flex; flex-wrap: wrap;  max-width: 300px;">
@@ -686,7 +683,6 @@ function RadialChart() {
           barData.value
         }
             `;
-        console.log({ d });
         tooltip
           .style("left", `${d.pageX + 15}px`)
           .style("top", `${d.pageY - 28}px`)

@@ -18,8 +18,6 @@ export const fetchRankingData = createAsyncThunk(
 export const fetchInsight = createAsyncThunk(
   "radialChart/fetchInsight",
   async ({ key, dataset }) => {
-    console.log("execute fetch insight");
-
     const reply = await axios.post("/api/get-insight", {
       key,
       dataset,

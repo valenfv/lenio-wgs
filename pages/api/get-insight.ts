@@ -20,7 +20,6 @@ export default async function handler(
   )
     .then((reply) => reply.json())
     .catch((err) => {
-      console.log(err);
       return false;
     });
 
