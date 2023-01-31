@@ -52,7 +52,7 @@ const StyledTableCell = styled(TableCell)<TableCellProps & { indicatorColor?: st
 }));
 
 // eslint-disable-next-line max-len
-const StyledTableRow = styled(TableRow)<TableRowProps & { showIndicationSelection?: boolean, indicatorColor?: string }>((props) => ({
+const StyledTableRow = styled(TableRow)<TableRowProps & { showIndicationSelection?: boolean }>((props) => ({
   [`&.${tableRowClasses.root}`]: {
     background: props.selected ? 'hsla(0, 0%, 100%, 15%)' : 'transparent',
     cursor: props.showIndicationSelection ? 'pointer' : 'default',
