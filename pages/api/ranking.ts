@@ -46,7 +46,7 @@ export default function rankingHandler(req: NextApiRequest, res: NextApiResponse
   const { selected_countries } = body;
   switch (method) {
     case 'POST':
-      if (!comparing_country || !selected_countries?.length) {
+      if (!comparing_country || !selected_countries) {
         res.status(403).end('Wrong format');
         break;
       }
