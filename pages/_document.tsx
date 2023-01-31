@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Html, Head, Main, NextScript,
 } from 'next/document';
+import { MetaTags } from '../components/MetaTags';
 
 export default function Document() {
   return (
@@ -16,6 +17,7 @@ export default function Document() {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
+        <MetaTags title="World Data Visualization" />
       </Head>
       <body style={{
         boxSizing: 'border-box',
