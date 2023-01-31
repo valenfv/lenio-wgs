@@ -364,7 +364,7 @@ function RadialChart() {
     categories.forEach((category, index) => {
       const text = radialElementsContainer
         .append('text')
-        .attr('x', index > 8 && index < 27 ? 75 : 7)
+        .attr('x', 7)
         .attr('dy', 13);
 
       text
@@ -373,7 +373,7 @@ function RadialChart() {
         .attr('font-family', 'Monstserrat')
         .style('text-anchor', 'start')
         .attr('font-weight', 700)
-        .attr('font-size', '12px')
+        .attr('font-size', '10px')
         .attr('overflow', 'ellipsis')
         .attr('xlink:href', `#${category.label}`)
         .text(setEllipsis(category.label, 4).toUpperCase());
