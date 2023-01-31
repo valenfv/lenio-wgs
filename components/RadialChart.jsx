@@ -257,7 +257,7 @@ function RadialChart() {
 }
               <br>
               <strong>Score:</strong> ${
-  getTooltipData(d.target?.__data__?.indicator, metricsData).value
+  getTooltipData(d.target?.__data__?.indicator, metricsData).value || 'No data'
 }`,
         )
         .style('left', `${d.pageX}px`)
