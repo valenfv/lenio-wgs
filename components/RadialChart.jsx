@@ -1,3 +1,4 @@
+/* eslint-disable no-inner-declarations */
 /* eslint-disable prefer-spread */
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable no-shadow */
@@ -522,7 +523,7 @@ function RadialChart() {
       legendYPosition += 28;
     });
 
-    if (selectedIndicatorData?.sortedCountries.length > 7) {
+    if (selectedIndicatorData?.sortedCountries.length > 10) {
       // workaround
       const duplicateCount = selectedIndicatorData?.sortedCountries.reduce(
         (prev, curr) => (curr.country === comparingCountry.code ? prev + 1 : prev),
@@ -538,9 +539,11 @@ function RadialChart() {
           [],
         );
       }
-      selectedIndicatorData.sortedCountries = selectedIndicatorData?.sortedCountries.filter(
-        (country, i) => country.country === comparingCountry.code || i % 4 === 0,
-      );
+      if (selectedIndicatorData?.sortedCountries.length > 21) {
+        selectedIndicatorData.sortedCountries = selectedIndicatorData?.sortedCountries.filter(
+          (country, i) => country.country === comparingCountry.code || i % 4 === 0,
+        );
+      }
       // Bar Chart
       const barChart = svg.append('g');
       const barChartWidth = 495;
@@ -548,6 +551,31 @@ function RadialChart() {
       const margin = {
         top: 70, bottom: 50, left: 50, right: 85,
       };
+
+      function onMouseEnter(d) {
+        const bar = d3.select(this)
+          .attr('stroke', 'black');
+        const barData = bar.datum();
+        const tooltipHtml = `
+                <b>${countries[barData.country]}</b>
+                <hr />
+                <b>${indicators[selectedIndicator].indicator_name}: </b>${barData.value}
+            `;
+        tooltip
+          .style('left', `${d.layerX + 15}px`)
+          .style('top', `${d.layerY - 28}px`)
+          .html(tooltipHtml)
+          .transition()
+          .duration(400)
+          .style('opacity', 1)
+          .style('max-width', '300px');
+      }
+      function onMouseLeave() {
+        d3.select(this)
+          .attr('stroke', 'transparent');
+
+        tooltip.transition().duration(200).style('opacity', 0);
+      }
 
       barChart
         .selectAll()
@@ -588,11 +616,14 @@ function RadialChart() {
         .attr('height', (d) => y(0) - y(d.value))
         .attr(
           'width',
-          selectedIndicatorData?.sortedCountries.length < 21 ? 14 : 4,
+          4,
         )
+        .style('cursor', 'pointer')
+        .on('mouseover', onMouseEnter)
+        .on('mouseleave', onMouseLeave)
         .attr('transform', `translate(${getBarXPosition()}, 280)`);
     } else {
-      // Bar Chart
+      // countries Chart
       const barChart = svg.append('g');
       const barChartWidth = 450;
       const barChartHeight = 300;
