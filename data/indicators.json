@@ -177,7 +177,7 @@
 		"source_URL": "https://data.worldbank.org/indicator/EG.ELC.ACCS.ZS",
 		"id": "9bee96b1b89d7d9e7d562af0d64753876cbba914c3bfe1c52cbae20f64bba0f3",
 		"data_type": "percent",
-		"higher_is_better": false
+		"higher_is_better": true
 	},
 	"b6b1399d53ea98896cfedc7ec550f5b7bac495c84f75e9d3eeb10fc54e036cb7": {
 		"indicator_name": "POLITICAL RIGHTS SCORE",
