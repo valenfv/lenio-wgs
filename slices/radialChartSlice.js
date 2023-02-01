@@ -15,18 +15,47 @@ export const fetchRankingData = createAsyncThunk(
   },
 );
 
+export const fetchInsight = createAsyncThunk(
+  'radialChart/fetchInsight',
+  async ({
+    key,
+    dataset,
+    comparingCountry,
+    selectedOrg,
+    indicator,
+  }) => {
+    const reply = await axios.post('/api/get-insight', {
+      key,
+      dataset,
+      comparingCountry,
+      selectedOrg,
+      indicator,
+    });
+
+    return {
+      insight: reply.data.description,
+    };
+  },
+);
+
 export const radialChartSlice = createSlice({
   name: 'radialChart',
   initialState: {
     comparing_country: '',
     metrics: null,
-    selectedIndicator: 'abf6788a66fbe940547ee9c108535f0be5b0eacbd2bec3796634f90a742202cd',
+    selectedIndicator:
+      'abf6788a66fbe940547ee9c108535f0be5b0eacbd2bec3796634f90a742202cd',
     test: null,
+    insight: null,
     loading: false,
   },
   reducers: {
     setSelectedIndicator: (state, action) => {
+      state.insight = null;
       state.selectedIndicator = action.payload;
+    },
+    clearInsight: (state) => {
+      state.insight = null;
     },
   },
   extraReducers: (builder) => {
@@ -38,11 +67,13 @@ export const radialChartSlice = createSlice({
       state.metrics = action.payload.metrics;
       state.loading = false;
     });
+
+    builder.addCase(fetchInsight.fulfilled, (state, action) => {
+      state.insight = action.payload.insight;
+    });
   },
 });
 
 export default radialChartSlice.reducer;
 
-export const {
-  setSelectedIndicator,
-} = radialChartSlice.actions;
+export const { setSelectedIndicator, clearInsight } = radialChartSlice.actions;
