@@ -14,7 +14,6 @@ import bordering from '../data/bordering_countries.json';
 import organizations from '../data/organizations.json';
 import { Loading } from '../components/Loading';
 
-
 export default function World() {
   const svgRef = React.useRef(null);
   const dispatch = useDispatch();
@@ -91,14 +90,6 @@ export default function World() {
       <Loading loading={loading} />
       <div className={styles.map} ref={svgRef} />
       <div className={styles.colorPallete}>
-        <div style={{
-          marginBottom: '15px',
-        }}
-        >
-          {iHib
-            ? 'Highest is better'
-            : 'Lowest is better'}
-        </div>
         {renderLegend()}
       </div>
     </div>
