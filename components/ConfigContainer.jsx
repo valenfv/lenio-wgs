@@ -32,6 +32,7 @@ function ConfigContainer({
       <CountryPicker
         label="Select an organization to compare"
         canBeNull={false}
+        label="Select an organization to compare against"
         showNeighboring
         showOrganizations
         showWorld
