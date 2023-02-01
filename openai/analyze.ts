@@ -1,22 +1,15 @@
-import { getPrompt, queryCompletionsChat } from "./completions";
-import { promptTemplate } from "./template";
-import { IDataset, IGPTResponse } from "./types";
+import { getPrompt, queryCompletionsChat } from './completions';
+import { promptTemplate } from './template';
+import { IDataset, IGPTResponse } from './types';
 
 function stringifyData(data: IDataset) {
-  const header =
-    Object.keys(data[0]).reduce((lr, l) => {
-      return lr + "\t" + l;
-    }, "") + "\n";
+  const header = `${Object.keys(data[0]).reduce((lr, l) => `${lr}\t${l}`, '')}\n`;
 
-  return data.reduce((r, row) => {
-    return (
-      r +
-      Object.keys(row).reduce((lr, l) => {
-        return lr + "\t" + row[l];
-      }, "") +
-      "\n"
-    );
-  }, header);
+  return data.reduce((r, row) => (
+    `${r
+      + Object.keys(row).reduce((lr, l) => `${lr}\t${row[l]}`, '')
+    }\n`
+  ), header);
 }
 
 export function generatePrompt(dataset: IDataset) {
@@ -33,24 +26,28 @@ ${stringifyData(dataset)}
 
 export async function generateInsight(
   dataset: IDataset,
-  apikey: string
+  comparingCountry: string,
+  selectedOrg: string,
+  indicator: string,
+  apikey: string,
 ): Promise<{ reply: IGPTResponse; response: string }> {
   const response = await queryCompletionsChat(
     promptTemplate,
     [
       {
         question: `
+  This dataset compares the country of ${comparingCountry} against the members of the ${selectedOrg} taking into account the values the metric called "${indicator}".
   This is the dataset:
 
-  ${stringifyData(dataset.slice(0, 10))}
+  ${stringifyData(dataset)}
           `,
       },
     ],
-    { apikey }
+    { apikey },
   );
 
   return {
-    response: response?.[0].reply || "",
-    reply: JSON.parse(response?.[0].reply || "") as IGPTResponse,
+    response: response?.[0].reply || '',
+    reply: JSON.parse(response?.[0].reply || '') as IGPTResponse,
   };
 }

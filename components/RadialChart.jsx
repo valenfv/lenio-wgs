@@ -71,22 +71,35 @@ function RadialChart() {
   const previousSelectedIndicator = usePrevious(selectedIndicator);
 
   const loadInsight = React.useMemo(() => {
+    function getInitials(word) {
+      return word.replaceAll('\n', '').split(' ').filter((x) => x).map((d) => d[0])
+        .join('')
+        .slice(0, 10);
+    }
+
     let timeout;
-    return (selectedIndicator, metrics) => {
+    return (selectedIndicator, metrics, comparingCountry, selectedCountry) => {
       clearTimeout(timeout);
+      dispatch(clearInsight());
+
       timeout = setTimeout(() => {
         const currentMetric = metrics.find(
           (metric) => metric.indicatorId === selectedIndicator,
         );
         const dataset = currentMetric.sortedCountries
+          .filter(
+            (d) => d.value !== null && d.value !== undefined,
+          )
           .map((row) => ({
             'Country name': row.country_name,
             [currentMetric.indicator]: row.value,
-          }))
-          .filter((row) => row[currentMetric.indicator]);
+          }));
         dispatch(
           fetchInsight({
-            key: selectedIndicator,
+            key: `${comparingCountry.code}-${getInitials(selectedCountry.code)}-${getInitials(indicators[selectedIndicator].indicator_name)}`,
+            comparingCountry: comparingCountry.label,
+            selectedOrg: selectedCountry.code,
+            indicator: indicators[selectedIndicator].indicator_name,
             dataset,
           }),
         );
@@ -96,9 +109,9 @@ function RadialChart() {
 
   React.useEffect(() => {
     if (metrics && selectedIndicator) {
-      loadInsight(selectedIndicator, metrics);
+      loadInsight(selectedIndicator, metrics, comparingCountry, selectedCountry);
     }
-  }, [metrics, selectedIndicator, loadInsight]);
+  }, [metrics, selectedIndicator, loadInsight, comparingCountry, selectedCountry]);
 
   const width = 750;
   const height = 750;
@@ -331,7 +344,6 @@ function RadialChart() {
       .on('click', (d) => {
         const { indicatorId } = d3.select(d.currentTarget).datum();
         dispatch(changeSelectedIndicator(indicatorId));
-        dispatch(clearInsight());
         // mouseLeave();
       });
 
@@ -432,7 +444,7 @@ function RadialChart() {
     const mouseOverIndicatorLabel = function (d) {
       const tooltipHTML = `
       <div style="display: flex; flex-wrap: wrap;  max-width: 300px;">
-      <b style="flex: 100%">${d.srcElement.innerText}</b>
+      <b style="flex: 100%">${indicators[selectedIndicator].indicator_name}</b>
       ${
   insight
     ? `<br/>
@@ -446,7 +458,11 @@ function RadialChart() {
         powered by OpenAI
       </b>
       </div>`
-    : ''
+    : `
+    <div style="display: flex; justify-content: center; flex: 100%;">
+    <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 0 100 100" overflow="visible" fill="#03035e"><defs> <circle id="inline" r="6" cx="20" cy="50"></circle>    </defs> <use xlink:href="#inline" x="0"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="20"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.25s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="40"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.5s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="60"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.75s" repeatCount="indefinite"></animate>    </use> </svg>
+    </div>
+    `
 }
       `;
 
@@ -471,16 +487,18 @@ function RadialChart() {
       .attr('height', 60)
       .append('xhtml:div')
       .attr('class', radialStyles.centerLegendContainer)
-      .on('mouseleave', mouseLeave)
-      .on('mouseover', mouseOverIndicatorLabel)
       .style('width', '172px')
       .style('height', '60px');
-
+    // indicatorLabel.append('div').style('position', 'relative').html('<svg xmlns=\'http://www.w3.org/2000/svg\' style="position: absolute; right: 40px;" width="22" viewBox=\'0 0 100 100\' fill=\'none\' stroke=\'#FFF\' stroke-width=\'8\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><circle cx="50" cy="50" r="40"/> <line x1="50" y1="30" x2="50" y2="52" />   <circle cx="50" cy="68" r="1"/></svg> ');
     indicatorLabel
       .append('div')
       .attr('class', radialStyles.indicatorLabel)
       .style('font-weight', 700)
-      .html(`${indicators[selectedIndicator].indicator_name}`);
+      .html(`
+<svg xmlns='http://www.w3.org/2000/svg' style="cursor: pointer; transform: rotate(180deg)" width="15" viewBox='0 0 100 100' fill='none' stroke='#FFF' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'><circle cx="50" cy="50" r="40"/> <line x1="50" y1="30" x2="50" y2="52" />   <circle cx="50" cy="68" r="1"/></svg>
+      ${indicators[selectedIndicator].indicator_name}`)
+      .on('mouseleave', mouseLeave)
+      .on('mouseover', mouseOverIndicatorLabel);
 
     if (selectedIndicatorData) {
       selectedIndicatorData.sortedCountries = selectedIndicatorData?.sortedCountries.filter(
@@ -876,6 +894,15 @@ function RadialChart() {
   }, [comparingCountry, selectedIndicator, metrics, insight]);
 
   const loading = useSelector((state) => state.radialChart.loading);
+  const infoIcon = (
+    <svg xmlns="http://www.w3.org/2000/svg" style={{ cursor: 'pointer', transform: 'rotate(180deg)' }} width="15" viewBox="0 0 100 100" fill="none" stroke="#FFF" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="50" cy="50" r="40" />
+      {' '}
+      <line x1="50" y1="30" x2="50" y2="52" />
+      {' '}
+      <circle cx="50" cy="68" r="1" />
+    </svg>
+  );
 
   return (
     <div
@@ -895,6 +922,15 @@ function RadialChart() {
         The chart presents countries’ indicator ranking relative to all countries, neighbors, and
         various organizations. Each wedge represents an indicator with better rankings towards
         the outer ring.
+        {' '}
+        <b>Insights powered by OpenAI</b>
+        {' '}
+        <i>
+          (hover
+          {' '}
+          {infoIcon}
+          )
+        </i>
       </p>
       <svg viewBox={`0 0 ${width + 80} ${height}`} ref={radialChart} />
     </div>

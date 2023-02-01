@@ -1,41 +1,50 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable camelcase */
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { formatRadialChartData } from "../lib/helpers";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
+import { formatRadialChartData } from '../lib/helpers';
 
 export const fetchRankingData = createAsyncThunk(
-  "radialChart/fetchRankingData",
+  'radialChart/fetchRankingData',
   async ({ comparing_country, selected_countries }) => {
     const { data } = await axios.post('/api/ranking', {
       comparing_country,
       selected_countries,
     });
     return formatRadialChartData(data);
-  }
+  },
 );
 
 export const fetchInsight = createAsyncThunk(
-  "radialChart/fetchInsight",
-  async ({ key, dataset }) => {
-    const reply = await axios.post("/api/get-insight", {
+  'radialChart/fetchInsight',
+  async ({
+    key,
+    dataset,
+    comparingCountry,
+    selectedOrg,
+    indicator,
+  }) => {
+    const reply = await axios.post('/api/get-insight', {
       key,
       dataset,
+      comparingCountry,
+      selectedOrg,
+      indicator,
     });
 
     return {
       insight: reply.data.description,
     };
-  }
+  },
 );
 
 export const radialChartSlice = createSlice({
-  name: "radialChart",
+  name: 'radialChart',
   initialState: {
-    comparing_country: "",
+    comparing_country: '',
     metrics: null,
     selectedIndicator:
-      "abf6788a66fbe940547ee9c108535f0be5b0eacbd2bec3796634f90a742202cd",
+      'abf6788a66fbe940547ee9c108535f0be5b0eacbd2bec3796634f90a742202cd',
     test: null,
     insight: null,
     loading: false,
@@ -47,7 +56,7 @@ export const radialChartSlice = createSlice({
     },
     clearInsight: (state) => {
       state.insight = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchRankingData.pending, (state) => {
