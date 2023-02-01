@@ -22,6 +22,7 @@ function ConfigContainer({
   return (
     <StyledContainer>
       <CountryPicker
+        label="Select a country"
         showCountries
         showWorld={false}
         canBeNull={false}
@@ -29,6 +30,7 @@ function ConfigContainer({
         country={comparingCountry}
       />
       <CountryPicker
+        label="Select an organization to compare"
         canBeNull={false}
         showNeighboring
         showOrganizations

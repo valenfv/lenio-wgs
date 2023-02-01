@@ -37,6 +37,14 @@ import radialStyles from '../styles/radial.module.css';
 import indicators from '../data/indicators.json';
 import { Loading } from './Loading';
 
+const TEXTS = {
+  WORLD: 'Ranking for the selected country versus all countries.',
+  NEIGHBORS: 'Ranking for the selected country versus 11 neighboring countries.',
+  DEFAULT: 'The chart presents countries’ indicator ranking relative to all countries, neighbors, and various organizations. Each wedge represents an indicator with better rankings towards the outer ring.',
+  Organizations: 'Ranking for the selected country versus 120 countries in selected organization.',
+  sampled: '148 countries ranking sampled down to 50.',
+};
+
 function usePrevious(state) {
   const ref = React.useRef(state || null);
 
@@ -235,29 +243,24 @@ function RadialChart() {
                 <img
                   loading="lazy"
                   width="30"
-                  src=${
-  getTooltipData(d.target?.__data__?.indicator, metricsData)
-    .imgSrc
-}
-                  srcSet=${
-  getTooltipData(d.target?.__data__?.indicator, metricsData)
-    .imgSrcSet
-}
+                  src=${getTooltipData(d.target?.__data__?.indicator, metricsData)
+            .imgSrc
+          }
+                  srcSet=${getTooltipData(d.target?.__data__?.indicator, metricsData)
+            .imgSrcSet
+          }
                   alt="${countries[comparingCountry.code]} flag"
                 />
               </div>
-              <strong style="font-size:14px">${
-  d.target?.__data__?.indicator
-}</strong>
+              <strong style="font-size:14px">${d.target?.__data__?.indicator
+          }</strong>
               <br>
-              <strong>Ranking:</strong> ${
-  getTooltipData(d.target?.__data__?.indicator, metricsData)
-    .ranking
-}
+              <strong>Ranking:</strong> ${getTooltipData(d.target?.__data__?.indicator, metricsData)
+            .ranking
+          }
               <br>
-              <strong>Value:</strong> ${
-  getTooltipData(d.target?.__data__?.indicator, metricsData).value || 'No data'
-}`,
+              <strong>Value:</strong> ${getTooltipData(d.target?.__data__?.indicator, metricsData).value || 'No data'
+          }`,
         )
         .style('left', `${d.pageX}px`)
         .style('top', `${d.pageY - 28}px`)
@@ -414,6 +417,30 @@ function RadialChart() {
       );
     }
 
+    const showMetricInfo = function (d) {
+      // console.log(selectedCountry)
+      // console.log(metrics[0].sortedCountries.length - 1)
+      const amountPerGroup = metrics[0].sortedCountries.length - 1
+      let message = ""
+      if (selectedCountry.code === "NEIGHBORS")
+        message = `Ranking for the selected country versus ${amountPerGroup} neighboring countries.`
+      else if (selectedCountry.group === "Organizations")
+        message = `Ranking for the selected country versus ${amountPerGroup} countries in selected organization.`
+      else
+        message = "Ranking for the selected country versus all countries."
+      // const message = TEXTS[selectedCountry.code] || TEXTS[selectedCountry.group] || "No information provided"
+      tooltip
+        .text(message)
+        .style('left', `${d.pageX}px`)
+        .style('top', `${d.pageY - 28}px`)
+        .style('z-index', '2')
+        .style('background', 'white')
+        .style('position', 'absolute')
+        .style('font-weight', 'bold')
+        .transition()
+        .duration(400)
+        .style('opacity', 1);
+    }
     // highest
     const lowestCountryContainer = center
       .append('foreignObject')
@@ -423,7 +450,8 @@ function RadialChart() {
       .attr('height', 90)
       .append('xhtml:div')
       .append('div')
-      .attr('class', radialStyles.centerLegendContainer);
+      .attr('class', radialStyles.centerLegendContainer)
+
 
     lowestCountryContainer
       .append('div')
@@ -436,16 +464,16 @@ function RadialChart() {
       .append('div')
       .attr('class', radialStyles.clcCountryValue)
       .html(
-        `${
-          abbreviateNumber(selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].value)
-          || '-'
+        `${abbreviateNumber(selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].value)
+        || '-'
         }`,
       );
+
 
     lowestCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryLegend)
-      .html('Worst Ranked');
+      .html('Highest Ranked');
 
     // lowest
     const highestCountryContainer = center
@@ -455,7 +483,7 @@ function RadialChart() {
       .attr('width', 110)
       .attr('height', 90)
       .append('xhtml:div')
-      .attr('class', radialStyles.centerLegendContainer);
+      .attr('class', radialStyles.centerLegendContainer)
 
     highestCountryContainer
       .append('div')
@@ -463,10 +491,9 @@ function RadialChart() {
       .on('mouseover', mouseOverText)
       .on('mouseleave', mouseLeave)
       .html(
-        `${
-          countries[
-            selectedIndicatorData?.sortedCountries[0].country
-          ]
+        `${countries[
+        selectedIndicatorData?.sortedCountries[0].country
+        ]
         }`,
       );
 
@@ -474,19 +501,18 @@ function RadialChart() {
       .append('div')
       .attr('class', radialStyles.clcCountryValue)
       .html(
-        `${
-          abbreviateNumber(
-            selectedIndicatorData?.sortedCountries[
-              0
-            ].value,
-          ) || '-'
+        `${abbreviateNumber(
+          selectedIndicatorData?.sortedCountries[
+            0
+          ].value,
+        ) || '-'
         }`,
       );
 
     highestCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryLegend)
-      .html('Best Ranked');
+      .html('Lowest Ranked');
 
     // comparing
     const comparingCountryContainer = center
@@ -497,7 +523,8 @@ function RadialChart() {
       .attr('height', 90)
       .append('xhtml:div')
       .append('div')
-      .attr('class', radialStyles.centerLegendContainer);
+      .attr('class', radialStyles.centerLegendContainer)
+      .on("mouseover", showMetricInfo)
 
     comparingCountryContainer
       .append('div')
@@ -599,9 +626,8 @@ function RadialChart() {
         const tooltipHtml = `
                 <b>${countries[barData.country]}</b>
                 <hr />
-                <b>${indicators[selectedIndicator].indicator_name}: </b>${
-  barData.value
-}
+                <b>${indicators[selectedIndicator].indicator_name}: </b>${barData.value
+          }
             `;
         console.log({ d });
         tooltip
@@ -747,8 +773,7 @@ function RadialChart() {
           .attr('width', 30)
           .attr('height', 30)
           .append('xhtml:div')
-          .style('height', '30px')
-          .style('width', '30px')
+          .attr('height', '30px')
           .style('background-size', 'cover')
           .style('background-position', 'center')
           .style('border-radius', '50%')
@@ -795,6 +820,8 @@ function RadialChart() {
 
   const loading = useSelector((state) => state.radialChart.loading);
 
+  const message = TEXTS.DEFAULT;
+
   return (
     <div
       id="radialChartContainer"
@@ -810,9 +837,7 @@ function RadialChart() {
     >
       <Loading loading={loading} />
       <p style={{ color: 'white', fontSize: 14, marginBottom: 16 }}>
-        The chart presents countries’ indicator ranking relative to all countries, neighbors, and
-        various organizations. Each wedge represents an indicator with better rankings towards
-        the outer ring.
+        {message}
       </p>
       <svg viewBox={`0 0 ${width + 80} ${height}`} ref={radialChart} />
     </div>
