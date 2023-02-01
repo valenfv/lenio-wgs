@@ -22,8 +22,27 @@ div.tooltip {
 
 .background {
   fill: transparent;
-  pointer-evens: all;
+  pointer-events: all;
 }
+
+.colorPallete {
+  background-color: #fff;
+  position: absolute;
+  bottom: 130px;
+  left: 370px;
+  width: 90px;
+  padding: 5px 10px;
+  border-radius: 2px;
+}
+
+.colorPallete > div:not(:first-child) {
+  margin-top: 6px;
+} 
+.colorPallete > div {
+  display: flex;
+  align-items: center;
+} 
+
 
 .world {
   transform-origin: center;
