@@ -73,6 +73,7 @@ function NavButton({ text, selected, onClick }: NavButtonProps) {
 }
 
 const NavButtonsContainer = styled('div')(() => ({
+  marginRight: '25px',
   marginLeft: 'auto',
   '& button': {
     borderRadius: 0,

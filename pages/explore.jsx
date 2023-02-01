@@ -64,8 +64,31 @@ export default function World() {
       </div>
       <DataVisContainer>
         <Loading loading={loading} />
-        <div ref={svgRef} className={styles.chart} />
-
+        <div className={styles.content}>
+          <div ref={svgRef} className={styles.chart} />
+          <div className={styles.legends}>
+            <div className={styles.legend}>
+              <svg viewBox="-5 -5 10 10" width={10} height={10}>
+                <circle r="5" style={{ fill: 'rgb(105, 179, 162)' }} />
+              </svg>
+              Countries from
+              {' '}
+              {selectedCountry.label || ''}
+            </div>
+            <div className={styles.legend}>
+              <svg viewBox="-6 -6 12 12" width={12} height={12}>
+                <circle r="5" style={{ fill: 'rgb(0, 0, 0)', opacity: '0.5' }} stroke="rgb(255, 255, 255)" />
+              </svg>
+              All other countries
+            </div>
+            <div className={styles.legend}>
+              <svg viewBox="0 0 12 12" width={12} height={12}>
+                <rect width="8" height="8" x={4} y={-4} style={{ fill: 'rgb(105, 179, 162)', transform: 'rotate(45deg)' }} stroke="rgba(0, 0, 0, 0)" />
+              </svg>
+              {comparingCountry.label || ''}
+            </div>
+          </div>
+        </div>
       </DataVisContainer>
     </div>
   );
