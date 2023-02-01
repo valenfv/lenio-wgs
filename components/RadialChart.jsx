@@ -288,23 +288,23 @@ function RadialChart() {
                   loading="lazy"
                   width="30"
                   src=${getTooltipData(d.target?.__data__?.indicator, metricsData)
-    .imgSrc
-}
+            .imgSrc
+          }
                   srcSet=${getTooltipData(d.target?.__data__?.indicator, metricsData)
-    .imgSrcSet
-}
+            .imgSrcSet
+          }
                   alt="${countries[comparingCountry.code]} flag"
                 />
               </div>
               <strong style="font-size:14px">${d.target?.__data__?.indicator
-}</strong>
+          }</strong>
               <br>
               <strong>Ranking:</strong> ${getTooltipData(d.target?.__data__?.indicator, metricsData)
-    .ranking
-}
+            .ranking
+          }
               <br>
               <strong>Value:</strong> ${getTooltipData(d.target?.__data__?.indicator, metricsData).value || 'No data'
-}`,
+          }`,
         )
         .style('left', `${d.pageX}px`)
         .style('top', `${d.pageY - 28}px`)
@@ -441,7 +441,7 @@ function RadialChart() {
       <div style="display: flex; flex-wrap: wrap;  max-width: 300px;">
       <b style="flex: 100%">${indicators[selectedIndicator].indicator_name}</b>
       ${insight
-    ? `<br/>
+          ? `<br/>
       <br/>
       <span style="flex: 100%; font-weight: normal;">
         ${insight}
@@ -452,12 +452,12 @@ function RadialChart() {
         powered by OpenAI
       </b>
       </div>`
-    : `
+          : `
     <div style="display: flex; justify-content: center; flex: 100%;">
     <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 0 100 100" overflow="visible" fill="#03035e"><defs> <circle id="inline" r="6" cx="20" cy="50"></circle>    </defs> <use xlink:href="#inline" x="0"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="20"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.25s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="40"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.5s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="60"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.75s" repeatCount="indefinite"></animate>    </use> </svg>
     </div>
     `
-}
+        }
       `;
 
       tooltip
@@ -539,9 +539,9 @@ function RadialChart() {
       .attr('class', radialStyles.clcCountryLabel)
       .html(
         `${countries[
-          selectedIndicatorData?.sortedCountries[
-            selectedIndicatorData.sortedCountries.length - 1
-          ].country
+        selectedIndicatorData?.sortedCountries[
+          selectedIndicatorData.sortedCountries.length - 1
+        ].country
         ]
         }`,
       );
@@ -561,7 +561,7 @@ function RadialChart() {
     lowestCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryLegend)
-      .html('Highest Ranked');
+      .html('Worst Ranked');
 
     // lowest
     const highestCountryContainer = center
@@ -592,7 +592,7 @@ function RadialChart() {
     highestCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryLegend)
-      .html('Lowest Ranked');
+      .html('Best Ranked');
 
     // comparing
     const comparingCountryContainer = center
@@ -709,7 +709,7 @@ function RadialChart() {
                 <b>${countries[barData.country]}</b>
                 <hr />
                 <b>${indicators[selectedIndicator].indicator_name}: </b>${barData.value
-}
+          }
             `;
         tooltip
           .style('left', `${d.pageX + 15}px`)
