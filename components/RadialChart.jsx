@@ -11,7 +11,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import getCountryISO2 from 'country-iso-3-to-2';
 import * as d3 from 'd3';
 import { abbreviateNumber } from 'js-abbreviation-number';
-import { fetchRankingData } from '../slices/radialChartSlice';
+import {
+  clearInsight,
+  fetchInsight,
+  fetchRankingData,
+} from '../slices/radialChartSlice';
 import { changeSelectedIndicator } from '../slices/sidebarSlice';
 import {
   COUNTRIES_QTY,
@@ -51,15 +55,63 @@ function RadialChart() {
   const radialChart = useRef();
   const dispatch = useDispatch();
   const {
-    comparingCountry, selectedCountry, selectedIndicator, metrics,
+    comparingCountry,
+    selectedCountry,
+    selectedIndicator,
+    metrics,
+    insight,
   } = useSelector((state) => ({
     comparingCountry: state.sidebar.comparingCountry,
     selectedCountry: state.sidebar.selectedCountry,
     selectedIndicator: state.sidebar.selectedIndicator,
     metrics: state.radialChart.metrics,
+    insight: state.radialChart.insight,
   }));
 
   const previousSelectedIndicator = usePrevious(selectedIndicator);
+
+  const loadInsight = React.useMemo(() => {
+    function getInitials(word) {
+      return word.replaceAll('\n', '').split(' ').filter((x) => x).map((d) => d[0])
+        .join('')
+        .slice(0, 10);
+    }
+
+    let timeout;
+    return (selectedIndicator, metrics, comparingCountry, selectedCountry) => {
+      clearTimeout(timeout);
+      dispatch(clearInsight());
+
+      timeout = setTimeout(() => {
+        const currentMetric = metrics.find(
+          (metric) => metric.indicatorId === selectedIndicator,
+        );
+        const dataset = currentMetric.sortedCountries
+          .filter(
+            (d) => d.value !== null && d.value !== undefined,
+          )
+          .map((row) => ({
+            'Country name': row.country_name,
+            [currentMetric.indicator]: row.value,
+          }));
+        dispatch(
+          fetchInsight({
+            key: `${comparingCountry.code}-${getInitials(selectedCountry.code)}-${getInitials(indicators[selectedIndicator].indicator_name)}`,
+            comparingCountry: comparingCountry.label,
+            selectedOrg: selectedCountry.code,
+            indicator: indicators[selectedIndicator].indicator_name,
+            dataset,
+          }),
+        );
+      }, 500);
+    };
+  }, [dispatch]);
+
+  React.useEffect(() => {
+    if (metrics && selectedIndicator) {
+      loadInsight(selectedIndicator, metrics, comparingCountry, selectedCountry);
+    }
+  }, [metrics, selectedIndicator, loadInsight, comparingCountry, selectedCountry]);
 
   const width = 750;
   const height = 750;
@@ -389,6 +441,44 @@ function RadialChart() {
         .text(setEllipsis(category.label, 4).toUpperCase());
     });
 
+    const mouseOverIndicatorLabel = function (d) {
+      const tooltipHTML = `
+      <div style="display: flex; flex-wrap: wrap;  max-width: 300px;">
+      <b style="flex: 100%">${indicators[selectedIndicator].indicator_name}</b>
+      ${
+  insight
+    ? `<br/>
+      <br/>
+      <span style="flex: 100%; font-weight: normal;">
+        ${insight}
+      </span>
+      <br/>
+      <br/>
+      <b style="flex: 100%; margin-top: 12px; text-align: right;">
+        powered by OpenAI
+      </b>
+      </div>`
+    : `
+    <div style="display: flex; justify-content: center; flex: 100%;">
+    <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 0 100 100" overflow="visible" fill="#03035e"><defs> <circle id="inline" r="6" cx="20" cy="50"></circle>    </defs> <use xlink:href="#inline" x="0"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="20"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.25s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="40"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.5s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="60"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.75s" repeatCount="indefinite"></animate>    </use> </svg>
+    </div>
+    `
+}
+      `;
+
+      tooltip
+        .html(tooltipHTML)
+        .style('left', `${d.pageX}px`)
+        .style('top', `${d.pageY - 28}px`)
+        .style('z-index', '2')
+        .style('background', 'white')
+        .style('position', 'absolute')
+        .style('font-weight', 'bold')
+        .transition()
+        .duration(400)
+        .style('opacity', 1);
+    };
+
     const indicatorLabel = center
       .append('foreignObject')
       .attr('x', -86)
@@ -397,16 +487,18 @@ function RadialChart() {
       .attr('height', 60)
       .append('xhtml:div')
       .attr('class', radialStyles.centerLegendContainer)
-      .on('mouseover', mouseOverText)
-      .on('mouseleave', mouseLeave)
       .style('width', '172px')
       .style('height', '60px');
-
+    // indicatorLabel.append('div').style('position', 'relative').html('<svg xmlns=\'http://www.w3.org/2000/svg\' style="position: absolute; right: 40px;" width="22" viewBox=\'0 0 100 100\' fill=\'none\' stroke=\'#FFF\' stroke-width=\'8\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><circle cx="50" cy="50" r="40"/> <line x1="50" y1="30" x2="50" y2="52" />   <circle cx="50" cy="68" r="1"/></svg> ');
     indicatorLabel
       .append('div')
       .attr('class', radialStyles.indicatorLabel)
       .style('font-weight', 700)
-      .html(`${indicators[selectedIndicator].indicator_name}`);
+      .html(`
+<svg xmlns='http://www.w3.org/2000/svg' style="cursor: pointer; transform: rotate(180deg)" width="15" viewBox='0 0 100 100' fill='none' stroke='#FFF' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'><circle cx="50" cy="50" r="40"/> <line x1="50" y1="30" x2="50" y2="52" />   <circle cx="50" cy="68" r="1"/></svg>
+      ${indicators[selectedIndicator].indicator_name}`)
+      .on('mouseleave', mouseLeave)
+      .on('mouseover', mouseOverIndicatorLabel);
 
     if (selectedIndicatorData) {
       selectedIndicatorData.sortedCountries = selectedIndicatorData?.sortedCountries.filter(
@@ -430,15 +522,26 @@ function RadialChart() {
       .on('mouseover', mouseOverText)
       .on('mouseleave', mouseLeave)
       .attr('class', radialStyles.clcCountryLabel)
-      .html(`${countries[selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].country]}`);
+      .html(
+        `${
+          countries[
+            selectedIndicatorData?.sortedCountries[
+              selectedIndicatorData.sortedCountries.length - 1
+            ].country
+          ]
+        }`,
+      );
 
     lowestCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryValue)
       .html(
         `${
-          abbreviateNumber(selectedIndicatorData?.sortedCountries[selectedIndicatorData.sortedCountries.length - 1].value)
-          || '-'
+          abbreviateNumber(
+            selectedIndicatorData?.sortedCountries[
+              selectedIndicatorData.sortedCountries.length - 1
+            ].value,
+          ) || '-'
         }`,
       );
 
@@ -462,24 +565,15 @@ function RadialChart() {
       .attr('class', radialStyles.clcCountryLabel)
       .on('mouseover', mouseOverText)
       .on('mouseleave', mouseLeave)
-      .html(
-        `${
-          countries[
-            selectedIndicatorData?.sortedCountries[0].country
-          ]
-        }`,
-      );
+      .html(`${countries[selectedIndicatorData?.sortedCountries[0].country]}`);
 
     highestCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryValue)
       .html(
         `${
-          abbreviateNumber(
-            selectedIndicatorData?.sortedCountries[
-              0
-            ].value,
-          ) || '-'
+          abbreviateNumber(selectedIndicatorData?.sortedCountries[0].value)
+          || '-'
         }`,
       );
 
@@ -507,15 +601,17 @@ function RadialChart() {
       .style('font-weight', 700)
       .html(`${comparingCountry?.label}`);
 
-    const comparingCountryValue = selectedIndicatorData?.sortedCountries.find((c) => c.country === comparingCountry.code)?.value;
-    const abbreviatedNumber = comparingCountryValue ? abbreviateNumber(comparingCountryValue) : 'No data';
+    const comparingCountryValue = selectedIndicatorData?.sortedCountries.find(
+      (c) => c.country === comparingCountry.code,
+    )?.value;
+    const abbreviatedNumber = comparingCountryValue
+      ? abbreviateNumber(comparingCountryValue)
+      : 'No data';
 
     comparingCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryValue)
-      .html(
-        `${abbreviatedNumber}`,
-      );
+      .html(`${abbreviatedNumber}`);
 
     comparingCountryContainer
       .append('div')
@@ -603,7 +699,6 @@ function RadialChart() {
   barData.value
 }
             `;
-        console.log({ d });
         tooltip
           .style('left', `${d.pageX + 15}px`)
           .style('top', `${d.pageY - 28}px`)
@@ -722,9 +817,14 @@ function RadialChart() {
         .attr('width', '47')
         .attr('height', '68')
         .attr('viewBox', '0 0 47 68')
-        .attr('d', 'M0.85908 23.9301C0.808557 23.8311 0.77669 23.7396 0.76432 23.6292C0.5416 21.6415 -1.20447 0.746582 23.8168 0.746582C48.8381 0.746582 47.092 21.6415 46.8693 23.6292C46.8569 23.7396 46.8251 23.8311 46.7745 23.9301L24.7074 67.1449C24.3362 67.8718 23.2974 67.8718 22.9262 67.1449L0.85908 23.9301Z')
+        .attr(
+          'd',
+          'M0.85908 23.9301C0.808557 23.8311 0.77669 23.7396 0.76432 23.6292C0.5416 21.6415 -1.20447 0.746582 23.8168 0.746582C48.8381 0.746582 47.092 21.6415 46.8693 23.6292C46.8569 23.7396 46.8251 23.8311 46.7745 23.9301L24.7074 67.1449C24.3362 67.8718 23.2974 67.8718 22.9262 67.1449L0.85908 23.9301Z',
+        )
         .attr('fill', () => {
-          const pinColor = INDICATORS_TYPE_MAP[LABELS_MAP[indicators[selectedIndicator].indicator_name].type];
+          const pinColor = INDICATORS_TYPE_MAP[
+            LABELS_MAP[indicators[selectedIndicator].indicator_name].type
+          ];
           return pinColor;
         })
         // .attr('stroke', (d) => (d.country === comparingCountry.code ? 'black' : 'transparent'))
@@ -793,9 +893,18 @@ function RadialChart() {
       d3.select(radialChart.current).select('#removeme').remove();
       tooltip.remove();
     };
-  }, [comparingCountry, selectedIndicator, metrics]);
+  }, [comparingCountry, selectedIndicator, metrics, insight]);
 
   const loading = useSelector((state) => state.radialChart.loading);
+  const infoIcon = (
+    <svg xmlns="http://www.w3.org/2000/svg" style={{ cursor: 'pointer', transform: 'rotate(180deg)' }} width="15" viewBox="0 0 100 100" fill="none" stroke="#FFF" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="50" cy="50" r="40" />
+      {' '}
+      <line x1="50" y1="30" x2="50" y2="52" />
+      {' '}
+      <circle cx="50" cy="68" r="1" />
+    </svg>
+  );
 
   return (
     <div
@@ -815,6 +924,15 @@ function RadialChart() {
         The chart presents countries’ indicator ranking relative to all countries, neighbors, and
         various organizations. Each wedge represents an indicator with better rankings towards
         the outer ring.
+        {' '}
+        <b>Insights powered by OpenAI</b>
+        {' '}
+        <i>
+          (hover
+          {' '}
+          {infoIcon}
+          )
+        </i>
       </p>
       <svg viewBox={`0 0 ${width + 80} ${height}`} ref={radialChart} />
     </div>
