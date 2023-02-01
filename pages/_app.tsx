@@ -30,8 +30,8 @@ const StyledHeader = styled('header')({
     },
     '&:last-child': {
       height: '40px',
-    }
-  }
+    },
+  },
 });
 
 const StyledButton = styled(Button)({
@@ -150,6 +150,6 @@ export default function App({ Component, pageProps }: AppProps) {
       <main style={{ padding: '0 50px 50px 25px' }}>
         <Component {...pageProps} />
       </main>
-    </Provider >
+    </Provider>
   );
 }
