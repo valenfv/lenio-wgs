@@ -7,7 +7,7 @@ import {
 import { ConfigContainer } from '../components/ConfigContainer';
 import {
   useChoropleth,
-  colors as choroplethColors
+  colors as choroplethColors,
 } from '../lib/useChoropleth';
 import { fetchWorldData } from '../slices/worldSlice';
 import bordering from '../data/bordering_countries.json';
