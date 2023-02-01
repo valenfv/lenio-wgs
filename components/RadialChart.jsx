@@ -392,15 +392,15 @@ function RadialChart() {
 
     const indicatorLabel = center
       .append('foreignObject')
-      .attr('x', -100)
+      .attr('x', -86)
       .attr('y', -225)
-      .attr('width', 200)
+      .attr('width', 172)
       .attr('height', 60)
       .append('xhtml:div')
       .attr('class', radialStyles.centerLegendContainer)
       .on('mouseover', mouseOverText)
       .on('mouseleave', mouseLeave)
-      .style('width', '200px')
+      .style('width', '172px')
       .style('height', '60px');
 
     indicatorLabel
