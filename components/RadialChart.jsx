@@ -41,14 +41,6 @@ import radialStyles from '../styles/radial.module.css';
 import indicators from '../data/indicators.json';
 import { Loading } from './Loading';
 
-const TEXTS = {
-  WORLD: 'Ranking for the selected country versus all countries.',
-  NEIGHBORS: 'Ranking for the selected country versus 11 neighboring countries.',
-  DEFAULT: 'The chart presents countries’ indicator ranking relative to all countries, neighbors, and various organizations. Each wedge represents an indicator with better rankings towards the outer ring.',
-  Organizations: 'Ranking for the selected country versus 120 countries in selected organization.',
-  sampled: '148 countries ranking sampled down to 50.',
-};
-
 function usePrevious(state) {
   const ref = React.useRef(state || null);
 
@@ -296,23 +288,23 @@ function RadialChart() {
                   loading="lazy"
                   width="30"
                   src=${getTooltipData(d.target?.__data__?.indicator, metricsData)
-            .imgSrc
-          }
+    .imgSrc
+}
                   srcSet=${getTooltipData(d.target?.__data__?.indicator, metricsData)
-            .imgSrcSet
-          }
+    .imgSrcSet
+}
                   alt="${countries[comparingCountry.code]} flag"
                 />
               </div>
               <strong style="font-size:14px">${d.target?.__data__?.indicator
-          }</strong>
+}</strong>
               <br>
               <strong>Ranking:</strong> ${getTooltipData(d.target?.__data__?.indicator, metricsData)
-            .ranking
-          }
+    .ranking
+}
               <br>
               <strong>Value:</strong> ${getTooltipData(d.target?.__data__?.indicator, metricsData).value || 'No data'
-          }`,
+}`,
         )
         .style('left', `${d.pageX}px`)
         .style('top', `${d.pageY - 28}px`)
@@ -449,7 +441,7 @@ function RadialChart() {
       <div style="display: flex; flex-wrap: wrap;  max-width: 300px;">
       <b style="flex: 100%">${indicators[selectedIndicator].indicator_name}</b>
       ${insight
-          ? `<br/>
+    ? `<br/>
       <br/>
       <span style="flex: 100%; font-weight: normal;">
         ${insight}
@@ -460,12 +452,12 @@ function RadialChart() {
         powered by OpenAI
       </b>
       </div>`
-          : `
+    : `
     <div style="display: flex; justify-content: center; flex: 100%;">
     <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 0 100 100" overflow="visible" fill="#03035e"><defs> <circle id="inline" r="6" cx="20" cy="50"></circle>    </defs> <use xlink:href="#inline" x="0"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="20"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.25s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="40"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.5s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="60"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.75s" repeatCount="indefinite"></animate>    </use> </svg>
     </div>
     `
-        }
+}
       `;
 
       tooltip
@@ -511,14 +503,11 @@ function RadialChart() {
     const showMetricInfo = function (d) {
       // console.log(selectedCountry)
       // console.log(metrics[0].sortedCountries.length - 1)
-      const amountPerGroup = metrics[0].sortedCountries.length - 1
-      let message = ""
-      if (selectedCountry.code === "NEIGHBORS")
-        message = `Ranking for the selected country versus ${amountPerGroup} neighboring countries.`
-      else if (selectedCountry.group === "Organizations")
-        message = `Ranking for the selected country versus ${amountPerGroup} countries in selected organization.`
-      else
-        message = "Ranking for the selected country versus all countries."
+      const amountPerGroup = metrics[0].sortedCountries.length - 1;
+      let message = '';
+      if (selectedCountry.code === 'NEIGHBORS') message = `Ranking for the selected country versus ${amountPerGroup} neighboring countries.`;
+      else if (selectedCountry.group === 'Organizations') message = `Ranking for the selected country versus ${amountPerGroup} countries in selected organization.`;
+      else message = 'Ranking for the selected country versus all countries.';
       // const message = TEXTS[selectedCountry.code] || TEXTS[selectedCountry.group] || "No information provided"
       tooltip
         .text(message)
@@ -531,7 +520,7 @@ function RadialChart() {
         .transition()
         .duration(400)
         .style('opacity', 1);
-    }
+    };
     // highest
     const lowestCountryContainer = center
       .append('foreignObject')
@@ -541,8 +530,7 @@ function RadialChart() {
       .attr('height', 90)
       .append('xhtml:div')
       .append('div')
-      .attr('class', radialStyles.centerLegendContainer)
-
+      .attr('class', radialStyles.centerLegendContainer);
 
     lowestCountryContainer
       .append('div')
@@ -551,9 +539,9 @@ function RadialChart() {
       .attr('class', radialStyles.clcCountryLabel)
       .html(
         `${countries[
-        selectedIndicatorData?.sortedCountries[
-          selectedIndicatorData.sortedCountries.length - 1
-        ].country
+          selectedIndicatorData?.sortedCountries[
+            selectedIndicatorData.sortedCountries.length - 1
+          ].country
         ]
         }`,
       );
@@ -570,7 +558,6 @@ function RadialChart() {
         }`,
       );
 
-
     lowestCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryLegend)
@@ -584,7 +571,7 @@ function RadialChart() {
       .attr('width', 110)
       .attr('height', 90)
       .append('xhtml:div')
-      .attr('class', radialStyles.centerLegendContainer)
+      .attr('class', radialStyles.centerLegendContainer);
 
     highestCountryContainer
       .append('div')
@@ -617,7 +604,7 @@ function RadialChart() {
       .append('xhtml:div')
       .append('div')
       .attr('class', radialStyles.centerLegendContainer)
-      .on("mouseover", showMetricInfo)
+      .on('mouseover', showMetricInfo);
 
     comparingCountryContainer
       .append('div')
@@ -722,7 +709,7 @@ function RadialChart() {
                 <b>${countries[barData.country]}</b>
                 <hr />
                 <b>${indicators[selectedIndicator].indicator_name}: </b>${barData.value
-          }
+}
             `;
         tooltip
           .style('left', `${d.pageX + 15}px`)
@@ -929,8 +916,6 @@ function RadialChart() {
       <circle cx="50" cy="68" r="1" />
     </svg>
   );
-
-  const message = TEXTS.DEFAULT;
 
   return (
     <div
