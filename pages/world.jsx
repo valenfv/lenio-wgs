@@ -14,7 +14,6 @@ import bordering from '../data/bordering_countries.json';
 import organizations from '../data/organizations.json';
 import { Loading } from '../components/Loading';
 
-
 export default function World() {
   const svgRef = React.useRef(null);
   const dispatch = useDispatch();
@@ -59,7 +58,7 @@ export default function World() {
   });
   function renderLegend() {
     const colors = !iHib ? choroplethColors : choroplethColors.reverse();
-    let colorText = ['Best', 'Good', 'Bad', 'Worst'];
+    let colorText = ['1st Quarter', '2nd Quarter', '3rd Quarter', '4th Quarter'];
     colorText = !iHib ? colorText : colorText.reverse();
 
     return [...colors, '#808080'].map((backgroundColor, index) => (
