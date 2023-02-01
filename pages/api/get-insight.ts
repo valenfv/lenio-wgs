@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-case-declarations */
 /* eslint-disable camelcase */
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -20,7 +21,7 @@ export default async function handler(
     `https://kzkgagh296.execute-api.us-east-1.amazonaws.com/prod/designs/${key}-test1`,
   )
     .then((reply) => reply.json())
-    .catch((err) => false);
+    .catch(() => false);
 
   if (insightExists) {
     return res.status(200).send({ description: insightExists.design });
