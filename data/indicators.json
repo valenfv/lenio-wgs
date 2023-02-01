@@ -186,7 +186,7 @@
 		"source_URL": "https://freedomhouse.org/reports/publication-archives",
 		"id": "b6b1399d53ea98896cfedc7ec550f5b7bac495c84f75e9d3eeb10fc54e036cb7",
 		"data_type": "numeric",
-		"higher_is_better": false
+		"higher_is_better": true
 	},
 	"e727157830356e026bf060e58d46ffe9228093c3f26529016dce727ff61a5d73": {
 		"indicator_name": "CIVIL LIBERTIES SCORE",
