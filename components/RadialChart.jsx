@@ -246,7 +246,6 @@ function RadialChart() {
                   alt="${countries[comparingCountry.code]} flag"
                 />
               </div>
-              <span style="font-size: 14px; display: block; margin-bottom: 2px;">Position of selected country for metric </span>
               <strong style="font-size:14px">${
   d.target?.__data__?.indicator
 }</strong>
@@ -810,11 +809,9 @@ function RadialChart() {
     >
       <Loading loading={loading} />
       <p style={{ color: 'white', fontSize: 14, marginBottom: 16 }}>
-        The chart shows the position of the country in ranking form different
-        standpoints. The wedges represent the various metrics available, their
-        height represent the position in the ranking of the selected country
-        within the group of countries compared against. The closer to the outer
-        ring, the better the selected country is in the ranking.
+        The chart presents countries’ indicator ranking relative to all countries, neighbors, and
+        various organizations. Each wedge represents an indicator with better rankings towards
+        the outer ring.
       </p>
       <svg viewBox={`0 0 ${width + 80} ${height}`} ref={radialChart} />
     </div>
