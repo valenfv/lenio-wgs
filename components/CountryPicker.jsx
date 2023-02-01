@@ -44,12 +44,12 @@ const getPickerItems = ({
     code: country,
     label: countries[country],
     group: COUNTRY,
-  })) : []),
+  })).sort((a, b) => a.label.trim().localeCompare(b.label.trim())) : []),
   ...(showOrganizations ? Object.keys(organizations).map((organization) => ({
     code: organization,
     label: organization,
     group: ORGANIZATION,
-  })) : []),
+  })).sort((a, b) => a.label.trim().localeCompare(b.label.trim())) : []),
 ]);
 
 const StyledTextField = styled(TextField)({
