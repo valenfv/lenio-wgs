@@ -594,7 +594,7 @@ function RadialChart() {
       };
 
       function onMouseEnter(d) {
-        const bar = d3.select(this).attr('stroke', 'black');
+        const bar = d3.select(this);
         const barData = bar.datum();
         const tooltipHtml = `
                 <b>${countries[barData.country]}</b>
@@ -657,6 +657,8 @@ function RadialChart() {
         .attr('class', 'rect')
         .attr('height', (d) => y(0) - y(d.value))
         .attr('width', 4)
+        .attr('stroke', 'transparent')
+        .attr('stroke-width', 6)
         .style('cursor', 'pointer')
         .on('mouseover', onMouseEnter)
         .on('mouseleave', onMouseLeave)
