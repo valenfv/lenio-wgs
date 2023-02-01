@@ -445,7 +445,7 @@ function RadialChart() {
     lowestCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryLegend)
-      .html('Highest Ranked');
+      .html('Worst Ranked');
 
     // lowest
     const highestCountryContainer = center
@@ -486,7 +486,7 @@ function RadialChart() {
     highestCountryContainer
       .append('div')
       .attr('class', radialStyles.clcCountryLegend)
-      .html('Lowest Ranked');
+      .html('Best Ranked');
 
     // comparing
     const comparingCountryContainer = center
