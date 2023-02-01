@@ -73,6 +73,7 @@ function NavButton({ text, selected, onClick }: NavButtonProps) {
 }
 
 const NavButtonsContainer = styled('div')(() => ({
+  marginRight: '25px',
   marginLeft: 'auto',
   '& button': {
     borderRadius: 0,
@@ -108,6 +109,7 @@ export default function App({ Component, pageProps }: AppProps) {
           alt="Logo Image"
           style={{
             marginRight: 'auto',
+            marginLeft: '25px',
           }}
         />
         <div style={{ color: 'rgba(238, 238, 238, 0.5)' }}>« Dashboard of the Present Future »</div>

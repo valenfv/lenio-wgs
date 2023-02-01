@@ -7,6 +7,7 @@ import {
 import { ConfigContainer } from '../components/ConfigContainer';
 import {
   useChoropleth,
+  colors as choroplethColors,
 } from '../lib/useChoropleth';
 import { fetchWorldData } from '../slices/worldSlice';
 import bordering from '../data/bordering_countries.json';
@@ -55,6 +56,31 @@ export default function World() {
     comparingCountry,
     iHib,
   });
+  function renderLegend() {
+    const colors = !iHib ? choroplethColors : choroplethColors.reverse();
+    let colorText = ['1st Quarter', '2nd Quarter', '3rd Quarter', '4th Quarter'];
+    colorText = !iHib ? colorText : colorText.reverse();
+
+    return [...colors, '#808080'].map((backgroundColor, index) => (
+      <div>
+        <div
+          style={{
+            width: '20px',
+            height: '20px',
+            backgroundColor,
+          }}
+        />
+        <div
+          style={{
+            marginLeft: '10px',
+          }}
+        >
+          {[...colorText, 'No Data'][index]}
+        </div>
+      </div>
+    ));
+  }
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return (
     <div className={styles.worldContainer}>
@@ -63,6 +89,9 @@ export default function World() {
       </div>
       <Loading loading={loading} />
       <div className={styles.map} ref={svgRef} />
+      <div className={styles.colorPallete}>
+        {renderLegend()}
+      </div>
     </div>
   );
 }
