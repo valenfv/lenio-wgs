@@ -12,6 +12,7 @@ const StyledHeader = styled('header')({
   width: '100%',
   height: '95px',
   display: 'flex',
+  minWidth: '1264px',
   flex: 1,
   color: 'white',
   justifyContent: 'center',
