@@ -174,6 +174,74 @@ function RadialChart() {
     );
   }, [highlights, comparingCountry, dispatch]);
 
+  const [roscoRendered, setRoscoRendered] = React.useState(false);
+  const toggleRoscoRendered = () => setRoscoRendered((prev) => !prev);
+  React.useEffect(() => {
+    const mouseOverIndicatorLabel = function (d) {
+      const tooltipHTML = `
+      <div style="display: flex; flex-wrap: wrap;  max-width: 300px;">
+      <b style="flex: 100%">${indicators[selectedIndicator].indicator_name}</b>
+      ${insight
+    ? `<br/>
+      <br/>
+      <span style="flex: 100%; font-weight: normal;">
+        ${insight}
+      </span>
+      <br/>
+      <br/>
+      <b style="flex: 100%; margin-top: 12px; text-align: right;">
+        powered by OpenAI
+      </b>
+      </div>`
+    : `
+    <div style="display: flex; justify-content: center; flex: 100%;">
+    <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 0 100 100" overflow="visible" fill="#03035e"><defs> <circle id="inline" r="6" cx="20" cy="50"></circle>    </defs> <use xlink:href="#inline" x="0"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="20"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.25s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="40"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.5s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="60"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.75s" repeatCount="indefinite"></animate>    </use> </svg>
+    </div>`}`;
+
+      d3.select(`.${styles.tooltip}`)
+        .html(tooltipHTML)
+        .style('left', `${d.pageX}px`)
+        .style('top', `${d.pageY - 28}px`)
+        .style('z-index', '2')
+        .style('background', 'white')
+        .style('position', 'absolute')
+        .style('font-weight', 'bold')
+        .transition()
+        .duration(400)
+        .style('opacity', 1);
+    };
+
+    const mouseLeave = function () {
+      d3.select(`.${styles.tooltip}`).transition().duration(300).style('opacity', 0);
+    };
+
+    const indicatorLabel = d3.select('.center')
+      .append('foreignObject')
+      .attr('id', 'centerLegend')
+      .attr('x', -86)
+      .attr('y', -225)
+      .attr('width', 172)
+      .attr('height', 60)
+      .append('xhtml:div')
+      .attr('class', radialStyles.centerLegendContainer)
+      .style('width', '172px')
+      .style('height', '60px');
+    // indicatorLabel.append('div').style('position', 'relative').html('<svg xmlns=\'http://www.w3.org/2000/svg\' style="position: absolute; right: 40px;" width="22" viewBox=\'0 0 100 100\' fill=\'none\' stroke=\'#FFF\' stroke-width=\'8\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><circle cx="50" cy="50" r="40"/> <line x1="50" y1="30" x2="50" y2="52" />   <circle cx="50" cy="68" r="1"/></svg> ');
+    indicatorLabel
+      .append('div')
+      .attr('class', radialStyles.indicatorLabel)
+      .style('font-weight', 700)
+      .html(`
+<svg xmlns='http://www.w3.org/2000/svg' style="cursor: pointer; transform: rotate(180deg)" width="15" viewBox='0 0 100 100' fill='none' stroke='#FFF' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'><circle cx="50" cy="50" r="40"/> <line x1="50" y1="30" x2="50" y2="52" />   <circle cx="50" cy="68" r="1"/></svg>
+      ${indicators[selectedIndicator].indicator_name}`)
+      .on('mouseleave', mouseLeave)
+      .on('mouseover', mouseOverIndicatorLabel);
+
+    return () => {
+      d3.select('#centerLegend').remove();
+    };
+  }, [insight, selectedIndicator, metrics, comparingCountry, roscoRendered]);
+
   useEffect(() => {
     if (!metrics) return;
     const chartLabels = getRadialChartLabes(metrics);
@@ -221,7 +289,8 @@ function RadialChart() {
       .data([1])
       .join('g')
       .attr('class', 'center')
-      .attr('transform', `translate(${width / 2},${height / 2})`);
+      .attr('transform', `translate(${width / 2},${height / 2})`)
+      .call(toggleRoscoRendered);
 
     const getElementAngle = (element) => {
       const startAngle = element?.startAngle || 0;
@@ -246,7 +315,7 @@ function RadialChart() {
 
       return [initialAngle, endAngle + offset];
     })();
-
+    console.log(`rtation duration: ${10 * Math.abs(angle[1] - angle[0])}ms`);
     const radialElementsContainer = center
       .append('g')
       .attr('class', 'radial-elements')
@@ -436,63 +505,25 @@ function RadialChart() {
         .text(setEllipsis(category.label, 4).toUpperCase());
     });
 
-    const mouseOverIndicatorLabel = function (d) {
-      const tooltipHTML = `
-      <div style="display: flex; flex-wrap: wrap;  max-width: 300px;">
-      <b style="flex: 100%">${indicators[selectedIndicator].indicator_name}</b>
-      ${insight
-    ? `<br/>
-      <br/>
-      <span style="flex: 100%; font-weight: normal;">
-        ${insight}
-      </span>
-      <br/>
-      <br/>
-      <b style="flex: 100%; margin-top: 12px; text-align: right;">
-        powered by OpenAI
-      </b>
-      </div>`
-    : `
-    <div style="display: flex; justify-content: center; flex: 100%;">
-    <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 0 100 100" overflow="visible" fill="#03035e"><defs> <circle id="inline" r="6" cx="20" cy="50"></circle>    </defs> <use xlink:href="#inline" x="0"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="20"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.25s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="40"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.5s" repeatCount="indefinite"></animate>    </use><use xlink:href="#inline" x="60"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.75s" repeatCount="indefinite"></animate>    </use> </svg>
-    </div>
-    `
-}
-      `;
-
-      tooltip
-        .html(tooltipHTML)
-        .style('left', `${d.pageX}px`)
-        .style('top', `${d.pageY - 28}px`)
-        .style('z-index', '2')
-        .style('background', 'white')
-        .style('position', 'absolute')
-        .style('font-weight', 'bold')
-        .transition()
-        .duration(400)
-        .style('opacity', 1);
-    };
-
-    const indicatorLabel = center
-      .append('foreignObject')
-      .attr('x', -86)
-      .attr('y', -225)
-      .attr('width', 172)
-      .attr('height', 60)
-      .append('xhtml:div')
-      .attr('class', radialStyles.centerLegendContainer)
-      .style('width', '172px')
-      .style('height', '60px');
-    // indicatorLabel.append('div').style('position', 'relative').html('<svg xmlns=\'http://www.w3.org/2000/svg\' style="position: absolute; right: 40px;" width="22" viewBox=\'0 0 100 100\' fill=\'none\' stroke=\'#FFF\' stroke-width=\'8\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><circle cx="50" cy="50" r="40"/> <line x1="50" y1="30" x2="50" y2="52" />   <circle cx="50" cy="68" r="1"/></svg> ');
-    indicatorLabel
-      .append('div')
-      .attr('class', radialStyles.indicatorLabel)
-      .style('font-weight', 700)
-      .html(`
-<svg xmlns='http://www.w3.org/2000/svg' style="cursor: pointer; transform: rotate(180deg)" width="15" viewBox='0 0 100 100' fill='none' stroke='#FFF' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'><circle cx="50" cy="50" r="40"/> <line x1="50" y1="30" x2="50" y2="52" />   <circle cx="50" cy="68" r="1"/></svg>
-      ${indicators[selectedIndicator].indicator_name}`)
-      .on('mouseleave', mouseLeave)
-      .on('mouseover', mouseOverIndicatorLabel);
+    //     const indicatorLabel = center
+    //       .append('foreignObject')
+    //       .attr('x', -86)
+    //       .attr('y', -225)
+    //       .attr('width', 172)
+    //       .attr('height', 60)
+    //       .append('xhtml:div')
+    //       .attr('class', radialStyles.centerLegendContainer)
+    //       .style('width', '172px')
+    //       .style('height', '60px');
+    //     // indicatorLabel.append('div').style('position', 'relative').html('<svg xmlns=\'http://www.w3.org/2000/svg\' style="position: absolute; right: 40px;" width="22" viewBox=\'0 0 100 100\' fill=\'none\' stroke=\'#FFF\' stroke-width=\'8\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><circle cx="50" cy="50" r="40"/> <line x1="50" y1="30" x2="50" y2="52" />   <circle cx="50" cy="68" r="1"/></svg> ');
+    //     indicatorLabel
+    //       .append('div')
+    //       .attr('class', radialStyles.indicatorLabel)
+    //       .style('font-weight', 700)
+    //       .html(`
+    // <svg xmlns='http://www.w3.org/2000/svg' style="cursor: pointer; transform: rotate(180deg)" width="15" viewBox='0 0 100 100' fill='none' stroke='#FFF' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'><circle cx="50" cy="50" r="40"/> <line x1="50" y1="30" x2="50" y2="52" />   <circle cx="50" cy="68" r="1"/></svg>
+    //       ${indicators[selectedIndicator].indicator_name}`)
+    //       .on('mouseleave', mouseLeave);
 
     if (selectedIndicatorData) {
       selectedIndicatorData.sortedCountries = selectedIndicatorData?.sortedCountries.filter(
@@ -905,7 +936,7 @@ function RadialChart() {
       d3.select(radialChart.current).select('#removeme').remove();
       tooltip.remove();
     };
-  }, [comparingCountry, selectedIndicator, metrics, insight]);
+  }, [comparingCountry, selectedIndicator, metrics]);
 
   const loading = useSelector((state) => state.radialChart.loading);
   const infoIcon = (
