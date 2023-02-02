@@ -7,6 +7,7 @@
   padding: 20px;
   background-color: transparent;
   margin-left: 200px;
+  min-width: 900px;
 }
 
 div.tooltip {   

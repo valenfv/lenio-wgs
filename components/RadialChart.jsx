@@ -955,6 +955,7 @@ function RadialChart() {
       style={{
         width: '65%',
         height: '65%',
+        minWidth: '800px',
         display: 'flex',
         flexDirection: 'column',
         margin: '0 auto',

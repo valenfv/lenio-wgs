@@ -6,6 +6,7 @@ const StyledContainer = styled('div')({
   position: 'relative',
   justifyContent: 'center',
   width: '100%',
+  minWidth: '800px',
   background: '#000020',
   border: '1px solid rgba(238, 238, 238, 0.2)',
   marginLeft: '20px',
