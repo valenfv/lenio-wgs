@@ -8,30 +8,18 @@ import { useRouter } from 'next/router';
 import { store } from '../store';
 import '../styles/main.css';
 
-// import ConfigContainer from '../components/ConfigContainer';
-// import DataVisContainer from '../components/DataVisContainer';
-
 const StyledHeader = styled('header')({
   width: '100%',
-  '& > div': {
-    display: 'flex',
-    flex: 1,
-    color: 'white',
-    justifyContent: 'flex-start',
-    position: 'relative',
-    alignItems: 'center',
-    fontSize: '28px',
-    lineHeight: '40px',
-    margin: '0 auto',
-
-    '&:first-child': {
-      margin: '0 auto',
-      height: '95px',
-    },
-    '&:last-child': {
-      height: '40px',
-    },
-  },
+  height: '95px',
+  display: 'flex',
+  flex: 1,
+  color: 'white',
+  justifyContent: 'center',
+  position: 'relative',
+  alignItems: 'center',
+  fontSize: '28px',
+  lineHeight: '40px',
+  margin: '0 auto',
 });
 
 const StyledButton = styled(Button)({
@@ -111,41 +99,30 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <StyledHeader>
-        <div>
-          <Image
-            src="/header-logo1.png"
-            height={48}
-            width={200}
-            alt="Logo Image"
-            style={{
-              marginLeft: '25px',
-            }}
-          />
-          <div
-            style={{
-              color: 'rgba(238, 238, 238, 0.5)',
-              margin: '0 auto',
-            }}
-          >
-            « Dashboard of the Present Future »
-          </div>
-        </div>
-        <div>
-          <NavButtonsContainer>
-            {charts.map((props) => (
-              <NavButton
-                key={props.href}
-                onClick={() => {
-                  setCurrentChart(props.chartType);
-                  router.push(props.href);
-                }}
-                selected={currentChart === props.chartType}
-                text={props.text}
-              />
-            ))}
-
-          </NavButtonsContainer>
-        </div>
+        <Image
+          src="/header-logo1.png"
+          height={48}
+          width={200}
+          alt="Logo Image"
+          style={{
+            marginRight: 'auto',
+            marginLeft: '25px',
+          }}
+        />
+        <div style={{ color: 'rgba(238, 238, 238, 0.5)' }}>« Dashboard of the Present Future »</div>
+        <NavButtonsContainer>
+          {charts.map((props) => (
+            <NavButton
+              key={props.href}
+              onClick={() => {
+                setCurrentChart(props.chartType);
+                router.push(props.href);
+              }}
+              selected={currentChart === props.chartType}
+              text={props.text}
+            />
+          ))}
+        </NavButtonsContainer>
       </StyledHeader>
       <main style={{ padding: '0 50px 50px 25px' }}>
         <Component {...pageProps} />
