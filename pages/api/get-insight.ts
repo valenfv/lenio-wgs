@@ -17,13 +17,14 @@ export default async function handler(
   } = req.body;
   // checking if insight is already in the cloud storage
   // @ts-ignore
+
   const insightExists = await fetch(
     `https://kzkgagh296.execute-api.us-east-1.amazonaws.com/prod/designs/${key}-test1`,
   )
     .then((reply) => reply.json())
     .catch(() => false);
 
-  if (insightExists) {
+  if (insightExists && insightExists.design) {
     return res.status(200).send({ description: insightExists.design });
   }
 
@@ -36,19 +37,23 @@ export default async function handler(
   );
 
   // saving new insight to cloud storage
-  await fetch(
-    'https://kzkgagh296.execute-api.us-east-1.amazonaws.com/prod/designs',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+  try {
+    await fetch(
+      'https://kzkgagh296.execute-api.us-east-1.amazonaws.com/prod/designs',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: `${key}-test1`,
+          design: insight.reply.description,
+        }),
       },
-      body: JSON.stringify({
-        id: `${key}-test1`,
-        design: insight.reply.description,
-      }),
-    },
-  );
+    );
+  } catch (e) {
+    console.error({ e });
+  }
 
   res.status(200).send(insight.reply);
 }
