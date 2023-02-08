@@ -9,7 +9,7 @@ interface SEOProps {
 
 const AUTHOR = 'Karl Mosche, Alexander Carol, Leniolabs_';
 const SITE_URL = 'https://wdvp.leniolabs.com/';
-const BASE_DESCRIPTION = 'Visualization dashboard of the present future visualization.';
+const BASE_DESCRIPTION = 'Interactive visualization of "Dashboard of the present future" by Karl Mosche, Alex Carol and Leniolabs_ for the WDVP contest';
 const BASE_TITLE = 'World Data Visualization';
 const BASE_IMAGE = 'wdvp.png';
 
@@ -49,21 +49,18 @@ export function MetaTags(props: SEOProps) {
       <meta name="image" property="og:image" content={image} />
 
       <meta
-        name="twitter card"
-        property="twitter:card"
+        name="twitter:card"
         content="summary_large_image"
       />
-      <meta name="twitter url" property="twitter:url" content={SITE_URL} />
-      <meta name="twitter title" property="twitter:title" content={title} />
+      <meta name="twitter:url" content={SITE_URL} />
+      <meta name="twitter:title" content={title} />
       <meta
-        name="twitter description"
-        property="twitter:description"
+        name="twitter:description"
         content={description}
       />
-      <meta name="twitter image" property="twitter:image" content={image} />
+      <meta name="twitter:image" content={image} />
       <meta
-        name="twitter creator"
-        property="twitter:creator"
+        name="twitter:creator"
         content={AUTHOR}
       />
     </>
