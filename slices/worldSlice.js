@@ -11,9 +11,8 @@ export const fetchWorldData = createAsyncThunk(
     // eslint-disable-next-line max-len
     const iHib = data.find((countryData) => Boolean(countryData[indicator]))[indicator].higher_is_better;
     const rankedData = data.filter((d) => d[indicator])
-      .sort((a, b) => (!iHib
-        ? a[indicator].value - b[indicator].value
-        : b[indicator].value - a[indicator].value));
+      .sort((a, b) => (a[indicator].value - b[indicator].value));
+    // console.log({ rankedData });
     const serializedData = rankedData.reduce((prev, curr, index) => ({
       ...prev,
       [curr.country]: {

@@ -57,9 +57,9 @@ export default function World() {
     iHib,
   });
   function renderLegend() {
-    const colors = !iHib ? choroplethColors : choroplethColors.reverse();
+    const colors = !iHib ? choroplethColors : [...choroplethColors].reverse();
     let colorText = ['1st Quarter', '2nd Quarter', '3rd Quarter', '4th Quarter'];
-    colorText = !iHib ? colorText : colorText.reverse();
+    colorText = iHib ? colorText : [...colorText].reverse();
 
     return [...colors, '#808080'].map((backgroundColor, index) => (
       <div>
@@ -91,6 +91,8 @@ export default function World() {
       <div className={styles.map} ref={svgRef} />
       <div className={styles.colorPallete}>
         {renderLegend()}
+        <hr />
+        {iHib ? 'Higher is better' : 'Lower is better'}
       </div>
     </div>
   );
